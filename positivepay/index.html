@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Modern Positive Pay Academy — Built by AFS</title>
+<meta name="description" content="A free, structured curriculum for community bank and credit union treasury professionals. Built on real customer interviews and peer benchmarks."/>
+<link rel="stylesheet" href="assets/tokens.css"/>
+<link rel="stylesheet" href="assets/styles.css"/>
+<style>
+  /* Homepage-specific: decision card mock */
+  .decision-card{background:#fff;color:var(--ink);border-radius:16px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,0.45),0 4px 12px rgba(0,0,0,0.25);width:100%;max-width:380px;margin-left:auto;transform:rotate(0.6deg)}
+  .dc-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--afs-gray-2)}
+  .dc-head .label{font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--fg-3)}
+  .dc-head .flag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--afs-red);letter-spacing:0.5px}
+  .dc-head .flag .dotR{width:7px;height:7px;background:var(--afs-red);border-radius:50%;display:inline-block;animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+  .dc-rows{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .dc-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px}
+  .dc-row .k{color:var(--fg-3);font-weight:600;letter-spacing:0.2px}
+  .dc-row .v{color:var(--ink);font-weight:700}
+  .dc-amount{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;padding-top:14px;border-top:1px dashed var(--afs-gray-1)}
+  .dc-amount .k{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;color:var(--fg-3)}
+  .dc-amount .v{font-size:28px;font-weight:800;letter-spacing:-0.02em;color:var(--ink)}
+  .dc-actions{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .dc-actions button{height:38px;border-radius:8px;border:none;font-weight:700;font-size:12.5px;letter-spacing:0.4px;cursor:pointer;font-family:inherit}
+  .dc-return{background:var(--afs-red);color:#fff}
+  .dc-pay{background:var(--afs-gray-2);color:var(--ink)}
+  @media(max-width:980px){.decision-card{margin-left:0;max-width:100%;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <span class="brand-mark">A</span>
+      <span class="brand-name"><b>Advanced Fraud Academy</b><span>by AFS</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-panel">
+      <div class="hero-grid">
+        <div>
+          <span class="pill"><span class="dot"></span> Free · For community FI treasury teams</span>
+          <h1 style="margin-top:28px">The <span class="accent">Modern</span><br/>Positive Pay<br/>Academy.</h1>
+          <p class="hero-sub">A free, structured curriculum for the people who run Positive Pay at community banks and credit unions. Built on real customer interviews, peer benchmarks, and the playbook one community bank used to put 100+ commercial clients on PP.</p>
+          <div class="hero-ctas">
+            <a href="/positivepay/track-1/" class="btn btn-primary">Start Track 1 →</a>
+            <a href="/positivepay/curriculum/" class="btn btn-ghost">Browse curriculum</a>
+          </div>
+          <div class="hero-trust">Built by <b>Advanced Fraud Solutions</b> · 14+ years protecting community FIs</div>
+        </div>
+        <div>
+          <div class="decision-card" role="img" aria-label="Sample Positive Pay exception decision card">
+            <div class="dc-head">
+              <span class="label">Exception · #PP-44219</span>
+              <span class="flag"><span class="dotR"></span> MISMATCH FLAGGED</span>
+            </div>
+            <div class="dc-rows">
+              <div class="dc-row"><span class="k">Payee</span><span class="v">SAGE OFFICE SUPPLY</span></div>
+              <div class="dc-row"><span class="k">Issue date</span><span class="v">May 12, 2026</span></div>
+              <div class="dc-row"><span class="k">Account</span><span class="v">····4421</span></div>
+              <div class="dc-row"><span class="k">Cutoff</span><span class="v" style="color:var(--afs-red)">4:00 PM ET</span></div>
+            </div>
+            <div class="dc-amount"><span class="k">Amount</span><span class="v">$4,820.00</span></div>
+            <div class="dc-actions">
+              <button class="dc-return" type="button">Return</button>
+              <button class="dc-pay" type="button">Pay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div style="margin-top:32px">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="n">5</div><div class="lab">tracks</div></div>
+        <div class="stat-card"><div class="n">26</div><div class="lab">lessons</div></div>
+        <div class="stat-card"><div class="n">5<span style="font-size:24px;font-weight:700"> hr</span></div><div class="lab">total reading</div></div>
+        <div class="stat-card"><div class="n">2</div><div class="lab">certifications</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="section" style="padding-top:24px;padding-bottom:24px">
+  <div class="wrap">
+    <div class="why">
+      <div class="why-inner">
+        <span class="eyebrow muted">Why we built this</span>
+        <h2>Positive Pay is the most under-leveraged product in community banking.</h2>
+        <p class="lede">Every community FI has a Positive Pay program. Most run at 5% adoption with stalled enrollment, fee-resistant business clients, and a treasury team manually decisioning exceptions every day at 4 PM. That's not a product problem. That's an education problem. The Academy is the curriculum nobody else has built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section class="section" id="curriculum" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">5 tracks · 26 lessons</span>
+      <h2>Pick your starting point.</h2>
+    </div>
+    <div class="curr-grid">
+      <a href="/positivepay/track-1/" class="track">
+        <span class="featured-tag">Start here</span>
+        <div class="track-label"><span class="num">Track 01</span></div>
+        <h3>Foundations</h3>
+        <p>What modern Positive Pay actually is, who buys it, and the state of business payment fraud in 2026.</p>
+        <div class="track-foot">
+          <span class="lessons">6 lessons</span>
+          <span class="badge live"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;display:inline-block"></span> Available now</span>
+        </div>
+      </a>
+      <div class="track muted">
+        <div class="track-label"><span class="num">Track 02</span></div>
+        <h3>The Adoption Playbook</h3>
+        <p>Why your PP program stalled, and the 4 levers that get business clients from enrolled to engaged.</p>
+        <div class="track-foot"><span class="lessons">5 lessons</span><span class="badge soon">Coming soon</span></div>
+      </div>
+      <div class="track muted">
+        <div class="track-label"><span class="num">Track 03</span></div>
+        <h3>The Sales Motion</h3>
+        <p>The joint TMO + Relationship Banker call, conversation scripts, and the comeback to every objection.</p>
+        <div class="track-foot"><span class="lessons">5 lessons</span><span class="badge soon">Coming soon</span></div>
+      </div>
+      <div class="track muted">
+        <div class="track-label"><span class="num">Track 04</span></div>
+        <h3>Revenue &amp; Retention</h3>
+        <p>Turning PP into non-interest income and a retention moat. Pricing models, board memos, ROI math.</p>
+        <div class="track-foot"><span class="lessons">5 lessons</span><span class="badge soon">Coming soon</span></div>
+      </div>
+      <div class="track muted">
+        <div class="track-label"><span class="num">Track 05</span></div>
+        <h3>Operations &amp; Compliance</h3>
+        <p>Disclosures, default decisions, cutoffs, integrations, and examiner readiness.</p>
+        <div class="track-foot"><span class="lessons">5 lessons</span><span class="badge soon">Coming soon</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PEER PROOF -->
+<section class="section" style="padding-top:32px">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Real institutions, real data</span>
+      <h2>This isn't theory. It's what your peers told us.</h2>
+    </div>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">Most of our 100+ Positive Pay customers came in after a fraud incident. We don't sell it. We make it the obvious choice at a moment when they're listening.</p>
+        <div class="quote-attr">Corporate Support Officer<br/>$1B+ community bank · Southeast</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">Once they have check and ACH Positive Pay configured, it's almost like you're putting a wall around your customer. They don't leave.</p>
+        <div class="quote-attr">Chief Retail Officer<br/>$1B+ community bank · Southeast</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">Most of our business clients didn't know Positive Pay also does ACH. The conversation changes when they find out.</p>
+        <div class="quote-attr">Cash Management Officer<br/>Community bank · Northeast</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILT BY AFS -->
+<section class="section" id="about" style="padding-top:24px">
+  <div class="wrap">
+    <div class="built">
+      <div class="built-inner">
+        <span class="eyebrow light">Who built this</span>
+        <h2 style="margin-top:18px">Built by the team that's been protecting community FIs since 2012.</h2>
+        <p>The Academy is the working knowledge of the AFS team, distilled. Our product, sales engineering, partnerships, and customer success teams have spent more than a decade inside community banks and credit unions, sitting through hundreds of integration calls with FIS, Fiserv, Jack Henry, Candescent, and Lumen. This curriculum is what fell out of those conversations.</p>
+        <div class="built-stats">
+          <div class="bstat"><div class="n">1,500+</div><div class="lab">community FIs protected</div></div>
+          <div class="bstat"><div class="n">14+</div><div class="lab">years in the category</div></div>
+          <div class="bstat"><div class="n">40+</div><div class="lab">core and digital banking integrations</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENROLLMENT -->
+<section class="section" id="enroll" style="padding-top:8px">
+  <div class="wrap">
+    <div class="enroll-grid">
+      <div class="enroll-left">
+        <span class="eyebrow">Free, in under 60 seconds</span>
+        <h2>Join the Academy.</h2>
+        <p style="font-size:18px;line-height:1.6;color:var(--fg-2);font-weight:500">Get the Track 1 welcome kit emailed to you, plus monthly insights tailored to your current Positive Pay status. We never sell your data. Unsubscribe anytime.</p>
+        <ul class="enroll-list">
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span> 10-minute lessons. No videos.</li>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span> Templates, scripts, and worksheets.</li>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span> Peer benchmarks at your asset tier.</li>
+        </ul>
+      </div>
+      <form class="form-card" method="post" action="http://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl">
+        <input type="hidden" name="retURL" value="https://advancedfraudacademy.com/positivepay/thank-you/"/>
+        <div class="form-row">
+          <div class="field"><label for="first">First name</label><input id="first" name="first_name" type="text" required></div>
+          <div class="field"><label for="last">Last name</label><input id="last" name="last_name" type="text" required></div>
+        </div>
+        <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" required></div>
+        <div class="field"><label for="inst">Institution name</label><input id="inst" name="company" type="text" required></div>
+        <div class="field">
+          <label for="role">Role</label>
+          <select id="role" name="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option>VP Operations</option>
+            <option>Chief Retail Officer</option>
+            <option>Treasury Management Officer</option>
+            <option>Cash Management Officer</option>
+            <option>Relationship Banker</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="asset">Asset size</label>
+          <select id="asset" name="asset_size" required>
+            <option value="" disabled selected>Select asset size</option>
+            <option>Under $250M</option>
+            <option>$250M – $500M</option>
+            <option>$500M – $1B</option>
+            <option>$1B – $5B</option>
+            <option>$5B+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pp">Your Positive Pay status today</label>
+          <select id="pp" name="pp_status" required>
+            <option value="" disabled selected>Where are you today?</option>
+            <option>No Positive Pay program yet</option>
+            <option>Program exists, low adoption (&lt;10%)</option>
+            <option>Program exists, growing adoption</option>
+            <option>Mature program, optimizing</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">Enroll free</button>
+        <div class="micro">No spam. Unsubscribe anytime.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow muted">FAQ</span>
+      <h2>Quick answers.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq" open>
+        <summary>Is the Academy really free?</summary>
+        <p>Yes. Free for every community bank, credit union, and treasury professional. No upsell required.</p>
+      </details>
+      <details class="faq">
+        <summary>Do I need to be an AFS customer to take the Academy?</summary>
+        <p>No. The curriculum is vendor-neutral. If you want to talk to AFS about implementing what you learn, that conversation is on the table, never required.</p>
+      </details>
+      <details class="faq">
+        <summary>What's the certification?</summary>
+        <p>Complete Tracks 1–3 and pass the practitioner quiz to earn the "Modern Positive Pay Practitioner" badge. Complete all 5 tracks for "Modern Positive Pay Strategist." Both are LinkedIn-shareable.</p>
+      </details>
+      <details class="faq">
+        <summary>When do new tracks launch?</summary>
+        <p>Track 2 drops summer 2026. Tracks 3–5 follow on a roughly quarterly cadence. Enrolled members get launch emails first.</p>
+      </details>
+      <details class="faq">
+        <summary>Who built this?</summary>
+        <p>Advanced Fraud Solutions, the consortium fraud-prevention platform serving 1,500+ community FIs.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <span class="brand-mark">A</span>
+          <span class="brand-name"><b>Advanced Fraud Academy</b><span>by AFS</span></span>
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

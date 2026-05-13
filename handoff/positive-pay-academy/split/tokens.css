@@ -1,0 +1,240 @@
+/* ============================================================
+   AFS — Advanced Fraud Solutions
+   Foundations: color tokens + typography
+   ============================================================
+   Source: AFS Brand Guidelines.pdf
+
+   Aileron is the official typeface (Adobe Fonts).
+   ⚠ Substituted with Google Fonts "Manrope" until the licensed
+   Aileron .ttf/.woff2 files are dropped into /fonts.
+   Manrope is the closest free geometric sans with matching
+   weights (300/400/700) and similar x-height + terminals.
+   See README.md › FONTS for swap instructions.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  /* ── BRAND COLOR ─────────────────────────────────────── */
+  --afs-red:        #C70200;   /* Primary. Used for CTAs, accents, key brand mark */
+  --afs-red-light:  #EE0312;   /* Hover / brighter accent */
+  --afs-red-dark:   #9D0200;   /* Pressed / depth layer */
+  --afs-green:      #ADE25D;   /* Icon container fill (linework icons sit inside) */
+
+  /* ── NEUTRALS ────────────────────────────────────────── */
+  --afs-black:      #000000;   /* Logo, bold display type */
+  --afs-dark-grey:  #222222;   /* Dark surface, used in abstract graphics */
+  --afs-grey:       #595959;   /* Body text on light surfaces */
+  --afs-gray-1:     #D9D9D9;   /* Hairlines, dividers */
+  --afs-gray-2:     #F0F0F0;   /* Light surface, alt background */
+  --afs-gray-3:     #999999;   /* Muted body, captions */
+  --afs-gray-4:     #666666;   /* Secondary body */
+  --afs-white:      #FFFFFF;
+
+  /* ── SEMANTIC FOREGROUND / BACKGROUND ────────────────── */
+  --fg-1:           var(--afs-dark-grey);   /* Primary text on light bg */
+  --fg-2:           var(--afs-grey);        /* Secondary text */
+  --fg-3:           var(--afs-gray-3);      /* Tertiary, captions */
+  --fg-inverse:     var(--afs-white);       /* Text on dark bg */
+  --fg-on-red:      var(--afs-white);
+
+  --bg-1:           var(--afs-white);       /* Default surface */
+  --bg-2:           var(--afs-gray-2);      /* Section alt */
+  --bg-dark:        var(--afs-dark-grey);   /* Dark hero / abstract */
+  --bg-darker:      #1A1A1A;                /* Slightly darker than dark-grey, for abstract panels */
+
+  --accent:         var(--afs-red);
+  --accent-hover:   var(--afs-red-light);
+  --accent-press:   var(--afs-red-dark);
+  --icon-tile:      var(--afs-green);       /* Green rounded square containing icons */
+
+  /* ── STATE ───────────────────────────────────────────── */
+  --success:        #2E7D32;
+  --warn:           #E0A800;
+  --danger:         var(--afs-red);
+  --info:           #2563EB;
+
+  /* ── BORDERS / DIVIDERS ──────────────────────────────── */
+  --border:         var(--afs-gray-1);
+  --border-strong:  var(--afs-gray-3);
+  --border-dark:    rgba(255,255,255,0.08);
+
+  /* ── RADII ───────────────────────────────────────────── */
+  /* AFS leans on softly-rounded squares (~4–6px on the logo cells,
+     larger pill radii on CTAs in the brand-guide examples). */
+  --r-xs:   2px;
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   12px;
+  --r-xl:   20px;
+  --r-pill: 999px;
+
+  /* ── SPACING (4pt scale) ─────────────────────────────── */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ── ELEVATION ───────────────────────────────────────── */
+  /* AFS materials are mostly flat. Shadows are used sparingly on
+     CTAs and hover states — never heavy drop shadows. */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 10px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-red: 0 6px 18px rgba(199,2,0,0.30);
+
+  /* ── TYPE ────────────────────────────────────────────── */
+  --font-sans: "Aileron", "Manrope", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Weights (per brand guide, stick to 300 / 400 / 700, with 600/800 reserved for tight headings) */
+  --w-thin:     300;
+  --w-regular:  400;
+  --w-medium:   500;
+  --w-semibold: 600;
+  --w-bold:     700;
+  --w-black:    800;
+
+  /* Type ramp (pt converted ~1.333× to px for screen) */
+  --t-overline:      0.875rem;   /*  14px • Bold 700 • UPPER • LS 2.8px      */
+  --t-small-p:       0.875rem;   /*  14px • Thin 300 • LH 1.4                */
+  --t-paragraph:     1rem;       /*  16px • Thin 300 • LH 1.6 • LS 0.8px     */
+  --t-paragraph-bold:1rem;       /*  16px • Bold 600                          */
+  --t-subcopy:       1.5rem;     /*  24px • Thin 300 • LH 1.5                 */
+  --t-h6:            1.125rem;   /*  18px • Bold 700 • LH 1.55                */
+  --t-h5:            1.25rem;    /*  20px • Bold 700 • LH 1.5                 */
+  --t-h4:            1.375rem;   /*  22px • Bold 700 • LH 1.3                 */
+  --t-h3:            1.875rem;   /*  30px • Bold 700 • LH 1.3                 */
+  --t-h2:            2.5rem;     /*  40px • Bold 700 • LH 1.25                */
+  --t-h1:            2.75rem;    /*  44px • Bold 700                          */
+  --t-display:       3.75rem;    /*  60px • Bold 700 • LH 1.16                */
+  --t-stat:          4.0625rem;  /*  65px • Bold 700                          */
+  --t-stat-large:    5.3125rem;  /*  85px • Black 800                         */
+}
+
+/* ============================================================
+   SEMANTIC TYPE CLASSES (and matching element defaults)
+   Apply these as utility classes, e.g. <h1 class="t-h1">,
+   or rely on element defaults below.
+   ============================================================ */
+
+html { font-family: var(--font-sans); color: var(--fg-1); }
+body { font-family: var(--font-sans); color: var(--fg-1); background: var(--bg-1); -webkit-font-smoothing: antialiased; }
+
+.t-overline, .overline {
+  font-weight: var(--w-bold);
+  font-size:   var(--t-overline);
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--afs-red);
+}
+
+.t-display, .display {
+  font-weight: var(--w-bold);
+  font-size:   var(--t-display);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+}
+
+.t-stat        { font-weight: var(--w-bold);  font-size: var(--t-stat);       line-height: 1; }
+.t-stat-large  { font-weight: var(--w-black); font-size: var(--t-stat-large); line-height: 1; letter-spacing: -0.02em; }
+
+h1, .t-h1 { font-weight: var(--w-bold); font-size: var(--t-h1); line-height: 1.1; letter-spacing: -0.01em; }
+h2, .t-h2 { font-weight: var(--w-bold); font-size: var(--t-h2); line-height: 1.25; }
+h3, .t-h3 { font-weight: var(--w-bold); font-size: var(--t-h3); line-height: 1.3; }
+h4, .t-h4 { font-weight: var(--w-bold); font-size: var(--t-h4); line-height: 1.3; }
+h5, .t-h5 { font-weight: var(--w-bold); font-size: var(--t-h5); line-height: 1.5; }
+h6, .t-h6 { font-weight: var(--w-bold); font-size: var(--t-h6); line-height: 1.55; }
+
+.t-subcopy {
+  font-weight: var(--w-medium);
+  font-size:   var(--t-subcopy);
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+p, .t-p {
+  font-weight: var(--w-medium);
+  font-size:   var(--t-paragraph);
+  line-height: 1.6;
+  letter-spacing: 0.4px;
+  color: var(--fg-2);
+}
+.t-p-bold { font-weight: var(--w-semibold); }
+
+.t-small {
+  font-weight: var(--w-medium);
+  font-size:   var(--t-small-p);
+  line-height: 1.4;
+  letter-spacing: 0.4px;
+  color: var(--fg-3);
+}
+
+/* ============================================================
+   PRIMITIVES
+   ============================================================ */
+
+.afs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 14px 28px;
+  font-family: var(--font-sans);
+  font-weight: var(--w-bold);
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms ease, box-shadow 120ms ease;
+  text-decoration: none;
+}
+.afs-btn--primary { background: var(--afs-red); color: var(--fg-on-red); }
+.afs-btn--primary:hover { background: var(--afs-red-light); }
+.afs-btn--primary:active { background: var(--afs-red-dark); transform: translateY(1px); }
+
+.afs-btn--ghost { background: transparent; color: var(--afs-red); border: 1.5px solid var(--afs-red); padding: 12.5px 26.5px; border-radius: 8px; }
+.afs-btn--ghost:hover { background: var(--afs-red); color: var(--fg-on-red); }
+
+.afs-btn--dark { background: var(--afs-dark-grey); color: var(--fg-inverse); }
+.afs-btn--dark:hover { background: #000; }
+
+.afs-btn--link {
+  background: transparent; color: var(--afs-red); padding: 0;
+  border-radius: 0; border-bottom: 2px solid var(--afs-red);
+  text-transform: uppercase; letter-spacing: 1.2px;
+}
+
+/* Icon container — green rounded square per brand guide */
+.afs-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--afs-green);
+  border-radius: 10px;
+  color: var(--afs-dark-grey);
+}
+.afs-icon-tile svg { stroke: currentColor; fill: none; stroke-width: 1.75; }
+
+/* Cards: flat with subtle hairline, optional shadow on hover */
+.afs-card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-6);
+}
+.afs-card--dark {
+  background: var(--bg-darker);
+  border: 1px solid var(--border-dark);
+  color: var(--fg-inverse);
+}
