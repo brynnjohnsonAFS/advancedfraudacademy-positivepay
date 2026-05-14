@@ -365,23 +365,12 @@
 (function () {
   var form = document.querySelector('.form-card');
   if (!form) return;
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+  form.addEventListener('submit', function () {
     var email = form.querySelector('[name="email"]');
     if (email && email.value) {
       try { localStorage.setItem('afa_user_email', email.value.trim()); } catch (e) {}
     }
-    // POST to Pardot — keepalive ensures the request completes even after navigation
-    try {
-      fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString(),
-        keepalive: true,
-        mode: 'no-cors'
-      });
-    } catch (err) {}
-    window.location.href = '/positivepay/thank-you/';
+    // Let the form POST to Pardot normally — Pardot's Success Location handles the redirect
   });
 })();
 </script>
