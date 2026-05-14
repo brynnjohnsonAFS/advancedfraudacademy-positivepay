@@ -245,7 +245,7 @@
         <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" required></div>
         <div class="field"><label for="inst">Institution name</label><input id="inst" name="company" type="text" required></div>
         <div class="field">
-          <label for="role">Role</label>
+          <label for="role">Job title</label>
           <select id="role" name="job_title" required>
             <option value="" disabled selected>Select your role</option>
             <option>Treasury Management Officer</option>
@@ -267,6 +267,38 @@
             <option>$500M – $1B</option>
             <option>$1B – $5B</option>
             <option>$5B+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pp_status">Current Positive Pay status</label>
+          <select id="pp_status" name="Positive Pay Status" required>
+            <option value="" disabled selected>Select your status</option>
+            <option>Not currently offering Positive Pay</option>
+            <option>Offered but low adoption (under 25%)</option>
+            <option>Growing adoption (25–75%)</option>
+            <option>High adoption (75%+)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="biz_clients">Total business clients</label>
+          <select id="biz_clients" name="Total Business Clients" required>
+            <option value="" disabled selected>Select a range</option>
+            <option>Under 100</option>
+            <option>100–500</option>
+            <option>500–1,000</option>
+            <option>1,000–5,000</option>
+            <option>5,000+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="academy_goal">Primary goal for the Academy</label>
+          <select id="academy_goal" name="Academy Goal" required>
+            <option value="" disabled selected>Select your goal</option>
+            <option>Increase Positive Pay adoption</option>
+            <option>Understand pricing and revenue impact</option>
+            <option>Train my team</option>
+            <option>Evaluate upgrading our platform</option>
+            <option>General education</option>
           </select>
         </div>
         <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">Enroll free</button>
