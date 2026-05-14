@@ -267,6 +267,41 @@
             <option>Not sure</option>
           </select>
         </div>
+        <div class="field">
+          <label for="biz_clients">Business clients your FI currently serves</label>
+          <select id="biz_clients" name="total_business_clients" required>
+            <option value="" disabled selected>Select range</option>
+            <option>Fewer than 100</option>
+            <option>100–500</option>
+            <option>500–1,000</option>
+            <option>1,000–5,000</option>
+            <option>5,000+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="goal">Primary goal in joining the Academy</label>
+          <select id="goal" name="academy_goal" required>
+            <option value="" disabled selected>What are you here to do?</option>
+            <option>Improve our PP enrollment and adoption</option>
+            <option>Train our sales and treasury team</option>
+            <option>Evaluate AFS Positive Pay</option>
+            <option>Replace our current PP platform</option>
+            <option>Earn the certification</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="source">How did you find the Academy?</label>
+          <select id="source" name="referral_source">
+            <option value="" disabled selected>Select one (optional)</option>
+            <option>LinkedIn</option>
+            <option>AFS team or rep</option>
+            <option>Peer / colleague referral</option>
+            <option>Google / search</option>
+            <option>Industry conference or event</option>
+            <option>Other</option>
+          </select>
+        </div>
         <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">Enroll free</button>
         <div class="micro">No spam. Unsubscribe anytime.</div>
       </form>
@@ -342,6 +377,19 @@
   </div>
 </footer>
 
+
+<script>
+(function () {
+  var form = document.querySelector('.form-card');
+  if (!form) return;
+  form.addEventListener('submit', function () {
+    var email = form.querySelector('[name="email"]');
+    if (email && email.value) {
+      try { localStorage.setItem('afa_user_email', email.value.trim()); } catch (e) {}
+    }
+  });
+})();
+</script>
 
 <script type="text/javascript">
   piAId = '784193';
