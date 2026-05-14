@@ -388,6 +388,10 @@
     if (email && email.value) {
       try { localStorage.setItem('afa_user_email', email.value.trim()); } catch (e) {}
     }
+    // Form posts to Pardot via hidden iframe; redirect the main page to thank-you
+    setTimeout(function () {
+      window.location.href = '/positivepay/thank-you/';
+    }, 300);
   });
 })();
 </script>
