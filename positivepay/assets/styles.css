@@ -378,3 +378,29 @@ p{margin:0;font-weight:500;font-size:17px;line-height:1.6;color:var(--fg-2);lett
   75%{opacity:1}
   100%{transform:translateY(105vh) rotate(600deg) translateX(40px);opacity:0}
 }
+
+/* ── Paid traffic conversion nudges ── */
+
+/* Nav enroll button */
+.nav-enroll-btn{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:8px;border:1.5px solid var(--afs-gray-1);font-size:13.5px;font-weight:700;color:var(--ink);letter-spacing:0.1px;transition:border-color 0.15s,background 0.15s}
+.nav-enroll-btn:hover{border-color:var(--ink);background:var(--afs-gray-2)}
+
+/* Mid-page enrollment strip */
+.afa-enroll-strip{background:#0E0E0E;padding:40px 0}
+.afa-strip-inner{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.afa-strip-headline{font-size:20px;font-weight:800;color:#fff;letter-spacing:-0.01em;line-height:1.3}
+.afa-strip-sub{font-size:14px;color:rgba(255,255,255,0.5);margin-top:6px;font-weight:500}
+.afa-strip-btn{flex-shrink:0;height:48px;padding:0 24px}
+@media(max-width:640px){.afa-strip-inner{flex-direction:column;align-items:flex-start}.afa-strip-btn{width:100%;justify-content:center}}
+
+/* Sticky bottom bar */
+.afa-sticky-bar{position:fixed;bottom:0;left:0;right:0;background:#0E0E0E;border-top:1px solid rgba(255,255,255,0.08);z-index:200;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1)}
+.afa-sticky-bar.afa-sticky-visible{transform:translateY(0)}
+.afa-sticky-inner{max-width:1184px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:20px}
+.afa-sticky-text{flex:1;display:flex;align-items:baseline;gap:16px;min-width:0}
+.afa-sticky-name{font-size:14px;font-weight:800;color:#fff;white-space:nowrap}
+.afa-sticky-sub{font-size:13px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.afa-sticky-cta{height:40px;padding:0 20px;font-size:13.5px;flex-shrink:0}
+.afa-sticky-dismiss{background:none;border:none;color:rgba(255,255,255,0.35);font-size:20px;cursor:pointer;padding:8px;line-height:1;flex-shrink:0;transition:color 0.15s}
+.afa-sticky-dismiss:hover{color:rgba(255,255,255,0.8)}
+@media(max-width:600px){.afa-sticky-sub{display:none}.afa-sticky-name{font-size:13px}}

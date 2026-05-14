@@ -164,6 +164,19 @@
   </div>
 </section>
 
+<!-- ENROLLMENT STRIP (paid traffic only — shown via JS UTM detection) -->
+<section class="afa-enroll-strip" id="afa-enroll-strip" style="display:none">
+  <div class="wrap">
+    <div class="afa-strip-inner">
+      <div class="afa-strip-copy">
+        <div class="afa-strip-headline">Ready to start? Enrollment is free and takes 60 seconds.</div>
+        <div class="afa-strip-sub">26 lessons · 2 certifications · No video, no schedule</div>
+      </div>
+      <a href="#enroll" class="btn btn-primary afa-strip-btn">Enroll free →</a>
+    </div>
+  </div>
+</section>
+
 <!-- PEER PROOF -->
 <section class="section" style="padding-top:32px">
   <div class="wrap">
@@ -342,6 +355,75 @@
       try { localStorage.setItem('afa_user_email', email.value.trim()); } catch (e) {}
     }
   });
+})();
+</script>
+
+<script>
+/* ── Paid traffic conversion nudges ── */
+(function () {
+  // Detect any UTM param and persist for the session
+  var params = new URLSearchParams(window.location.search);
+  var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  if (utmKeys.some(function (k) { return params.get(k); })) {
+    try { sessionStorage.setItem('afa_paid_visit', '1'); } catch (e) {}
+  }
+  if (!sessionStorage.getItem('afa_paid_visit')) return;
+
+  // 1. Show mid-page enrollment strip
+  var strip = document.getElementById('afa-enroll-strip');
+  if (strip) strip.style.display = '';
+
+  // 2. Add "Enroll free" button to nav
+  var navLinks = document.querySelector('.nav-links');
+  if (navLinks) {
+    var navBtn = document.createElement('a');
+    navBtn.href = '#enroll';
+    navBtn.className = 'nav-enroll-btn';
+    navBtn.textContent = 'Enroll free';
+    navLinks.insertBefore(navBtn, navLinks.querySelector('.nav-cta'));
+  }
+
+  // 3. Sticky bottom bar
+  if (sessionStorage.getItem('afa_bar_dismissed')) return;
+
+  var bar = document.createElement('div');
+  bar.className = 'afa-sticky-bar';
+  bar.innerHTML =
+    '<div class="afa-sticky-inner">' +
+      '<div class="afa-sticky-text">' +
+        '<span class="afa-sticky-name">Modern Positive Pay Academy</span>' +
+        '<span class="afa-sticky-sub">Free · 26 lessons · No video · No schedule</span>' +
+      '</div>' +
+      '<a href="#enroll" class="btn btn-primary afa-sticky-cta">Enroll free →</a>' +
+      '<button class="afa-sticky-dismiss" aria-label="Dismiss">&times;</button>' +
+    '</div>';
+  document.body.appendChild(bar);
+
+  bar.querySelector('.afa-sticky-dismiss').addEventListener('click', function () {
+    bar.classList.remove('afa-sticky-visible');
+    try { sessionStorage.setItem('afa_bar_dismissed', '1'); } catch (e) {}
+  });
+
+  // Show once hero scrolls out of view; hide when enrollment form is visible
+  var dismissed = false;
+  var heroEl = document.querySelector('.hero');
+  var enrollEl = document.getElementById('enroll');
+
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.target === heroEl && !dismissed) {
+        if (!entry.isIntersecting) bar.classList.add('afa-sticky-visible');
+        else bar.classList.remove('afa-sticky-visible');
+      }
+      if (entry.target === enrollEl) {
+        if (entry.isIntersecting) bar.classList.remove('afa-sticky-visible');
+        else if (!dismissed && !heroEl.getBoundingClientRect().top >= 0) bar.classList.add('afa-sticky-visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  if (heroEl) obs.observe(heroEl);
+  if (enrollEl) obs.observe(enrollEl);
 })();
 </script>
 
