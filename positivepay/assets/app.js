@@ -50,19 +50,6 @@
         // Fire Pardot activity for lesson completion
         firePardotEvent('/positivepay/completed/' + id + '/');
 
-        // If this is the last lesson in the track, also fire a track-level event
-        var allItems = document.querySelectorAll('.lesson-item[data-lesson-id]');
-        if (allItems.length) {
-          var prog = getProgress();
-          var allDone = true;
-          allItems.forEach(function (item) {
-            if (!prog[item.getAttribute('data-lesson-id')]) allDone = false;
-          });
-          var trackMatch = window.location.pathname.match(/\/(track-\d+)\//);
-          if (allDone && trackMatch) {
-            firePardotEvent('/positivepay/completed/' + trackMatch[1] + '/');
-          }
-        }
         // Show toast, then navigate to track overview
         var parts = window.location.pathname.split('/').filter(Boolean);
         var trackIdx = parts.findIndex(function (s) { return /^track-\d+$/.test(s); });
@@ -106,7 +93,8 @@
 
   /* ── Self-check quiz ── */
   function initQuizzes() {
-    document.querySelectorAll('.quiz-question').forEach(function (question) {
+    var lessonId = getLessonId();
+    document.querySelectorAll('.quiz-question').forEach(function (question, qIdx) {
       var correctIndex = parseInt(question.getAttribute('data-correct'), 10);
       var feedback = question.querySelector('.quiz-feedback');
       var options = question.querySelectorAll('.quiz-option');
@@ -135,6 +123,10 @@
               feedback.classList.remove('correct');
             }
           }
+
+          // Track quiz answer: /positivepay/quiz/track-1/lesson-1/q1/correct/
+          var result = (idx === correctIndex) ? 'correct' : 'incorrect';
+          firePardotEvent('/positivepay/quiz/' + lessonId + '/q' + (qIdx + 1) + '/' + result + '/');
         });
       });
     });
@@ -199,6 +191,9 @@
       if (localStorage.getItem(celebKey)) return;
       localStorage.setItem(celebKey, '1');
     } catch (e) {}
+
+    // Fire track-level completion event to Pardot
+    firePardotEvent('/positivepay/completed/track-' + trackNum + '/');
 
     showTrackCompleteModal(trackNum, total);
   }
