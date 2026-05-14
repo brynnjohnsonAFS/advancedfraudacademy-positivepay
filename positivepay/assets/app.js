@@ -42,13 +42,20 @@
         delete p[id];
         saveProgress(p);
         markUndone(btn);
+        updateLessonListChecks();
       } else {
         p[id] = 1;
         saveProgress(p);
         markDone(btn);
+        updateLessonListChecks();
+        // Navigate to track overview after marking complete
+        var parts = window.location.pathname.split('/').filter(Boolean);
+        var trackIdx = parts.findIndex(function (s) { return /^track-\d+$/.test(s); });
+        if (trackIdx !== -1) {
+          var trackUrl = '/' + parts.slice(0, trackIdx + 1).join('/') + '/';
+          setTimeout(function () { window.location.href = trackUrl; }, 500);
+        }
       }
-      // Refresh the lesson list check marks on track overview pages
-      updateLessonListChecks();
     });
   }
 

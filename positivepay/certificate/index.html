@@ -14,7 +14,17 @@
 
   /* Locked state */
   #cert-locked { display:block }
-  .cert-progress-bar-outer { background:var(--afs-gray-2);border-radius:99px;height:10px;margin:20px 0 12px }
+  .cert-preview-wrap { position:relative;margin-bottom:36px;border-radius:24px;overflow:hidden }
+  .cert-preview-blur { filter:blur(5px);opacity:0.35;pointer-events:none;user-select:none }
+  .cert-preview-overlay {
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    background:rgba(255,255,255,0.55);backdrop-filter:blur(2px)
+  }
+  .cert-lock-icon { width:44px;height:44px;margin-bottom:14px;color:var(--fg-3) }
+  .cert-overlay-title { font-size:20px;font-weight:800;color:var(--ink);margin-bottom:8px }
+  .cert-overlay-sub { font-size:14px;color:var(--fg-2);max-width:280px;line-height:1.5 }
+  .cert-progress-bar-outer { background:var(--afs-gray-2);border-radius:99px;height:10px;margin:8px 0 12px }
   .cert-progress-bar-inner { background:var(--academy-green);border-radius:99px;height:10px;transition:width 0.3s ease }
   .cert-lesson-list { list-style:none;margin:24px 0 32px;padding:0;display:flex;flex-direction:column;gap:10px }
   .cert-lesson-list li { display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500 }
@@ -95,9 +105,39 @@
   <div id="cert-locked">
     <span class="eyebrow" style="display:block;margin-bottom:16px">Your certificate</span>
     <h1 style="font-size:40px;margin-bottom:16px">Your Positive Pay Foundations certificate</h1>
-    <p style="font-size:18px;line-height:1.65;color:var(--fg-2);margin-bottom:28px">Complete all 6 lessons in Track 1 to unlock your certificate. It's a shareable credential you can add to LinkedIn and your email signature.</p>
 
-    <p style="font-size:15px;font-weight:600;color:var(--fg-2);margin-bottom:8px">You've completed <span id="progress-count">0</span> of 6 lessons.</p>
+    <!-- Blurred certificate preview with lock overlay -->
+    <div class="cert-preview-wrap">
+      <div class="cert-card cert-preview-blur" aria-hidden="true">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">
+          <img src="/positivepay/assets/afa-logo.png" alt="" style="height:auto;width:140px;display:block">
+          <div style="font-size:13px;font-weight:700;color:var(--fg-3);line-height:1.4">Modern Positive<br/>Pay Academy</div>
+        </div>
+        <div class="cert-eyebrow">Certificate of Completion</div>
+        <div class="cert-name">Your Name</div>
+        <p class="cert-statement">has completed <strong>Positive Pay Foundations</strong>, Track 1 of the Modern Positive Pay Academy.</p>
+        <p class="cert-date">Completed May 14, 2026</p>
+        <div class="cert-section-label">Skills demonstrated</div>
+        <ul class="cert-skills">
+          <li>Define modern Positive Pay and explain it to any audience</li>
+          <li>Distinguish Check Positive Pay, ACH Positive Pay, and Payee Match</li>
+          <li>Interpret business payment fraud benchmarks</li>
+          <li>Compare Positive Pay buying paths</li>
+          <li>Run a structured vendor evaluation</li>
+        </ul>
+        <p class="cert-verify">Issued by Advanced Fraud Solutions · advancedfraudacademy.com/positivepay</p>
+      </div>
+      <div class="cert-preview-overlay">
+        <svg class="cert-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <div class="cert-overlay-title">Complete Track 1 to unlock</div>
+        <div class="cert-overlay-sub">Finish all 6 lessons and your shareable certificate unlocks automatically.</div>
+      </div>
+    </div>
+
+    <p style="font-size:15px;font-weight:600;color:var(--fg-2);margin-bottom:6px">You've completed <span id="progress-count">0</span> of 6 lessons.</p>
     <div class="cert-progress-bar-outer">
       <div class="cert-progress-bar-inner" id="progress-bar" style="width:0%"></div>
     </div>
@@ -152,7 +192,7 @@
             <option value="" disabled selected>Select your role</option>
             <option>Treasury Management Officer</option>
             <option>Chief Treasury Officer</option>
-            <option>Relationship Banker</option>
+            <option>Relationship Manager</option>
             <option>Operations / IT</option>
             <option>BSA / Compliance</option>
             <option>CEO / CFO / CRO</option>
@@ -222,7 +262,7 @@
       <a href="/positivepay/track-2/" class="btn btn-ghost-light">Continue to Track 2 →</a>
     </div>
 
-    <p class="cert-footer-note">The Modern Positive Pay Academy is free, vendor-neutral education for community bank and credit union treasury professionals, built and maintained by Advanced Fraud Solutions.</p>
+    <p class="cert-footer-note">The Modern Positive Pay Academy is free education for community bank and credit union treasury professionals, built and maintained by Advanced Fraud Solutions.</p>
   </div>
 
 </div>
