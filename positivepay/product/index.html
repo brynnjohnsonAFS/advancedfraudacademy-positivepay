@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Positive Pay by AFS — The Product</title>
+<meta name="description" content="The platform behind the Modern Positive Pay Academy. A fraud engine your examiners trust, and an adoption product your business clients actually log into."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/product/"/>
+<meta property="og:title" content="Positive Pay by AFS — The Product"/>
+<meta property="og:description" content="Positive Pay only stops fraud if your business clients actually use it. Built for that."/>
+<meta property="og:image" content="https://advancedfraudacademy.com/positivepay/assets/afa-social.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Positive Pay by AFS — The Product"/>
+<meta name="twitter:description" content="The platform behind the Modern Positive Pay Academy. Built for the adoption gap most Positive Pay programs leave open."/>
+<meta name="twitter:image" content="https://advancedfraudacademy.com/positivepay/assets/afa-social.png"/>
+<link rel="stylesheet" href="../assets/tokens.css"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet"/>
+<style>
+/* Positive Pay by AFS — Product page (inherits tokens.css + styles.css) */
+:root{--pp-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+
+.nav-current{color:var(--afs-red)!important;position:relative}
+.nav-current::after{content:"";position:absolute;left:0;right:0;bottom:-22px;height:2px;background:var(--afs-red)}
+
+.eyebrow .num{font-family:var(--pp-mono);color:var(--fg-3);font-weight:600;letter-spacing:1.2px;font-size:11px}
+.eyebrow.light .num{color:rgba(255,255,255,0.4)}
+
+/* HERO */
+.hero-panel{padding:96px 80px 80px;isolation:isolate}
+.hero-panel::after{content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(199,2,0,0.30),transparent 70%);filter:blur(20px);pointer-events:none;z-index:0;animation:pp-drift-glow 14s ease-in-out infinite}
+.hero-grid{grid-template-columns:1.1fr 0.9fr;gap:72px}
+.hero-eyebrow{font-size:11.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:rgba(255,255,255,0.55);display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--afs-red);animation:pp-blink 2.4s ease-in-out infinite}
+.hero-eyebrow b{font-weight:700;color:#fff}
+.hero-eyebrow .sep{opacity:0.4}
+.hero h1 .accent-pp{color:var(--academy-green);font-style:italic;font-weight:800}
+.hero-sub{max-width:580px;text-wrap:pretty}
+.hero-ctas{margin-top:36px;align-items:center}
+.hero-tour{font-size:14px;font-weight:600;color:rgba(255,255,255,0.78);display:inline-flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.25);padding-bottom:3px;transition:color 120ms ease,border-color 120ms ease}
+.hero-tour:hover{color:#fff;border-color:#fff}
+.hero-microcopy{margin-top:22px;font-size:13px;color:rgba(255,255,255,0.5);font-weight:500;max-width:480px;line-height:1.55}
+@media(max-width:1080px){.hero-panel{padding:64px 36px 72px}.hero-grid{grid-template-columns:1fr;gap:48px}}
+
+/* Hero product mockup */
+.mock-stage{position:relative;width:100%;min-height:440px}
+.mock-window{position:relative;background:#fff;color:var(--ink);border-radius:14px;box-shadow:0 40px 100px rgba(0,0,0,0.55),0 6px 16px rgba(0,0,0,0.35);width:100%;overflow:hidden;animation:pp-float-mock 7s ease-in-out infinite}
+.mock-bar{display:flex;align-items:center;gap:8px;padding:12px 14px;background:#FAFAFA;border-bottom:1px solid var(--border)}
+.mock-bar .lights{display:flex;gap:6px}
+.mock-bar .lights span{width:10px;height:10px;border-radius:50%;background:#E0E0E0}
+.mock-bar .title{font-size:11px;font-weight:600;color:var(--fg-3);letter-spacing:0.4px;margin-left:auto;font-family:var(--pp-mono)}
+.mock-body{padding:16px 16px 20px;position:relative;overflow:hidden}
+.mock-body::after{content:"";position:absolute;top:0;left:0;width:30%;height:100%;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(173,226,93,0.08),transparent);animation:pp-scan 6s ease-in-out infinite}
+.mock-head{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 14px;border-bottom:1px solid #EEE}
+.mock-head .h{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-0.005em}
+.mock-head .ct{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--fg-3)}
+.mock-head .ct b{color:var(--afs-red);font-weight:700}
+.queue{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+.queue li{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:13px 6px;border-bottom:1px solid #EEE;font-size:13px}
+.queue li:last-child{border-bottom:none}
+.queue li.sel{background:rgba(199,2,0,0.04);border-left:3px solid var(--afs-red);padding-left:10px;border-bottom-color:rgba(199,2,0,0.10)}
+.queue .av{width:30px;height:30px;border-radius:6px;background:var(--afs-gray-2);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--fg-2);font-family:var(--pp-mono)}
+.queue li.sel .av{background:var(--afs-red);color:#fff;animation:pp-pulse-av 2.2s ease-in-out infinite}
+.queue .nm{display:flex;flex-direction:column;gap:2px;min-width:0}
+.queue .nm b{font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.queue .nm span{font-size:11px;color:var(--fg-3);font-weight:500}
+.queue .am{font-weight:700;font-size:13px;font-family:var(--pp-mono);letter-spacing:-0.01em}
+.queue .flag{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:4px}
+.flag-mis{background:rgba(199,2,0,0.10);color:var(--afs-red)}
+.flag-ach{background:rgba(37,99,235,0.10);color:#2563EB}
+.flag-amt{background:rgba(224,168,0,0.15);color:#A57500}
+.flag-pay{background:rgba(46,125,50,0.12);color:#2E7D32}
+
+.sms-card{position:absolute;bottom:-30px;right:-22px;width:248px;background:#fff;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,0.45);padding:14px;color:var(--ink);transform:rotate(3deg);z-index:2;animation:pp-float-sms 5.5s ease-in-out infinite}
+.sms-top{display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid #EEE}
+.sms-top .av{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.sms-top .who{display:flex;flex-direction:column;line-height:1.1}
+.sms-top .who b{font-size:12px;font-weight:700}
+.sms-top .who span{font-size:10px;color:var(--fg-3);font-weight:600;margin-top:1px}
+.sms-bubble{margin-top:10px;background:#F2F2F4;border-radius:14px;padding:10px 12px;font-size:12.5px;line-height:1.4;font-weight:500}
+.sms-bubble b{color:var(--ink);font-weight:700}
+.sms-actions{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sms-actions button{height:34px;border:none;border-radius:8px;font-weight:700;font-size:11.5px;letter-spacing:0.4px;cursor:pointer;font-family:inherit}
+.sms-ret{background:var(--afs-red);color:#fff}
+.sms-pay{background:#EEE;color:var(--ink)}
+
+.ann{position:absolute;top:-18px;left:-22px;background:var(--academy-green);color:var(--ink);font-family:var(--pp-mono);font-size:11px;font-weight:600;padding:8px 12px;border-radius:999px;letter-spacing:0.2px;box-shadow:0 8px 20px rgba(0,0,0,0.25);transform:rotate(-3deg);z-index:3;animation:pp-wiggle 4.5s ease-in-out infinite}
+.ann::after{content:"";position:absolute;bottom:-6px;left:36px;width:8px;height:8px;background:var(--academy-green);transform:rotate(45deg)}
+
+@media(max-width:560px){.sms-card{position:relative;bottom:auto;right:auto;margin:24px auto 0;transform:none}.ann{display:none}}
+
+@keyframes pp-float-sms{0%,100%{transform:rotate(3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-6px)}}
+@keyframes pp-float-mock{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes pp-pulse-av{0%{box-shadow:0 0 0 0 rgba(199,2,0,0.55)}70%{box-shadow:0 0 0 8px rgba(199,2,0,0)}100%{box-shadow:0 0 0 0 rgba(199,2,0,0)}}
+@keyframes pp-drift-glow{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,18px)}}
+@keyframes pp-blink{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes pp-wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(-1deg)}}
+@keyframes pp-scan{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+@media(prefers-reduced-motion:reduce){.mock-window,.sms-card,.queue li.sel .av,.hero-panel::after,.ann,.mock-body::after,.hero-eyebrow .dot{animation:none}}
+
+/* Trust strip */
+.trust{padding:32px 0 0}
+.trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:#fff}
+.trust-row .cell{padding:24px 26px;border-right:1px solid var(--border)}
+.trust-row .cell:last-child{border-right:none}
+.trust-row .n{font-size:32px;font-weight:800;letter-spacing:-0.025em;line-height:1;color:var(--ink)}
+.trust-row .l{font-size:12.5px;font-weight:600;color:var(--fg-2);margin-top:8px;letter-spacing:0.1px;line-height:1.4}
+@media(max-width:760px){.trust-row{grid-template-columns:repeat(2,1fr)}.trust-row .cell{border-right:none;border-bottom:1px solid var(--border)}.trust-row .cell:nth-child(odd){border-right:1px solid var(--border)}.trust-row .cell:nth-last-child(-n+2){border-bottom:none}}
+
+/* PROBLEM */
+.problem-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:80px;align-items:start}
+@media(max-width:980px){.problem-grid{grid-template-columns:1fr;gap:40px}}
+.problem-text p{margin-top:18px;font-size:17px;color:var(--fg-2);font-weight:500;line-height:1.62}
+.problem-text p strong{color:var(--ink);font-weight:700}
+.stat-callout{margin-top:32px;padding:20px 24px;border-left:3px solid var(--afs-red);background:#FAFAFA;border-radius:0 12px 12px 0}
+.stat-callout b{font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;line-height:1;display:block;font-family:var(--pp-mono)}
+.stat-callout span{display:block;margin-top:8px;font-size:14px;color:var(--fg-2);font-weight:500;line-height:1.5}
+.friction-list{display:flex;flex-direction:column;gap:10px}
+.friction{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:18px 22px;background:#fff;border:1px solid var(--border);border-radius:12px;transition:border-color 120ms ease,transform 120ms ease}
+.friction:hover{border-color:var(--ink);transform:translateX(2px)}
+.friction .num{font-family:var(--pp-mono);font-size:11px;font-weight:600;color:var(--fg-3);letter-spacing:0.5px;padding-top:2px}
+.friction p{font-size:14.5px;font-weight:500;color:var(--ink);line-height:1.55;margin:0}
+.friction.last{background:#0E0E0E;border-color:#0E0E0E;color:#fff}
+.friction.last .num{color:var(--academy-green)}
+.friction.last p{color:#fff;font-weight:600}
+
+/* COST */
+.cost-section{background:#F6F5F2}
+.cost-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:880px){.cost-grid{grid-template-columns:1fr}}
+.cost-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:36px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden;transition:transform 200ms ease,box-shadow 200ms ease}
+.cost-card:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,0.06)}
+.cost-card .tag{display:flex;align-items:center;justify-content:space-between}
+.cost-card .lab{font-family:var(--pp-mono);font-size:11px;color:var(--fg-3);font-weight:600;letter-spacing:0.6px}
+.cost-card .ic{width:44px;height:44px;border-radius:10px;background:var(--academy-green);display:flex;align-items:center;justify-content:center}
+.cost-card .ic svg{width:22px;height:22px;stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.cost-card h3{font-size:26px;line-height:1.15;font-weight:800;letter-spacing:-0.022em}
+.cost-card p{font-size:15.5px;line-height:1.55;color:var(--fg-2)}
+.cost-card .underline-redbar{display:block;width:48px;height:3px;background:var(--afs-red);margin-top:4px;border-radius:2px}
+
+/* TURN */
+.turn{padding:120px 0;background:#fff;position:relative}
+.turn-inner{max-width:920px;margin:0 auto;text-align:center;padding:0 28px}
+.turn h2{font-size:60px;line-height:1.04;letter-spacing:-0.025em}
+.turn h2 .red{color:var(--afs-red)}
+.turn .lede{margin-top:28px;font-size:20px;color:var(--fg-2);max-width:760px;margin-left:auto;margin-right:auto}
+.turn-rule{width:1px;height:64px;background:var(--border);margin:0 auto 40px}
+@media(max-width:880px){.turn h2{font-size:34px}}
+
+/* MECHANISM */
+.mech-section{background:#0E0E0E;color:#fff;padding:128px 0;position:relative;overflow:hidden}
+.mech-section::before{content:"";position:absolute;inset:0;opacity:0.04;pointer-events:none;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at 20% 0%,#000 35%,transparent 80%)}
+.mech-section .section-head{position:relative}
+.mech-section h2{color:#fff;font-size:54px;line-height:1.05;letter-spacing:-0.025em}
+.mech-section .lede{color:rgba(255,255,255,0.75);font-size:20px}
+.mech-section .eyebrow{color:var(--academy-green)}
+.mech-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;background:rgba(255,255,255,0.015)}
+@media(max-width:980px){.mech-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.mech-grid{grid-template-columns:1fr}}
+.mech{padding:36px 32px 40px;border-right:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:14px;min-height:280px;transition:background 200ms ease}
+.mech:hover{background:rgba(255,255,255,0.025)}
+.mech:nth-child(3n){border-right:none}
+.mech:nth-last-child(-n+3){border-bottom:none}
+@media(max-width:980px){.mech{border-right:1px solid rgba(255,255,255,0.08)!important;border-bottom:1px solid rgba(255,255,255,0.08)!important}.mech:nth-child(2n){border-right:none!important}.mech:nth-last-child(-n+2){border-bottom:none!important}}
+.mech .row{display:flex;align-items:center;justify-content:space-between}
+.mech .n{font-family:var(--pp-mono);font-size:12px;color:var(--academy-green);font-weight:600;letter-spacing:1.4px}
+.mech .ic{width:36px;height:36px;border-radius:8px;background:rgba(173,226,93,0.15);display:flex;align-items:center;justify-content:center;color:var(--academy-green)}
+.mech .ic svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.75;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mech h3{color:#fff;font-size:20px;line-height:1.25;font-weight:700;letter-spacing:-0.012em}
+.mech p{color:rgba(255,255,255,0.7);font-size:14.5px;line-height:1.55;font-weight:500;margin-top:auto;letter-spacing:0.1px}
+.mech-foot{margin-top:48px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:28px 36px;background:rgba(255,255,255,0.04);border-radius:14px;border:1px solid rgba(255,255,255,0.08)}
+.mech-foot p{color:rgba(255,255,255,0.82);font-size:15px;font-weight:500;margin:0;line-height:1.5;max-width:680px}
+.mech-foot p b{color:#fff;font-weight:700}
+.btn-text{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.3px}
+.btn-text:hover{color:var(--academy-green)}
+.btn-text .arr{transition:transform 160ms ease}
+.btn-text:hover .arr{transform:translateX(3px)}
+
+/* JOBS */
+.jobs-section{padding:128px 0;background:#fff}
+.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:980px){.jobs-grid{grid-template-columns:1fr}}
+.job{background:#fff;border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform 200ms ease,border-color 200ms ease,box-shadow 200ms ease}
+.job:hover{transform:translateY(-3px);border-color:var(--ink);box-shadow:0 18px 40px rgba(0,0,0,0.05)}
+.job-viz{height:172px;padding:24px;display:flex;align-items:center;justify-content:center;background:#FAFAF7;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.job-viz::before{content:"";position:absolute;inset:0;opacity:0.05;pointer-events:none;background-image:linear-gradient(#000 1px,transparent 1px),linear-gradient(90deg,#000 1px,transparent 1px);background-size:24px 24px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+.job-body{padding:30px 30px 0;display:flex;flex-direction:column;gap:14px;flex:1}
+.job-lab{font-family:var(--pp-mono);font-size:11.5px;color:var(--afs-red);font-weight:600;letter-spacing:1.6px;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
+.job-lab .sl{color:var(--fg-3);font-weight:500}
+.job-body h3{font-size:24px;line-height:1.18;font-weight:800;letter-spacing:-0.022em;color:var(--ink);text-wrap:balance}
+.job-body p{font-size:15px;line-height:1.55;color:var(--fg-2);letter-spacing:0.1px}
+.job-foot{margin-top:24px;padding:18px 30px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;background:#FAFAF7}
+.job-foot .out{font-family:var(--pp-mono);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--fg-3);line-height:1.4}
+.job-foot .out b{color:var(--ink);font-weight:700;display:block;font-size:13px;letter-spacing:-0.005em;text-transform:none;font-family:var(--font-sans);margin-top:2px}
+.job-foot .arr{font-size:18px;font-weight:700;color:var(--afs-red);font-family:var(--pp-mono);transition:transform 160ms ease}
+.job:hover .job-foot .arr{transform:translateX(3px)}
+.viz-flow{display:flex;flex-direction:column;gap:8px;width:100%;position:relative;z-index:1}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;font-family:var(--pp-mono);font-size:10.5px;font-weight:600;letter-spacing:0.4px}
+.vrow .vd{width:7px;height:7px;border-radius:50%;background:#2E7D32}
+.vrow .vl{height:6px;background:var(--afs-gray-2);border-radius:3px}
+.vrow .vchip{padding:3px 8px;border-radius:4px;font-size:9px;letter-spacing:1.2px;text-transform:uppercase}
+.vrow.bad .vd{background:var(--afs-red);animation:pp-pulse-av 2s ease-in-out infinite}
+.vrow.bad .vl{background:rgba(199,2,0,0.18)}
+.vrow.bad .vchip{background:var(--afs-red);color:#fff}
+.vrow.ok .vchip{background:rgba(46,125,50,0.12);color:#2E7D32}
+.viz-bars{display:flex;align-items:flex-end;justify-content:center;gap:8px;width:100%;height:120px;position:relative;z-index:1}
+.viz-bars span{width:18px;background:var(--afs-gray-1);border-radius:4px 4px 2px 2px;display:block;position:relative}
+.viz-bars span::before{content:attr(data-l);position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-family:var(--pp-mono);font-size:8.5px;color:var(--fg-3);font-weight:600;letter-spacing:0.4px}
+.viz-bars span.last{background:var(--afs-red)}
+.viz-bars span.last::after{content:"+$";position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--pp-mono);font-size:11px;color:var(--afs-red);font-weight:700;letter-spacing:0.2px}
+.viz-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;width:100%;max-width:240px;position:relative;z-index:1}
+.viz-grid .acct{aspect-ratio:1;background:var(--afs-gray-1);border-radius:4px;position:relative}
+.viz-grid .acct.locked{background:var(--ink)}
+.viz-grid .acct.locked::after{content:"";position:absolute;inset:0;background:var(--academy-green);transform:scale(0.25);border-radius:50%;animation:pp-blink 3s ease-in-out infinite}
+.viz-grid .acct.locked:nth-child(7n)::after{animation-delay:0.4s}
+.viz-grid .acct.locked:nth-child(5n)::after{animation-delay:0.8s}
+.viz-grid .acct.locked:nth-child(3n)::after{animation-delay:1.2s}
+@media(prefers-reduced-motion:reduce){.vrow.bad .vd,.viz-grid .acct.locked::after{animation:none}}
+
+/* PROOF */
+.proof-foot{margin-top:48px;display:flex;align-items:center;gap:24px;padding:28px 36px;background:#fff;border-radius:14px;border:1px solid var(--border);flex-wrap:wrap}
+.proof-foot .key{display:flex;align-items:center;gap:14px;flex:1;min-width:260px}
+.proof-foot .icon{width:42px;height:42px;border-radius:10px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.proof-foot .icon svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
+.proof-foot p{font-size:15.5px;color:var(--ink);font-weight:600;line-height:1.45;margin:0;letter-spacing:-0.005em}
+.proof-foot p b{color:var(--afs-red);font-weight:700}
+.proof-section{background:#F6F5F2;padding:120px 0}
+.proof-section .quote-grid{grid-template-columns:repeat(2,1fr)}
+@media(max-width:880px){.proof-section .quote-grid{grid-template-columns:1fr}}
+
+/* OBJECTIONS */
+.obj-section{padding:120px 0;background:#fff}
+.obj-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border)}
+.obj{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;padding:40px 0;border-bottom:1px solid var(--border)}
+@media(max-width:880px){.obj{grid-template-columns:1fr;gap:14px;padding:32px 0}}
+.obj .q{display:flex;flex-direction:column;gap:14px}
+.obj .q .num{font-family:var(--pp-mono);font-size:12px;color:var(--fg-3);font-weight:600;letter-spacing:1.2px}
+.obj .q h3{font-size:24px;line-height:1.22;font-weight:700;color:var(--ink);letter-spacing:-0.015em;font-style:italic}
+.obj .q h3::before{content:"“";color:var(--afs-red);margin-right:4px}
+.obj .q h3::after{content:"”";color:var(--afs-red);margin-left:2px}
+.obj .a p{font-size:16.5px;line-height:1.6;color:var(--ink);font-weight:500}
+.obj .a p strong{font-weight:700;color:var(--ink)}
+
+/* RISK */
+.risk-section{padding:128px 0;background:#F6F5F2;position:relative}
+.risk-inner{max-width:1080px;margin:0 auto;padding:0 28px}
+.risk-card{background:#fff;border-radius:24px;padding:64px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;box-shadow:0 30px 80px rgba(0,0,0,0.05)}
+@media(max-width:980px){.risk-card{grid-template-columns:1fr;padding:40px;gap:40px}}
+.risk-card h2{font-size:44px;line-height:1.08;letter-spacing:-0.025em}
+.risk-card p{margin-top:18px;font-size:17px;line-height:1.6}
+.risk-card .ctas{margin-top:32px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.risk-tour{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:3px;transition:color 120ms ease,border-color 120ms ease}
+.risk-tour:hover{color:var(--afs-red);border-color:var(--afs-red)}
+.demo-card{background:#0E0E0E;color:#fff;border-radius:18px;padding:32px;position:relative;overflow:hidden}
+.demo-card::before{content:"";position:absolute;inset:0;opacity:0.06;pointer-events:none;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:48px 48px}
+.demo-card .row{display:flex;align-items:center;gap:14px;position:relative;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.demo-card .row:last-child{border-bottom:none}
+.demo-card .row .ic{width:36px;height:36px;border-radius:8px;background:rgba(173,226,93,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--academy-green)}
+.demo-card .row .ic svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.demo-card .row .t{font-size:14.5px;font-weight:600;color:#fff;letter-spacing:-0.005em}
+.demo-card .row .t span{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.55);margin-top:2px}
+.demo-card .head{font-family:var(--pp-mono);font-size:11px;color:rgba(255,255,255,0.55);font-weight:600;letter-spacing:1.6px;text-transform:uppercase;position:relative;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.demo-card .head::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--academy-green)}
+
+/* FINAL */
+.final{padding:24px 0 56px}
+.final-card{position:relative;background:#0E0E0E;color:#fff;border-radius:28px;padding:88px 80px;overflow:hidden;isolation:isolate}
+.final-card::before{content:"";position:absolute;inset:0;opacity:0.05;pointer-events:none;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 20% 30%,#000 30%,transparent 75%)}
+.final-card::after{content:"";position:absolute;right:-200px;bottom:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(199,2,0,0.30),transparent 70%);filter:blur(20px);pointer-events:none;z-index:0}
+.final-grid{position:relative;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:end;z-index:1}
+@media(max-width:980px){.final-card{padding:48px 32px}.final-grid{grid-template-columns:1fr;gap:40px}}
+.final-grid h2{color:#fff;font-size:56px;line-height:1.04;letter-spacing:-0.028em}
+.final-grid h2 .accent-pp{color:var(--academy-green);font-style:italic}
+.final-grid p{color:rgba(255,255,255,0.8);font-size:18px;line-height:1.6;font-weight:500;margin-top:22px;max-width:580px}
+.final-right{display:flex;flex-direction:column;gap:14px}
+.final-right .micro{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.55;font-weight:500;margin-top:12px}
+.final-right .tour{color:#fff;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.30);padding-bottom:3px;width:fit-content;transition:border-color 120ms ease}
+.final-right .tour:hover{border-color:#fff}
+@media(max-width:980px){.final-grid h2{font-size:36px}}
+
+/* P.S. */
+.ps-section{padding:24px 0 96px}
+.ps-card{display:flex;align-items:flex-start;gap:18px;padding:28px 32px;border:1px dashed var(--afs-gray-3);border-radius:14px;background:#FAFAF7}
+.ps-card .lab{font-family:var(--pp-mono);font-weight:700;font-size:13px;color:var(--afs-red);letter-spacing:0.4px;flex-shrink:0;padding-top:2px}
+.ps-card p{font-size:15.5px;line-height:1.6;color:var(--fg-2);max-width:840px;font-weight:500}
+.ps-card a{color:var(--ink);border-bottom:1px solid var(--ink);font-weight:600;transition:color 120ms ease,border-color 120ms ease}
+.ps-card a:hover{color:var(--afs-red);border-color:var(--afs-red)}
+.ps-card p strong{color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="../assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="/positivepay/product/" class="nav-current">The Product</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero" data-screen-label="01 Hero">
+  <div class="wrap">
+    <div class="hero-panel">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="dot"></span>
+            <span>The Product</span>
+            <span class="sep">·</span>
+            <b>Positive Pay by AFS</b>
+          </div>
+          <h1>Positive Pay<br/>only stops fraud<br/>if your clients<br/><span class="accent-pp">actually use it.</span></h1>
+          <p class="hero-sub">Whether you're evaluating Positive Pay for the first time, or you've had it for years and can't get anyone to log in, the thing that determines whether it works is the same: your business clients reviewing exceptions and deciding pay or return, on their own.</p>
+          <div class="hero-ctas">
+            <a href="#demo" class="btn btn-primary">Request a discovery call →</a>
+            <a href="#tour" class="hero-tour">Or take the self-guided tour →</a>
+          </div>
+          <p class="hero-microcopy">30 minutes, on your screen, your questions. No slide deck, no pressure, no sales theater. Just the product, and an honest read on whether it fits your FI.</p>
+        </div>
+
+        <div class="mock-stage">
+          <div class="ann">↳ Built for adoption.</div>
+          <div class="mock-window">
+            <div class="mock-bar">
+              <div class="lights"><span></span><span></span><span></span></div>
+              <div class="title">positivepay.afs · exceptions</div>
+            </div>
+            <div class="mock-body">
+              <div class="mock-head">
+                <span class="h">Today's exceptions</span>
+                <span class="ct"><b>04</b> · cutoff 4:00 PM ET</span>
+              </div>
+              <ul class="queue">
+                <li class="sel"><span class="av">01</span><span class="nm"><b>SAGE OFFICE SUPPLY</b><span>Check · #44219 · Payee altered</span></span><span class="am">$4,820.00</span><span class="flag flag-mis">Mismatch</span></li>
+                <li><span class="av">02</span><span class="nm"><b>NORTHWIND COFFEE CO.</b><span>ACH · originator not approved</span></span><span class="am">$1,240.50</span><span class="flag flag-ach">ACH</span></li>
+                <li><span class="av">03</span><span class="nm"><b>CASCADE LANDSCAPING</b><span>Check · amount &gt; issue</span></span><span class="am">$3,150.00</span><span class="flag flag-amt">Amount</span></li>
+                <li><span class="av">04</span><span class="nm"><b>BRIGHTON LEGAL LLP</b><span>Check · auto-paid · within tolerance</span></span><span class="am">$2,475.00</span><span class="flag flag-pay">Cleared</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sms-card">
+            <div class="sms-top">
+              <div class="av">PP</div>
+              <div class="who"><b>Positive Pay</b><span>SMS · Now</span></div>
+            </div>
+            <div class="sms-bubble">Exception flagged: <b>SAGE OFFICE SUPPLY</b> for <b>$4,820.00</b>. Payee altered. Decide before <b>4:00 PM ET</b>.</div>
+            <div class="sms-actions">
+              <button class="sms-ret" type="button">Return</button>
+              <button class="sms-pay" type="button">Pay</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="trust">
+      <div class="trust-row">
+        <div class="cell"><div class="n">1,200<span style="font-size:22px">+</span></div><div class="l">community FIs already protected by AFS</div></div>
+        <div class="cell"><div class="n">14 yrs</div><div class="l">in the consortium fraud category</div></div>
+        <div class="cell"><div class="n">40<span style="font-size:22px">+</span></div><div class="l">core and digital banking integrations</div></div>
+        <div class="cell"><div class="n">&lt;1 hr</div><div class="l">FI staff training to go live</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem" data-screen-label="02 Problem">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom:48px">
+      <span class="eyebrow"><span class="num">01</span> The problem</span>
+      <h2>Could you say your business clients are protected, and mean it?</h2>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-text">
+        <p>If one of your business clients called this afternoon and asked, <em>"are we protected from check and ACH fraud?"</em> — could you say yes, and mean it?</p>
+        <p><strong>For most community FIs, the honest answer is "sort of."</strong></p>
+        <p>Maybe you don't offer Positive Pay yet, and you know that gap is sitting there. Maybe it's bundled into your core, technically available, but you couldn't tell us how many business clients actually use it. Maybe you have a real program and it stalled in the double digits, with your team decisioning exceptions on clients' behalf because they won't log in.</p>
+        <p>Different starting points. Same problem. <strong>A Positive Pay program only protects the business clients who actually use it.</strong> And across community banking, most don't.</p>
+        <div class="stat-callout">
+          <b>97% / ~33%</b>
+          <span>Ninety-seven percent of community FIs offer check Positive Pay. Only about a third of business clients have adopted it.</span>
+        </div>
+      </div>
+
+      <div class="friction-list">
+        <div class="friction"><span class="num">01</span><p>"I don't write that many checks anymore" — and the conversation ends before ACH ever comes up.</p></div>
+        <div class="friction"><span class="num">02</span><p>Exceptions pile up because nobody on the business side reviews them. The RM chases decisions by phone every cutoff.</p></div>
+        <div class="friction"><span class="num">03</span><p>Onboarding one business client takes two months because their accounting software exports a file the platform won't accept.</p></div>
+        <div class="friction"><span class="num">04</span><p>Branch staff are fee-averse, so they hesitate to bring it up at all.</p></div>
+        <div class="friction"><span class="num">05</span><p>You can see the number. A fraction of your business clients are enrolled. You know the problem isn't selling it — it's getting them to use it.</p></div>
+        <div class="friction last"><span class="num">→</span><p>A Positive Pay program your clients ignore is exposure with a login. The fraud you meant to stop is still getting through.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cost-section" id="cost" data-screen-label="03 Cost">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="num">02</span> The agitation</span>
+      <h2>Here's what the gap actually costs you.</h2>
+      <p class="lede">Whether the gap is no program, an unused program, or a stalled one, it's easy to treat it as a someday problem. It isn't. Every month it stays open, it costs you in four places at once.</p>
+    </div>
+
+    <div class="cost-grid">
+      <div class="cost-card">
+        <div class="tag"><span class="lab">01 · LOSS</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></div></div>
+        <h3>Fraud you absorb.</h3>
+        <span class="underline-redbar"></span>
+        <p>The un-enrolled accounts are unprotected. When fraud hits, you either pass the loss to a business client and strain the relationship, or you eat it as the cost of doing business. Both are expensive.</p>
+      </div>
+      <div class="cost-card">
+        <div class="tag"><span class="lab">02 · REVENUE</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+        <h3>Revenue you leave on the table.</h3>
+        <span class="underline-redbar"></span>
+        <p>Industry research shows a majority of business clients using Positive Pay for free would be willing to pay for it. If your program is stalled or given away, that's six figures of non-interest income you aren't capturing.</p>
+      </div>
+      <div class="cost-card">
+        <div class="tag"><span class="lab">03 · DEPOSITS</span><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M8 15h4"/></svg></div></div>
+        <h3>Deposits you don't lock in.</h3>
+        <span class="underline-redbar"></span>
+        <p>A business client with check and ACH Positive Pay fully configured doesn't leave. As one chief retail officer put it: "almost like putting a wall around your customer." A stalled program builds no wall.</p>
+      </div>
+      <div class="cost-card">
+        <div class="tag"><span class="lab">04 · TIME</span><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <h3>Time your team burns.</h3>
+        <span class="underline-redbar"></span>
+        <p>Every exception your treasury staff decisions on a client's behalf, every cutoff your relationship managers spend chasing decisions, is time that should be going to growth.</p>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:48px;font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-0.005em">Stalled Positive Pay isn't neutral. It's a slow, compounding leak.</p>
+  </div>
+</section>
+
+<section class="turn" id="how" data-screen-label="04 Turn">
+  <div class="turn-inner">
+    <div class="turn-rule"></div>
+    <span class="eyebrow"><span class="num">03</span> The turn</span>
+    <h2 style="margin-top:18px">Most platforms are built for the bank. <span class="red">We built ours for the business client.</span></h2>
+    <p class="lede">Most Positive Pay platforms are fraud engines that <em>your team</em> monitors. Positive Pay by AFS is two products in one: a fraud engine — AI-powered Payee Match, real-time decisioning, examiner-ready audit trails — and an adoption product, designed so the business client actually uses it.</p>
+    <p class="lede" style="margin-top:24px"><strong style="color:var(--ink);font-weight:700">That second half is the half that makes the first half real.</strong> A fraud engine nobody logs into doesn't stop fraud. We built every part of Positive Pay by AFS around that truth.</p>
+  </div>
+</section>
+
+<section class="mech-section" data-screen-label="05 Mechanism">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom:56px">
+      <span class="eyebrow light"><span class="num">04</span> The mechanism</span>
+      <h2>What "built for adoption" actually means.</h2>
+      <p class="lede">Six things separate a Positive Pay your clients use from one they ignore. Positive Pay by AFS does all six.</p>
+    </div>
+
+    <div class="mech-grid">
+      <div class="mech">
+        <div class="row"><span class="n">01 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h7v7h-7z"/></svg></div></div>
+        <h3>Check, ACH and Payee Match in one platform.</h3>
+        <p>One login, three protections. Your business client doesn't bounce between systems, and you don't lose the ACH conversation when they say they've stopped writing checks.</p>
+      </div>
+      <div class="mech">
+        <div class="row"><span class="n">02 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8.5V21H3V3h12.5L21 8.5Z"/><path d="M14 3v6h6"/><path d="M9 17h6M9 13h6"/></svg></div></div>
+        <h3>File-agnostic ingestion.</h3>
+        <p>Your clients use whatever accounting software they use. We accept what it exports: headerless files, files without a full MICR line, fixed-length formats. No two-month onboarding fights over a missing column.</p>
+      </div>
+      <div class="mech">
+        <div class="row"><span class="n">03 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div></div>
+        <h3>Mobile and SMS exception review.</h3>
+        <p>A business owner gets a text, opens the exception on their phone, decides pay or return in seconds. The decision happens in the field, where they actually are.</p>
+      </div>
+      <div class="mech">
+        <div class="row"><span class="n">04 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h12"/><circle cx="19" cy="18" r="2"/></svg></div></div>
+        <h3>Pre-built rules.</h3>
+        <p>We populate a client's initial ruleset from their transaction history before they go live. Day one isn't thirty exceptions and an overwhelmed client. It's a system that already knows their normal.</p>
+      </div>
+      <div class="mech">
+        <div class="row"><span class="n">05 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3 8 8 10 5-2 8-5 8-10V6l-8-4Z"/></svg></div></div>
+        <h3>FI-controlled defaults.</h3>
+        <p>Your team sets pay-or-return at the FI level, written into the agreement. Your business client isn't toggling a setting that changes your liability picture.</p>
+      </div>
+      <div class="mech">
+        <div class="row"><span class="n">06 / 06</span><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <h3>Visible cutoff times.</h3>
+        <p>The cutoff shows on the screen, so "I didn't know the deadline" stops being a support call. Decisioning becomes routine, not anxious.</p>
+      </div>
+    </div>
+
+    <div class="mech-foot">
+      <p>When an exception is decisioned, the <b>Decision File</b> carries that decision back to your core — so transactions process without your team applying each one by hand. Implementation runs in weeks, not quarters. Staff training takes under an hour.</p>
+      <a href="#demo" class="btn-text"><span>See it on a discovery call</span><span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="jobs-section" id="jobs" data-screen-label="06 Jobs">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="num">05</span> What it's for</span>
+      <h2>Three jobs. One platform.</h2>
+      <p class="lede">Treasury leaders don't buy software. They hire it to do a job. Positive Pay by AFS is hired for three.</p>
+    </div>
+
+    <div class="jobs-grid">
+      <article class="job">
+        <div class="job-viz">
+          <div class="viz-flow">
+            <div class="vrow bad"><span class="vd"></span><span class="vl"></span><span class="vchip">RETURN</span></div>
+            <div class="vrow ok"><span class="vd"></span><span class="vl"></span><span class="vchip">PAY</span></div>
+            <div class="vrow ok"><span class="vd"></span><span class="vl"></span><span class="vchip">PAY</span></div>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-lab">Job 01 <span class="sl">/ Fraud</span></span>
+          <h3>Stop check and ACH fraud before it clears.</h3>
+          <p>Every transaction matched against what the client authorized. Payee Match catches the washed check where the dollar amount looks right but the payee was altered. Exceptions get decisioned before funds move, not investigated after they're gone.</p>
+        </div>
+        <div class="job-foot">
+          <span class="out">Outcome<b>Fraud stops at the gate.</b></span>
+          <span class="arr">→</span>
+        </div>
+      </article>
+
+      <article class="job">
+        <div class="job-viz">
+          <div class="viz-bars">
+            <span data-l="Q1" style="height:28%"></span>
+            <span data-l="Q2" style="height:44%"></span>
+            <span data-l="Q3" style="height:58%"></span>
+            <span data-l="Q4" style="height:74%"></span>
+            <span data-l="Q5" class="last" style="height:94%"></span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-lab">Job 02 <span class="sl">/ Revenue</span></span>
+          <h3>Turn Positive Pay into non-interest income.</h3>
+          <p>A product your clients use is a product they'll pay for. Priced per business account, bundled into a treasury tier — Positive Pay by AFS becomes a six-figure non-interest income line for a typical community FI book. Not a cost center.</p>
+        </div>
+        <div class="job-foot">
+          <span class="out">Outcome<b>A line item that earns its keep.</b></span>
+          <span class="arr">→</span>
+        </div>
+      </article>
+
+      <article class="job">
+        <div class="job-viz">
+          <div class="viz-grid">
+            <span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct"></span>
+            <span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span>
+            <span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct"></span><span class="acct locked"></span><span class="acct locked"></span><span class="acct locked"></span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-lab">Job 03 <span class="sl">/ Retention</span></span>
+          <h3>Retain your commercial deposits.</h3>
+          <p>A configured business client is a client who doesn't leave. In a market where everyone is fighting for commercial deposits, Positive Pay is one of the few products that both attracts business clients and holds them.</p>
+        </div>
+        <div class="job-foot">
+          <span class="out">Outcome<b>Stickier deposits, fewer at-risk accounts.</b></span>
+          <span class="arr">→</span>
+        </div>
+      </article>
+    </div>
+
+    <p style="margin-top:48px;text-align:center;font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-0.005em">One platform. Three jobs. All of them depend on the same thing — clients who actually use it.</p>
+  </div>
+</section>
+
+<section class="proof-section" id="proof" data-screen-label="07 Proof">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="num">06</span> Proof</span>
+      <h2>What treasury teams tell us.</h2>
+    </div>
+
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="quote-mark">“</div>
+        <p class="quote-body">Most of our 100+ Positive Pay customers came in after a fraud incident. We don't sell it. We make it the obvious choice at a moment when they're listening.</p>
+        <div class="quote-attr">Corporate Support Officer<br/>$1B+ community bank · 5 branches</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">“</div>
+        <p class="quote-body">People think it's a big fee until they've experienced fraud. Then the fee doesn't sound so big anymore.</p>
+        <div class="quote-attr">VP Business Services<br/>$5B credit union · 20+ branches</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">“</div>
+        <p class="quote-body">Once they have check and ACH Positive Pay configured, it's almost like you're putting a wall around your customer. They don't leave.</p>
+        <div class="quote-attr">Chief Retail Officer<br/>$1B+ community bank · 5 branches</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">“</div>
+        <p class="quote-body">It's an easy and simple product to use. That's the whole game for getting business clients to actually log in.</p>
+        <div class="quote-attr">Director of Digital Banking<br/>$4B credit union · 30+ branches</div>
+      </div>
+    </div>
+
+    <div class="proof-foot">
+      <div class="key">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></svg></div>
+        <p>The pattern underneath the quotes: <b>the FIs that win with Positive Pay aren't the ones with the most features</b> — they're the ones whose business clients log in. That's what we built for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="obj-section" data-screen-label="08 Objections">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="num">07</span> Real talk</span>
+      <h2>What you're probably thinking.</h2>
+    </div>
+
+    <div class="obj-list">
+      <div class="obj">
+        <div class="q"><span class="num">Objection 01</span><h3>We already have Positive Pay through our core.</h3></div>
+        <div class="a"><p>You have a fraud <em>feature</em>. The question is whether your business clients use it. If your enrollment is in the single digits and your team is decisioning exceptions on clients' behalf, you have a checkbox, not a program. <strong>Positive Pay by AFS is built for the adoption gap your core module leaves open.</strong></p></div>
+      </div>
+      <div class="obj">
+        <div class="q"><span class="num">Objection 02</span><h3>Our business clients are fee-averse.</h3></div>
+        <div class="a"><p>They are — until they have fraud. The treasury teams who get past this stop selling a fee and <strong>start selling fraud insurance</strong>, or they bundle Positive Pay into a higher treasury tier so it reads as a service level. We'll show you exactly how on the call.</p></div>
+      </div>
+      <div class="obj">
+        <div class="q"><span class="num">Objection 03</span><h3>Implementation will be a nightmare.</h3></div>
+        <div class="a"><p>Standard implementation is measured in <strong>weeks, not quarters</strong>, and staff training takes under an hour. The longest pole is usually core integration, and we've done it with more than forty integration partners. We'll give you a realistic timeline for your specific setup — not a sales-call promise.</p></div>
+      </div>
+      <div class="obj">
+        <div class="q"><span class="num">Objection 04</span><h3>My business clients won't actually use it.</h3></div>
+        <div class="a"><p>This is the real objection, and it's the one this entire platform is built to answer. <strong>File-agnostic ingestion. Mobile and SMS review. Pre-built rules. Visible cutoffs.</strong> Every design choice removes a reason a business client wouldn't log in. Adoption isn't an accident with Positive Pay by AFS. It's the product.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="risk-section" id="demo" data-screen-label="09 Risk reversal">
+  <div class="risk-inner">
+    <div class="risk-card">
+      <div>
+        <span class="eyebrow"><span class="num">08</span> Risk reversal</span>
+        <h2 style="margin-top:14px">A discovery call that respects your time.</h2>
+        <p>We're not going to put you through a sales cycle to find out if this fits.</p>
+        <p>The discovery call is <strong>thirty minutes, on your screen</strong>. We show you the product working, you ask the questions that matter to your FI, and we give you an honest read on fit — including the cases where Positive Pay by AFS is <em>not</em> the right call.</p>
+        <div class="ctas">
+          <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn btn-primary">Request a discovery call →</a>
+          <a href="#tour" class="risk-tour">Take the self-guided tour first →</a>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="head">What's in the 30 minutes</div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div><div class="t">Live walk-through of the product<span>Exception queue, mobile review, Decision File.</span></div></div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div><div class="t">An honest read on fit for your FI<span>Including the cases where AFS isn't the right call.</span></div></div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div><div class="t">Realistic implementation timeline<span>Mapped to your core and your stack.</span></div></div>
+        <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div><div class="t">Pricing conversation, if you want it<span>Per-account, bundled, or treasury-tier — we'll show you the math.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final" data-screen-label="10 Final CTA">
+  <div class="wrap">
+    <div class="final-card">
+      <div class="final-grid">
+        <div>
+          <span class="hero-eyebrow"><span class="dot"></span><b>Recap</b><span class="sep">·</span><span>The whole thing in one place</span></span>
+          <h2 style="margin-top:24px">Positive Pay that <span class="accent-pp">earns its line</span> on the budget.</h2>
+          <p>Your business clients face check and ACH fraud every day. A Positive Pay program only stops that fraud if your clients actually use it. Positive Pay by AFS is built for exactly that. When they use it, three things happen: fraud stops before it clears, Positive Pay becomes non-interest income, and your commercial deposits get stickier.</p>
+        </div>
+        <div class="final-right">
+          <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn btn-primary" style="height:54px;padding:0 32px;font-size:14.5px">Request a discovery call →</a>
+          <a href="#tour" class="tour">Or take the self-guided tour first →</a>
+          <p class="micro">Thirty minutes, on your screen, your questions. We'll tell you honestly whether it fits.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ps-section">
+  <div class="wrap">
+    <div class="ps-card">
+      <span class="lab">P.S.</span>
+      <p>If you've been working through <a href="/positivepay/">the Modern Positive Pay Academy</a>, you already know the playbook — the metrics that matter, the enrollment levers, the adoption mechanics. <strong>Positive Pay by AFS is the platform we built to run that playbook.</strong> The Academy works with any vendor. This page is just the honest answer to "so how does AFS do it?"</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="../assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:28px;width:auto;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>The platform behind the Modern Positive Pay Academy. Two products in one: a fraud engine your examiners trust, and an adoption product your business clients actually log into.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/product/">The Product</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="https://advancedfraudsolutions.com/privacy-policy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script type="text/javascript">
+  piAId = '784193';
+  piCId = '199064';
+  (function() {
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = 'https://pi.pardot.com/pd.js';
+      var c = document.getElementsByTagName('script')[0];
+      c.parentNode.insertBefore(s, c);
+    }
+    if (window.attachEvent) { window.attachEvent('onload', async_load); }
+    else { window.addEventListener('load', async_load, false); }
+  })();
+</script>
+</body>
+</html>
