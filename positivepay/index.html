@@ -36,6 +36,13 @@
   .dc-return{background:var(--afs-red);color:#fff}
   .dc-pay{background:var(--afs-gray-2);color:var(--ink)}
   @media(max-width:980px){.decision-card{margin-left:0;max-width:100%;transform:none}}
+  /* Radio pill groups */
+  .radio-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .radio-pill{position:relative}
+  .radio-pill input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
+  .radio-pill label{display:inline-flex;align-items:center;padding:6px 13px;border:1.5px solid var(--border);border-radius:100px;font-size:12.5px;font-weight:500;cursor:pointer;transition:border-color 0.12s,background 0.12s,color 0.12s;background:transparent;color:var(--fg-2);line-height:1.2;user-select:none}
+  .radio-pill input[type="radio"]:checked + label{background:var(--ink);border-color:var(--ink);color:#fff}
+  .radio-pill label:hover{border-color:var(--ink);color:var(--ink)}
 </style>
 </head>
 <body>
@@ -237,8 +244,7 @@
           <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span> Peer benchmarks at your asset tier.</li>
         </ul>
       </div>
-      <iframe name="pardot-frame" style="display:none" aria-hidden="true"></iframe>
-      <form class="form-card" method="post" action="https://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl" target="pardot-frame">
+      <form class="form-card" method="post" action="https://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl">
         <div class="form-row">
           <div class="field"><label for="first">First name</label><input id="first" name="first_name" type="text" required></div>
           <div class="field"><label for="last">Last name</label><input id="last" name="last_name" type="text" required></div>
@@ -246,61 +252,56 @@
         <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" required></div>
         <div class="field"><label for="inst">Institution name</label><input id="inst" name="company" type="text" required></div>
         <div class="field">
-          <label for="role">Job title</label>
-          <select id="role" name="job_title" required>
-            <option value="" disabled selected>Select your role</option>
-            <option>Treasury Management Officer</option>
-            <option>Director of Electronic Services / Digital Banking</option>
-            <option>VP of Business Account Services</option>
-            <option>Cash Management Officer</option>
-            <option>Chief Retail Officer</option>
-            <option>VP Operations</option>
-            <option>Relationship Manager</option>
-            <option>Other</option>
-          </select>
+          <label>Job title</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" id="jt1" name="job_title" value="Treasury Management Officer" required><label for="jt1">Treasury Management Officer</label></div>
+            <div class="radio-pill"><input type="radio" id="jt2" name="job_title" value="Director of Electronic Services / Digital Banking"><label for="jt2">Director of Electronic Services / Digital Banking</label></div>
+            <div class="radio-pill"><input type="radio" id="jt3" name="job_title" value="VP of Business Account Services"><label for="jt3">VP of Business Account Services</label></div>
+            <div class="radio-pill"><input type="radio" id="jt4" name="job_title" value="Cash Management Officer"><label for="jt4">Cash Management Officer</label></div>
+            <div class="radio-pill"><input type="radio" id="jt5" name="job_title" value="Chief Retail Officer"><label for="jt5">Chief Retail Officer</label></div>
+            <div class="radio-pill"><input type="radio" id="jt6" name="job_title" value="VP Operations"><label for="jt6">VP Operations</label></div>
+            <div class="radio-pill"><input type="radio" id="jt7" name="job_title" value="Relationship Manager"><label for="jt7">Relationship Manager</label></div>
+            <div class="radio-pill"><input type="radio" id="jt8" name="job_title" value="Other"><label for="jt8">Other</label></div>
+          </div>
         </div>
         <div class="field">
-          <label for="asset">Asset size</label>
-          <select id="asset" name="asset_size" required>
-            <option value="" disabled selected>Select asset size</option>
-            <option>Under $250M</option>
-            <option>$250M – $500M</option>
-            <option>$500M – $1B</option>
-            <option>$1B – $5B</option>
-            <option>$5B+</option>
-          </select>
+          <label>Asset size</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" id="as1" name="asset_size" value="Under $250M" required><label for="as1">Under $250M</label></div>
+            <div class="radio-pill"><input type="radio" id="as2" name="asset_size" value="$250M – $500M"><label for="as2">$250M – $500M</label></div>
+            <div class="radio-pill"><input type="radio" id="as3" name="asset_size" value="$500M – $1B"><label for="as3">$500M – $1B</label></div>
+            <div class="radio-pill"><input type="radio" id="as4" name="asset_size" value="$1B – $5B"><label for="as4">$1B – $5B</label></div>
+            <div class="radio-pill"><input type="radio" id="as5" name="asset_size" value="$5B+"><label for="as5">$5B+</label></div>
+          </div>
         </div>
         <div class="field">
-          <label for="pp_status">Current Positive Pay status</label>
-          <select id="pp_status" name="Positive Pay Status" required>
-            <option value="" disabled selected>Select your status</option>
-            <option>Not currently offering Positive Pay</option>
-            <option>Offered but low adoption (under 25%)</option>
-            <option>Growing adoption (25–75%)</option>
-            <option>High adoption (75%+)</option>
-          </select>
+          <label>Current Positive Pay status</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" id="pp1" name="Positive Pay Status" value="Not currently offering Positive Pay" required><label for="pp1">Not currently offering</label></div>
+            <div class="radio-pill"><input type="radio" id="pp2" name="Positive Pay Status" value="Offered but low adoption (under 25%)"><label for="pp2">Low adoption (under 25%)</label></div>
+            <div class="radio-pill"><input type="radio" id="pp3" name="Positive Pay Status" value="Growing adoption (25–75%)"><label for="pp3">Growing (25–75%)</label></div>
+            <div class="radio-pill"><input type="radio" id="pp4" name="Positive Pay Status" value="High adoption (75%+)"><label for="pp4">High adoption (75%+)</label></div>
+          </div>
         </div>
         <div class="field">
-          <label for="biz_clients">Total business clients</label>
-          <select id="biz_clients" name="Total Business Clients" required>
-            <option value="" disabled selected>Select a range</option>
-            <option>Under 100</option>
-            <option>100–500</option>
-            <option>500–1,000</option>
-            <option>1,000–5,000</option>
-            <option>5,000+</option>
-          </select>
+          <label>Total business clients</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" id="bc1" name="Total Business Clients" value="Under 100" required><label for="bc1">Under 100</label></div>
+            <div class="radio-pill"><input type="radio" id="bc2" name="Total Business Clients" value="100–500"><label for="bc2">100–500</label></div>
+            <div class="radio-pill"><input type="radio" id="bc3" name="Total Business Clients" value="500–1,000"><label for="bc3">500–1,000</label></div>
+            <div class="radio-pill"><input type="radio" id="bc4" name="Total Business Clients" value="1,000–5,000"><label for="bc4">1,000–5,000</label></div>
+            <div class="radio-pill"><input type="radio" id="bc5" name="Total Business Clients" value="5,000+"><label for="bc5">5,000+</label></div>
+          </div>
         </div>
         <div class="field">
-          <label for="academy_goal">Primary goal for the Academy</label>
-          <select id="academy_goal" name="Academy Goal" required>
-            <option value="" disabled selected>Select your goal</option>
-            <option>Increase Positive Pay adoption</option>
-            <option>Understand pricing and revenue impact</option>
-            <option>Train my team</option>
-            <option>Evaluate upgrading our platform</option>
-            <option>General education</option>
-          </select>
+          <label>Primary goal for the Academy</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" id="ag1" name="Academy Goal" value="Increase Positive Pay adoption" required><label for="ag1">Increase adoption</label></div>
+            <div class="radio-pill"><input type="radio" id="ag2" name="Academy Goal" value="Understand pricing and revenue impact"><label for="ag2">Pricing & revenue impact</label></div>
+            <div class="radio-pill"><input type="radio" id="ag3" name="Academy Goal" value="Train my team"><label for="ag3">Train my team</label></div>
+            <div class="radio-pill"><input type="radio" id="ag4" name="Academy Goal" value="Evaluate upgrading our platform"><label for="ag4">Evaluate upgrading</label></div>
+            <div class="radio-pill"><input type="radio" id="ag5" name="Academy Goal" value="General education"><label for="ag5">General education</label></div>
+          </div>
         </div>
         <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">Enroll free</button>
         <div class="micro">No spam. Unsubscribe anytime.</div>
@@ -383,15 +384,17 @@
 (function () {
   var form = document.querySelector('.form-card');
   if (!form) return;
-  form.addEventListener('submit', function () {
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
     var email = form.querySelector('[name="email"]');
     if (email && email.value) {
       try { localStorage.setItem('afa_user_email', email.value.trim()); } catch (e) {}
     }
-    // Form posts to Pardot via hidden iframe; redirect the main page to thank-you
-    setTimeout(function () {
-      window.location.href = '/positivepay/thank-you/';
-    }, 300);
+    // Fire form data to Pardot without waiting for a response, then redirect
+    try {
+      fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
+    } catch (err) {}
+    window.location.href = '/positivepay/thank-you/';
   });
 })();
 </script>
