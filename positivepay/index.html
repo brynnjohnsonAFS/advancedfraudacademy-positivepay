@@ -359,15 +359,10 @@
 </script>
 
 <script>
-/* ── Paid traffic conversion nudges ── */
+/* ── Enrollment nudges — show to all non-enrolled visitors ── */
 (function () {
-  // Detect any UTM param and persist for the session
-  var params = new URLSearchParams(window.location.search);
-  var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
-  if (utmKeys.some(function (k) { return params.get(k); })) {
-    try { sessionStorage.setItem('afa_paid_visit', '1'); } catch (e) {}
-  }
-  if (!sessionStorage.getItem('afa_paid_visit')) return;
+  // If already enrolled, show nothing
+  try { if (localStorage.getItem('afa_user_email')) return; } catch (e) {}
 
   // 1. Show mid-page enrollment strip
   var strip = document.getElementById('afa-enroll-strip');
@@ -383,9 +378,7 @@
     navLinks.insertBefore(navBtn, navLinks.querySelector('.nav-cta'));
   }
 
-  // 3. Sticky bottom bar
-  if (sessionStorage.getItem('afa_bar_dismissed')) return;
-
+  // 3. Sticky bottom bar — dismissed state resets on new session
   var bar = document.createElement('div');
   bar.className = 'afa-sticky-bar';
   bar.innerHTML =
@@ -399,25 +392,28 @@
     '</div>';
   document.body.appendChild(bar);
 
+  if (sessionStorage.getItem('afa_bar_dismissed')) {
+    bar.style.display = 'none';
+  }
+
   bar.querySelector('.afa-sticky-dismiss').addEventListener('click', function () {
     bar.classList.remove('afa-sticky-visible');
     try { sessionStorage.setItem('afa_bar_dismissed', '1'); } catch (e) {}
   });
 
   // Show once hero scrolls out of view; hide when enrollment form is visible
-  var dismissed = false;
   var heroEl = document.querySelector('.hero');
   var enrollEl = document.getElementById('enroll');
 
   var obs = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
-      if (entry.target === heroEl && !dismissed) {
+      if (bar.style.display === 'none') return;
+      if (entry.target === heroEl) {
         if (!entry.isIntersecting) bar.classList.add('afa-sticky-visible');
         else bar.classList.remove('afa-sticky-visible');
       }
       if (entry.target === enrollEl) {
         if (entry.isIntersecting) bar.classList.remove('afa-sticky-visible');
-        else if (!dismissed && !heroEl.getBoundingClientRect().top >= 0) bar.classList.add('afa-sticky-visible');
       }
     });
   }, { threshold: 0.15 });
