@@ -48,11 +48,21 @@
         markDone(btn);
         updateLessonListChecks();
         // Fire Pardot activity for lesson completion
-        try {
-          if (typeof piTracker === 'function') {
-            piTracker(window.location.origin + '/positivepay/completed/' + id + '/');
+        firePardotEvent('/positivepay/completed/' + id + '/');
+
+        // If this is the last lesson in the track, also fire a track-level event
+        var allItems = document.querySelectorAll('.lesson-item[data-lesson-id]');
+        if (allItems.length) {
+          var prog = getProgress();
+          var allDone = true;
+          allItems.forEach(function (item) {
+            if (!prog[item.getAttribute('data-lesson-id')]) allDone = false;
+          });
+          var trackMatch = window.location.pathname.match(/\/(track-\d+)\//);
+          if (allDone && trackMatch) {
+            firePardotEvent('/positivepay/completed/' + trackMatch[1] + '/');
           }
-        } catch (e) {}
+        }
         // Show toast, then navigate to track overview
         var parts = window.location.pathname.split('/').filter(Boolean);
         var trackIdx = parts.findIndex(function (s) { return /^track-\d+$/.test(s); });
@@ -280,6 +290,19 @@
     setTimeout(function () {
       if (container.parentNode) container.parentNode.removeChild(container);
     }, 5500);
+  }
+
+  /* ── Pardot event helper ── */
+  function firePardotEvent(path) {
+    var url = window.location.origin + path;
+    if (typeof piTracker === 'function') {
+      try { piTracker(url); } catch (e) {}
+    } else {
+      // Pardot script still loading — retry once it's ready
+      window.addEventListener('load', function () {
+        try { if (typeof piTracker === 'function') piTracker(url); } catch (e) {}
+      }, { once: true });
+    }
   }
 
   /* ── Enrollment gate ── */
