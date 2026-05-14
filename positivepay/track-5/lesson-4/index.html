@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lesson 4: The Decision File and core integration — Track 5 — Modern Positive Pay Academy</title>
+<link rel="stylesheet" href="../../assets/tokens.css"/>
+<link rel="stylesheet" href="../../assets/styles.css"/>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<div class="lesson-meta-bar">
+  <div class="wrap lesson-meta-row">
+    <div class="lesson-breadcrumb">
+      <a href="/positivepay/track-5/">Track 5: Operations & Compliance</a>
+      <span class="sep">›</span>
+      <span class="current">Lesson 4 of 5</span>
+    </div>
+    <div class="lesson-time">
+      <span>~9 min read</span>
+      <button class="complete-btn" aria-label="Mark lesson complete">Mark complete</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="lesson-body-wrap">
+<div class="wrap">
+<div class="lesson-layout">
+
+<article class="lesson-content">
+
+  <div class="callout-learn">
+    <div class="callout-label">What you'll learn</div>
+    <ul>
+      <li>What the Decision File is and why it matters</li>
+      <li>The difference between manual and automated decision processing</li>
+      <li>The questions to ask your vendor and your core about Decision File support</li>
+      <li>Why this is the most common integration sticking point</li>
+    </ul>
+  </div>
+
+  <h1>The Decision File and core integration</h1>
+
+  <h2>What the Decision File is.</h2>
+  <p>When a business client decisions an exception (pay or return), that decision has to get back to your core so the transaction is processed correctly. The Decision File is how that happens. It's a file, generated after the decision cutoff, containing the details of every decisioned exception — formatted so your core can ingest it and process transactions automatically.</p>
+  <p>It can typically be delivered by email, secure file transfer, or API, and modern platforms can also make decision data available in real time via webhook.</p>
+
+  <h2>Manual vs. automated processing.</h2>
+  <p>Without Decision File automation, someone at your FI manually applies each decision to the core every day. With a small program that's tolerable. With a large or growing program it becomes a real operational burden — and it's a frequent reason larger FIs hesitate on Positive Pay.</p>
+  <p>With Decision File automation, the file flows to the core and transactions process without manual intervention. Getting to automation is one of the highest-value integration outcomes in a Positive Pay deployment.</p>
+
+  <h2>The questions to ask.</h2>
+  <p>Ask your fraud vendor:</p>
+  <ul>
+    <li><em>How is the Decision File generated, in what formats, and delivered how?</em></li>
+    <li><em>Is the file configurable so we can map it to our core's requirements?</em></li>
+    <li><em>Is real-time decision data available, not just an end-of-day file?</em></li>
+  </ul>
+  <p>Ask your core provider:</p>
+  <ul>
+    <li><em>Can you ingest a third-party Decision File and process transactions from it automatically?</em></li>
+    <li><em>What does that integration cost and how long does it take?</em></li>
+  </ul>
+
+  <h2>Why it's the common sticking point.</h2>
+  <p>Decision File integration is the single most recurring challenge in Positive Pay deployments. The reasons: it requires the core to do work, core providers don't prioritize it unless multiple clients ask, the file format has to be mapped precisely to each core, and there can be nuances even within the same core depending on how each FI is configured.</p>
+  <p>The practical implication: don't assume Decision File automation is included and easy. Make it an explicit line item in your vendor evaluation and your implementation scope. If a vendor or core is vague about the Decision File, that vagueness is your risk.</p>
+
+  <div class="callout-do">
+    <div class="callout-label">Do this</div>
+    <p>Add the Decision File questions above to your vendor and core conversations. Get specific, written answers before you finalize your implementation scope.</p>
+  </div>
+
+  <h2>What's next.</h2>
+  <p>Lesson 5.5 closes the track and the Academy's curriculum with examiner readiness and reporting.</p>
+
+  <div class="quiz">
+  <div class="quiz-head"><span class="eyebrow">Self-check</span><h3>3 quick questions</h3></div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What is the Decision File?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> A list of enrolled business clients</div>
+      <div class="quiz-option"><span class="q-letter">B</span> A file of decisioned exceptions, formatted so your core can process transactions automatically</div>
+      <div class="quiz-option"><span class="q-letter">C</span> The pricing agreement</div>
+      <div class="quiz-option"><span class="q-letter">D</span> A marketing report</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. The Decision File carries each pay/return decision from the PP platform back to the core so transactions are processed correctly — without manual intervention.</div>
+    <div class="quiz-feedback incorrect">Not quite. The Decision File is a file of decisioned exceptions, formatted so your core can process transactions from them automatically — without manual work.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">Why is Decision File automation valuable?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> It reduces vendor fees</div>
+      <div class="quiz-option"><span class="q-letter">B</span> It removes the daily manual work of applying decisions to the core</div>
+      <div class="quiz-option"><span class="q-letter">C</span> It's required by examiners</div>
+      <div class="quiz-option"><span class="q-letter">D</span> It eliminates exceptions</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. Without automation, someone manually applies each decision to the core every day. That's fine at small scale. With a growing program, it becomes a real operational burden.</div>
+    <div class="quiz-feedback incorrect">Not quite. Decision File automation removes the daily manual work of applying decisions to the core — which becomes unsustainable as the program grows.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What should you do about the Decision File during vendor evaluation?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Assume it's included and easy</div>
+      <div class="quiz-option"><span class="q-letter">B</span> Make it an explicit line item and get specific written answers on what's automated, manual, and what automation costs</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Leave it to the core</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Ignore it until after go-live</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. Vagueness about the Decision File during vendor evaluation is your risk. Make it explicit. Get written answers before you finalize scope.</div>
+    <div class="quiz-feedback incorrect">Not quite. Make the Decision File an explicit line item and get specific, written answers before finalizing scope. Vagueness here is your risk.</div>
+  </div>
+</div>
+
+  <div class="lesson-nav">
+    <a href="/positivepay/track-5/lesson-3/"><span class="nav-dir">← Previous</span><span class="nav-title">What implementation actually looks like</span></a>
+    <a href="/positivepay/track-5/lesson-5/" class="next-link"><span class="nav-dir">Next lesson →</span><span class="nav-title">Examiner readiness and reporting</span></a>
+  </div>
+
+</article>
+
+<aside class="lesson-sidebar">
+  <div class="sidebar-card">
+    <div class="sc-label">Lesson asset</div>
+    <h4>The Decision File Question Set</h4>
+    <p>Vendor and core questions, plus a scope checklist. Use it in every vendor and core conversation about PP integration.</p>
+    <a href="../../assets/pdfs/decision-file-question-set.pdf" class="sidebar-download" download>
+      <span class="dl-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+      <span class="dl-info"><div class="name">The Decision File Question Set</div><div class="type">PDF · 1 page</div></span>
+    </a>
+  </div>
+
+  <div class="sidebar-cta">
+    <div class="sc-label">Talk to AFS</div>
+    <h4>Ready to put this into practice?</h4>
+    <p>We work with community FIs at every stage of this journey.</p>
+    <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn-sm">Book a call →</a>
+  </div>
+</aside>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

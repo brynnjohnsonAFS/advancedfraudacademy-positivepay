@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lesson 3: What implementation actually looks like — Track 5 — Modern Positive Pay Academy</title>
+<link rel="stylesheet" href="../../assets/tokens.css"/>
+<link rel="stylesheet" href="../../assets/styles.css"/>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<div class="lesson-meta-bar">
+  <div class="wrap lesson-meta-row">
+    <div class="lesson-breadcrumb">
+      <a href="/positivepay/track-5/">Track 5: Operations & Compliance</a>
+      <span class="sep">›</span>
+      <span class="current">Lesson 3 of 5</span>
+    </div>
+    <div class="lesson-time">
+      <span>~10 min read</span>
+      <button class="complete-btn" aria-label="Mark lesson complete">Mark complete</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="lesson-body-wrap">
+<div class="wrap">
+<div class="lesson-layout">
+
+<article class="lesson-content">
+
+  <div class="callout-learn">
+    <div class="callout-label">What you'll learn</div>
+    <ul>
+      <li>Why signing the contract is the easy part</li>
+      <li>The multi-party coordination map</li>
+      <li>What custom integration work actually costs</li>
+      <li>A realistic implementation timeline</li>
+    </ul>
+  </div>
+
+  <h1>What implementation actually looks like</h1>
+
+  <h2>Signing is the easy part.</h2>
+  <p>The hardest part of Positive Pay isn't choosing a vendor. It's the implementation — and most community FIs have no mental model for what it involves. The product is straightforward. The coordination is not.</p>
+
+  <h2>The multi-party coordination map.</h2>
+  <p>A typical Positive Pay implementation involves up to five organizations:</p>
+  <p><strong>Your FI</strong> owns the project, the configuration decisions, and the business client onboarding.</p>
+  <p><strong>Your Top Core Provider</strong> has to support the connection that gets decision data into the core. This is often the longest pole.</p>
+  <p><strong>Your Major Digital Banking Provider</strong> has to support the single sign-on so business clients reach Positive Pay without a separate login.</p>
+  <p><strong>Your teller capture platform</strong> comes into play if you want in-branch check validation.</p>
+  <p><strong>The fraud vendor</strong> configures their side and supports the integration build.</p>
+  <p>Implementation is the work of getting all five aligned on scope, sequence, and timeline. No single party controls the whole chain.</p>
+
+  <h2>What custom integration work costs.</h2>
+  <p>Some integration work is standard and included. Some is custom — and custom work has a price. Custom work requests at the core level can run into the thousands or tens of thousands of dollars, depending on scope.</p>
+  <p>Two things reduce this cost. First, ask whether your fraud vendor has a partner status with your core that can subsidize or productize the integration. Second, ask whether the integration work, once built, can be reused for other FIs on the same core — some FIs negotiate cost-sharing arrangements for integration work that benefits the broader client base.</p>
+
+  <h2>A realistic timeline.</h2>
+  <p>A standard implementation without deep custom integration can be quick: configuration, file setup, and internal training in a couple of weeks. Add core integration, single sign-on, and teller capture, and the timeline stretches. A realistic range for a fully integrated deployment is several weeks to several months, driven mostly by the partners' development queues — not the fraud vendor.</p>
+  <p>Plan for testing. Build in a testing window before go-live, and test under realistic conditions, including parallel use by multiple staff at once if you have a teller integration. Issues that don't surface in single-user testing surface in production.</p>
+
+  <div class="callout-do">
+    <div class="callout-label">Do this</div>
+    <p>Before your implementation kickoff, draw the five-party coordination map for your specific FI and identify which party owns each dependency. The map is your project plan.</p>
+  </div>
+
+  <h2>What's next.</h2>
+  <p>Lesson 5.4 goes deep on the single most common integration challenge: the Decision File.</p>
+
+  <div class="quiz">
+  <div class="quiz-head"><span class="eyebrow">Self-check</span><h3>3 quick questions</h3></div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What's the hardest part of a Positive Pay implementation?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Choosing a vendor</div>
+      <div class="quiz-option"><span class="q-letter">B</span> The multi-party coordination across the FI, core, digital banking, teller capture, and fraud vendor</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Writing the disclosure</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Pricing</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. The product is straightforward. The coordination across up to five organizations — each with their own queue and priorities — is the hard part.</div>
+    <div class="quiz-feedback incorrect">Not quite. The hardest part is the multi-party coordination. Getting the FI, core, digital banking, teller capture, and fraud vendor aligned is the real work.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What can reduce the cost of custom core integration work?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Nothing, it's fixed</div>
+      <div class="quiz-option"><span class="q-letter">B</span> Asking about vendor-core partner status and whether the work can be reused or cost-shared</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Skipping testing</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Using a smaller core</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. A fraud vendor with partner status at your core can subsidize the integration. Work that can be reused across FIs on the same core can be cost-shared.</div>
+    <div class="quiz-feedback incorrect">Not quite. Ask whether your fraud vendor has partner status with your core, and whether the integration work can be reused or cost-shared with other FIs.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What mostly drives the implementation timeline for a fully integrated deployment?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> The fraud vendor's speed</div>
+      <div class="quiz-option"><span class="q-letter">B</span> The partners' development queues</div>
+      <div class="quiz-option"><span class="q-letter">C</span> The disclosure review</div>
+      <div class="quiz-option"><span class="q-letter">D</span> The number of business clients</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. Core and digital banking integration are the long poles. The fraud vendor is usually ready quickly — it's the partners' queues that stretch the timeline.</div>
+    <div class="quiz-feedback incorrect">Not quite. The partners' development queues — especially the core and digital banking provider — are what drive the timeline, not the fraud vendor's speed.</div>
+  </div>
+</div>
+
+  <div class="lesson-nav">
+    <a href="/positivepay/track-5/lesson-2/"><span class="nav-dir">← Previous</span><span class="nav-title">Default decisions, cutoffs, and SLAs</span></a>
+    <a href="/positivepay/track-5/lesson-4/" class="next-link"><span class="nav-dir">Next lesson →</span><span class="nav-title">The Decision File and core integration</span></a>
+  </div>
+
+</article>
+
+<aside class="lesson-sidebar">
+  <div class="sidebar-card">
+    <div class="sc-label">Lesson asset</div>
+    <h4>The Implementation Coordination Map</h4>
+    <p>The five-party template and dependency tracker. Draw it before your kickoff and you have your project plan.</p>
+    <a href="../../assets/pdfs/implementation-coordination-map.pdf" class="sidebar-download" download>
+      <span class="dl-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+      <span class="dl-info"><div class="name">The Implementation Coordination Map</div><div class="type">PDF · 1 page</div></span>
+    </a>
+  </div>
+
+  <div class="sidebar-cta">
+    <div class="sc-label">Talk to AFS</div>
+    <h4>Ready to put this into practice?</h4>
+    <p>We work with community FIs at every stage of this journey.</p>
+    <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn-sm">Book a call →</a>
+  </div>
+</aside>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

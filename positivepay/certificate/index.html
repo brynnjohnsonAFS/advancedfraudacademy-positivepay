@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Certificate — Modern Positive Pay Academy</title>
+<meta name="description" content="Claim your Positive Pay Foundations certificate from the Modern Positive Pay Academy."/>
+<link rel="stylesheet" href="../assets/tokens.css"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<script src="../assets/app.js" defer></script>
+<style>
+  /* ── Certificate page styles ── */
+  .cert-wrap { max-width:720px;margin:0 auto;padding:64px 24px 96px }
+
+  /* Locked state */
+  #cert-locked { display:block }
+  .cert-progress-bar-outer { background:var(--afs-gray-2);border-radius:99px;height:10px;margin:20px 0 12px }
+  .cert-progress-bar-inner { background:var(--academy-green);border-radius:99px;height:10px;transition:width 0.3s ease }
+  .cert-lesson-list { list-style:none;margin:24px 0 32px;padding:0;display:flex;flex-direction:column;gap:10px }
+  .cert-lesson-list li { display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500 }
+  .cert-lesson-list li .ck { width:22px;height:22px;border-radius:50%;border:2px solid var(--afs-gray-1);display:flex;align-items:center;justify-content:center;flex-shrink:0 }
+  .cert-lesson-list li.done .ck { background:var(--academy-green);border-color:var(--academy-green) }
+  .cert-lesson-list li.done .ck svg { display:block }
+  .cert-lesson-list li .ck svg { display:none;width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none }
+  .cert-lesson-list li a { color:var(--ink);text-decoration:none }
+  .cert-lesson-list li a:hover { color:var(--afs-red) }
+  .cert-lesson-list li.done span.lt { color:var(--fg-2) }
+  .cert-microcopy { font-size:13px;color:var(--fg-3);margin-top:16px }
+
+  /* Claim state */
+  #cert-claim { display:none }
+  .cert-form { display:flex;flex-direction:column;gap:16px;margin:28px 0 }
+  .cert-form-row { display:grid;grid-template-columns:1fr 1fr;gap:16px }
+  .cert-form label { display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:var(--ink) }
+  .cert-form input, .cert-form select {
+    padding:10px 14px;border:1.5px solid var(--afs-gray-1);border-radius:8px;
+    font-size:15px;font-family:inherit;color:var(--ink);background:#fff;
+    outline:none;transition:border-color 120ms
+  }
+  .cert-form input:focus, .cert-form select:focus { border-color:var(--afs-red) }
+  .cert-form .full { grid-column:1/-1 }
+
+  /* Claimed / certificate display state */
+  #cert-claimed { display:none }
+  .cert-card {
+    background:#fff;border:1px solid var(--afs-gray-1);border-radius:24px;
+    padding:56px 64px;position:relative;overflow:hidden;margin-bottom:32px
+  }
+  .cert-card::before {
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(173,226,93,0.06) 0%,transparent 60%);
+    pointer-events:none
+  }
+  .cert-eyebrow { font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--fg-3);margin-bottom:20px }
+  .cert-name { font-size:48px;font-weight:800;letter-spacing:-0.03em;line-height:1.05;color:var(--ink);margin-bottom:16px }
+  .cert-statement { font-size:18px;line-height:1.6;color:var(--fg-2);margin-bottom:8px }
+  .cert-date { font-size:14px;color:var(--fg-3);font-weight:600;margin-bottom:36px }
+  .cert-section-label { font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--fg-3);margin-bottom:14px }
+  .cert-skills { list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:10px }
+  .cert-skills li { display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink);line-height:1.5 }
+  .cert-skills li::before { content:"✓";color:var(--academy-green);font-weight:800;flex-shrink:0;margin-top:1px }
+  .cert-lessons-list { list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:8px }
+  .cert-lessons-list li { font-size:14px;color:var(--fg-2);display:flex;gap:10px }
+  .cert-lessons-list li::before { content:attr(data-num);color:var(--fg-3);font-weight:700;width:18px;flex-shrink:0 }
+  .cert-verify { font-size:12px;color:var(--fg-3);border-top:1px solid var(--afs-gray-2);padding-top:20px;margin-top:8px }
+  .cert-actions { display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px }
+  .cert-footer-note { font-size:13px;color:var(--fg-3);line-height:1.6 }
+
+  @media (max-width:640px) {
+    .cert-form-row { grid-template-columns:1fr }
+    .cert-card { padding:36px 28px }
+    .cert-name { font-size:32px }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="cert-wrap">
+
+  <!-- ── LOCKED STATE ── -->
+  <div id="cert-locked">
+    <span class="eyebrow" style="display:block;margin-bottom:16px">Your certificate</span>
+    <h1 style="font-size:40px;margin-bottom:16px">Your Positive Pay Foundations certificate</h1>
+    <p style="font-size:18px;line-height:1.65;color:var(--fg-2);margin-bottom:28px">Complete all 6 lessons in Track 1 to unlock your certificate. It's a shareable credential you can add to LinkedIn and your email signature.</p>
+
+    <p style="font-size:15px;font-weight:600;color:var(--fg-2);margin-bottom:8px">You've completed <span id="progress-count">0</span> of 6 lessons.</p>
+    <div class="cert-progress-bar-outer">
+      <div class="cert-progress-bar-inner" id="progress-bar" style="width:0%"></div>
+    </div>
+
+    <ul class="cert-lesson-list" id="lesson-checklist">
+      <li data-id="track-1/lesson-1">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-1/" class="lt">What Positive Pay actually is in 2026</a>
+      </li>
+      <li data-id="track-1/lesson-2">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-2/" class="lt">Two products in one: fraud engine + adoption product</a>
+      </li>
+      <li data-id="track-1/lesson-3">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-3/" class="lt">Check vs ACH vs Payee Match: which to lead with</a>
+      </li>
+      <li data-id="track-1/lesson-4">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-4/" class="lt">The state of business payment fraud</a>
+      </li>
+      <li data-id="track-1/lesson-5">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-5/" class="lt">Direct vs. partner: how community FIs actually buy</a>
+      </li>
+      <li data-id="track-1/lesson-6">
+        <span class="ck"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>
+        <a href="/positivepay/track-1/lesson-6/" class="lt">The Positive Pay Buyer's Guide</a>
+      </li>
+    </ul>
+
+    <a href="#" id="keep-going-btn" class="btn btn-primary">Keep going →</a>
+    <p class="cert-microcopy">Progress is saved on this device. Finish all six and your certificate unlocks automatically.</p>
+  </div>
+
+  <!-- ── CLAIM STATE ── -->
+  <div id="cert-claim">
+    <span class="eyebrow" style="display:block;margin-bottom:16px">Track 1 complete</span>
+    <h1 style="font-size:40px;margin-bottom:16px">You've completed Track 1.</h1>
+    <p style="font-size:18px;line-height:1.65;color:var(--fg-2);margin-bottom:8px">Claim your Positive Pay Foundations certificate. Enter your details and we'll generate a shareable credential. It takes about 30 seconds, and it's free.</p>
+
+    <form class="cert-form" id="cert-form" action="http://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl" method="POST">
+      <div class="cert-form-row">
+        <label>First name<input type="text" name="FirstName" required placeholder="Jane"/></label>
+        <label>Last name<input type="text" name="LastName" required placeholder="Smith"/></label>
+      </div>
+      <label class="full">Work email<input type="email" name="Email" required placeholder="jane@yourbank.com"/></label>
+      <label class="full">Institution name<input type="text" name="Company" required placeholder="First Community Bank"/></label>
+      <div class="cert-form-row">
+        <label>Role
+          <select name="Role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option>Treasury Management Officer</option>
+            <option>Chief Treasury Officer</option>
+            <option>Relationship Banker</option>
+            <option>Operations / IT</option>
+            <option>BSA / Compliance</option>
+            <option>CEO / CFO / CRO</option>
+            <option>VP Operations</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Asset size
+          <select name="AssetSize" required>
+            <option value="" disabled selected>Select asset size</option>
+            <option>Under $250M</option>
+            <option>$250M–$500M</option>
+            <option>$500M–$1B</option>
+            <option>$1B–$3B</option>
+            <option>$3B–$10B</option>
+            <option>Over $10B</option>
+          </select>
+        </label>
+      </div>
+      <input type="hidden" name="retURL" value="/positivepay/certificate/?claimed=1"/>
+      <input type="hidden" name="oid" value="cert_track1"/>
+      <button type="submit" class="btn btn-primary" style="align-self:flex-start;margin-top:8px">Generate my certificate →</button>
+    </form>
+
+    <p class="cert-microcopy">By claiming your certificate you're also enrolled in the Academy, so you'll be first to know when new tracks launch. No spam. Unsubscribe anytime.</p>
+  </div>
+
+  <!-- ── CLAIMED / CERTIFICATE STATE ── -->
+  <div id="cert-claimed">
+    <div class="cert-card">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">
+        <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:140px;display:block">
+        <div style="font-size:13px;font-weight:700;color:var(--fg-3);line-height:1.4">Modern Positive<br/>Pay Academy</div>
+      </div>
+
+      <div class="cert-eyebrow">Certificate of Completion</div>
+      <div class="cert-name" id="cert-display-name">Your Name</div>
+      <p class="cert-statement">has completed <strong>Positive Pay Foundations</strong>, Track 1 of the Modern Positive Pay Academy.</p>
+      <p class="cert-date">Completed <span id="cert-display-date"></span></p>
+
+      <div class="cert-section-label">Skills demonstrated</div>
+      <p style="font-size:14px;color:var(--fg-2);margin-bottom:12px">This credential certifies the holder can:</p>
+      <ul class="cert-skills">
+        <li>Define modern Positive Pay and explain it to any audience inside a financial institution</li>
+        <li>Distinguish Check Positive Pay, ACH Positive Pay, and Payee Match, and know when to lead with each</li>
+        <li>Interpret business payment fraud benchmarks and translate them into board-level talking points</li>
+        <li>Compare Positive Pay buying paths and choose between direct and partner channels</li>
+        <li>Run a structured vendor evaluation from internal alignment through contract negotiation</li>
+      </ul>
+
+      <div class="cert-section-label">Lessons completed</div>
+      <ul class="cert-lessons-list">
+        <li data-num="1.">What Positive Pay actually is in 2026</li>
+        <li data-num="2.">Two products in one: fraud engine + adoption product</li>
+        <li data-num="3.">Check vs ACH vs Payee Match: which to lead with</li>
+        <li data-num="4.">The state of business payment fraud</li>
+        <li data-num="5.">Direct vs. partner: how community FIs actually buy Positive Pay</li>
+        <li data-num="6.">The Positive Pay Buyer's Guide</li>
+      </ul>
+
+      <p class="cert-verify">Issued by Advanced Fraud Solutions · advancedfraudacademy.com/positivepay</p>
+    </div>
+
+    <div class="cert-actions">
+      <a href="https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=Positive+Pay+Foundations&organizationName=Advanced+Fraud+Solutions&issueYear=2026&certUrl=https%3A%2F%2Fadvancedfraudacademy.com%2Fpositivepay%2Fcertificate%2F" target="_blank" rel="noopener" class="btn btn-primary">Share on LinkedIn →</a>
+      <button class="btn btn-ghost-light" id="copy-link-btn" onclick="copyLink()">Copy link</button>
+      <a href="/positivepay/track-2/" class="btn btn-ghost-light">Continue to Track 2 →</a>
+    </div>
+
+    <p class="cert-footer-note">The Modern Positive Pay Academy is free, vendor-neutral education for community bank and credit union treasury professionals, built and maintained by Advanced Fraud Solutions.</p>
+  </div>
+
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'afa_progress';
+  var CERT_KEY = 'afa_cert_t1';
+  var TRACK1 = [
+    'track-1/lesson-1','track-1/lesson-2','track-1/lesson-3',
+    'track-1/lesson-4','track-1/lesson-5','track-1/lesson-6'
+  ];
+  var LESSONS = [
+    { id:'track-1/lesson-1', url:'/positivepay/track-1/lesson-1/', title:'What Positive Pay actually is in 2026' },
+    { id:'track-1/lesson-2', url:'/positivepay/track-1/lesson-2/', title:'Two products in one: fraud engine + adoption product' },
+    { id:'track-1/lesson-3', url:'/positivepay/track-1/lesson-3/', title:'Check vs ACH vs Payee Match: which to lead with' },
+    { id:'track-1/lesson-4', url:'/positivepay/track-1/lesson-4/', title:'The state of business payment fraud' },
+    { id:'track-1/lesson-5', url:'/positivepay/track-1/lesson-5/', title:'Direct vs. partner: how community FIs actually buy' },
+    { id:'track-1/lesson-6', url:'/positivepay/track-1/lesson-6/', title:'The Positive Pay Buyer\'s Guide' },
+  ];
+
+  function getProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+  }
+
+  function getCertData() {
+    try { return JSON.parse(localStorage.getItem(CERT_KEY) || 'null'); } catch(e) { return null; }
+  }
+
+  function formatDate(d) {
+    return d.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  }
+
+  function showLocked(progress, count) {
+    document.getElementById('cert-locked').style.display = 'block';
+    document.getElementById('cert-claim').style.display = 'none';
+    document.getElementById('cert-claimed').style.display = 'none';
+
+    document.getElementById('progress-count').textContent = count;
+    document.getElementById('progress-bar').style.width = Math.round(count/6*100) + '%';
+
+    var items = document.querySelectorAll('#lesson-checklist li');
+    var firstIncomplete = null;
+    items.forEach(function(li) {
+      var id = li.getAttribute('data-id');
+      if (progress[id]) {
+        li.classList.add('done');
+      } else if (!firstIncomplete) {
+        firstIncomplete = li.querySelector('a').getAttribute('href');
+      }
+    });
+
+    var btn = document.getElementById('keep-going-btn');
+    if (firstIncomplete) btn.setAttribute('href', firstIncomplete);
+  }
+
+  function showClaim() {
+    document.getElementById('cert-locked').style.display = 'none';
+    document.getElementById('cert-claim').style.display = 'block';
+    document.getElementById('cert-claimed').style.display = 'none';
+
+    // intercept form to save name before Pardot redirect
+    var form = document.getElementById('cert-form');
+    form.addEventListener('submit', function() {
+      var first = form.querySelector('[name=FirstName]').value.trim();
+      var last = form.querySelector('[name=LastName]').value.trim();
+      var data = { name: first + ' ' + last, date: new Date().toISOString() };
+      try { localStorage.setItem(CERT_KEY, JSON.stringify(data)); } catch(e) {}
+    });
+  }
+
+  function showClaimed(certData) {
+    document.getElementById('cert-locked').style.display = 'none';
+    document.getElementById('cert-claim').style.display = 'none';
+    document.getElementById('cert-claimed').style.display = 'block';
+
+    if (certData) {
+      document.getElementById('cert-display-name').textContent = certData.name || 'Your Name';
+      var d = certData.date ? new Date(certData.date) : new Date();
+      document.getElementById('cert-display-date').textContent = formatDate(d);
+    } else {
+      document.getElementById('cert-display-date').textContent = formatDate(new Date());
+    }
+  }
+
+  function boot() {
+    var params = new URLSearchParams(window.location.search);
+    var claimed = params.get('claimed') === '1';
+    var certData = getCertData();
+    var progress = getProgress();
+    var count = TRACK1.filter(function(id) { return progress[id]; }).length;
+    var allDone = count === 6;
+
+    if (claimed || (allDone && certData)) {
+      showClaimed(certData);
+    } else if (allDone) {
+      showClaim();
+    } else {
+      showLocked(progress, count);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(function() {
+    var btn = document.getElementById('copy-link-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy link'; }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>

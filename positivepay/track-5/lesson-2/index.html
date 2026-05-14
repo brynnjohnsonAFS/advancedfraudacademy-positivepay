@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lesson 2: Default decisions, cutoffs, and SLAs — Track 5 — Modern Positive Pay Academy</title>
+<link rel="stylesheet" href="../../assets/tokens.css"/>
+<link rel="stylesheet" href="../../assets/styles.css"/>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<div class="lesson-meta-bar">
+  <div class="wrap lesson-meta-row">
+    <div class="lesson-breadcrumb">
+      <a href="/positivepay/track-5/">Track 5: Operations & Compliance</a>
+      <span class="sep">›</span>
+      <span class="current">Lesson 2 of 5</span>
+    </div>
+    <div class="lesson-time">
+      <span>~8 min read</span>
+      <button class="complete-btn" aria-label="Mark lesson complete">Mark complete</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="lesson-body-wrap">
+<div class="wrap">
+<div class="lesson-layout">
+
+<article class="lesson-content">
+
+  <div class="callout-learn">
+    <div class="callout-label">What you'll learn</div>
+    <ul>
+      <li>What a default decision is and who should control it</li>
+      <li>How to set cutoff times that work for checks and ACH</li>
+      <li>The grace-period mechanic that reduces client friction</li>
+      <li>Why visible cutoffs reduce support calls</li>
+    </ul>
+  </div>
+
+  <h1>Default decisions, cutoffs, and SLAs</h1>
+
+  <h2>The default decision.</h2>
+  <p>When a business client doesn't decision an exception before the cutoff, the system applies a default: pay or return. This is one of the most important settings in your program.</p>
+  <p><strong>Who controls it.</strong> The default should be controlled at the FI level, set in the agreement — not toggled by the business client in the interface. A business client changing their own default can change your liability picture without understanding the consequence.</p>
+  <p><strong>How to set it.</strong> For standard Positive Pay, the common default is return: if no decision is made, the item is returned, because the whole point is to block unauthorized items. For Reverse Positive Pay, where there are many more items to review, the common default is pay, because returning everything undecisioned would be unworkable. Set the default to match the service type and document it in the disclosure.</p>
+
+  <h2>Cutoff times.</h2>
+  <p>Cutoffs differ for checks and ACH because the underlying rules differ.</p>
+  <p><strong>Checks.</strong> A same-day cutoff (commonly mid-to-late afternoon) is typical, because of the limited window to return a check item without it being treated as a late return. Your business clients need to decision before you bundle returns for the day.</p>
+  <p><strong>ACH.</strong> ACH has a longer return window under network rules, which gives you more flexibility. Files that arrive late in the day can often be decisioned the next morning and still fall within the allowable window.</p>
+
+  <h2>The grace-period mechanic.</h2>
+  <p>A useful feature: a grace period for ACH exceptions. If a file is uploaded close to or after the cutoff, the system gives the business client a defined window — for example, two hours from upload, carrying into the next morning — to decision it. This prevents a late-arriving file from forcing a rushed, end-of-day scramble, while still keeping the decision inside the network's return window.</p>
+
+  <h2>Make cutoffs visible.</h2>
+  <p>The most common avoidable support call is "I didn't know when the cutoff was." If your platform can display the cutoff time on the exception screen — or better, on every screen — do it. A visible cutoff is a support call that never happens.</p>
+
+  <div class="callout-do">
+    <div class="callout-label">Do this</div>
+    <p>Confirm your default decisions are set at the FI level, documented in your disclosure, and that your cutoff times are visible to business clients in the interface.</p>
+  </div>
+
+  <h2>What's next.</h2>
+  <p>Lesson 5.3 covers what implementation actually looks like when you bring all of this live.</p>
+
+  <div class="quiz">
+  <div class="quiz-head"><span class="eyebrow">Self-check</span><h3>3 quick questions</h3></div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">Who should control the default decision setting?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> The business client, in the interface</div>
+      <div class="quiz-option"><span class="q-letter">B</span> The FI, set in the agreement</div>
+      <div class="quiz-option"><span class="q-letter">C</span> The vendor</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Whoever logs in first</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. A client changing their own default can change your liability picture without understanding the consequence. Control it at the FI level.</div>
+    <div class="quiz-feedback incorrect">Not quite. The FI should control the default, set in the agreement. A client changing their own default can alter your liability without understanding it.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">Why do check and ACH cutoffs differ?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> They don't — they should be the same</div>
+      <div class="quiz-option"><span class="q-letter">B</span> The underlying return windows and network rules differ</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Checks are more important</div>
+      <div class="quiz-option"><span class="q-letter">D</span> ACH isn't time-sensitive</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. Checks have a tight same-day return window. ACH has a longer return window, giving you more flexibility to carry decisions into the next morning.</div>
+    <div class="quiz-feedback incorrect">Not quite. Check and ACH return windows and network rules differ — checks are tighter, ACH gives more flexibility. Cutoffs should reflect those realities.</div>
+  </div>
+  <div class="quiz-question" data-correct="2">
+    <div class="q-text">What's the most common avoidable support call?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Password resets</div>
+      <div class="quiz-option"><span class="q-letter">B</span> Pricing questions</div>
+      <div class="quiz-option"><span class="q-letter">C</span> "I didn't know when the cutoff was"</div>
+      <div class="quiz-option"><span class="q-letter">D</span> File format errors</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. Display the cutoff time everywhere in the interface. A visible cutoff is a support call that never happens.</div>
+    <div class="quiz-feedback incorrect">Not quite. 'I didn't know when the cutoff was' is the most common avoidable support call. Display the cutoff time prominently in the interface.</div>
+  </div>
+</div>
+
+  <div class="lesson-nav">
+    <a href="/positivepay/track-5/lesson-1/"><span class="nav-dir">← Previous</span><span class="nav-title">Disclosures done right</span></a>
+    <a href="/positivepay/track-5/lesson-3/" class="next-link"><span class="nav-dir">Next lesson →</span><span class="nav-title">What implementation actually looks like</span></a>
+  </div>
+
+</article>
+
+<aside class="lesson-sidebar">
+  <div class="sidebar-card">
+    <div class="sc-label">Lesson asset</div>
+    <h4>The Defaults & Cutoffs Configuration Guide</h4>
+    <p>Default decision settings, cutoff time frameworks for check and ACH, and the grace-period configuration checklist.</p>
+    <a href="../../assets/pdfs/defaults-cutoffs-configuration-guide.pdf" class="sidebar-download" download>
+      <span class="dl-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+      <span class="dl-info"><div class="name">The Defaults & Cutoffs Configuration Guide</div><div class="type">PDF · 1 page</div></span>
+    </a>
+  </div>
+
+  <div class="sidebar-cta">
+    <div class="sc-label">Talk to AFS</div>
+    <h4>Ready to put this into practice?</h4>
+    <p>We work with community FIs at every stage of this journey.</p>
+    <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn-sm">Book a call →</a>
+  </div>
+</aside>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

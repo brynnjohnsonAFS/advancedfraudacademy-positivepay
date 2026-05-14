@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lesson 5: Removing file-format friction — Track 2 — Modern Positive Pay Academy</title>
+<link rel="stylesheet" href="../../assets/tokens.css"/>
+<link rel="stylesheet" href="../../assets/styles.css"/>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<div class="lesson-meta-bar">
+  <div class="wrap lesson-meta-row">
+    <div class="lesson-breadcrumb">
+      <a href="/positivepay/track-2/">Track 2: The Adoption Playbook</a>
+      <span class="sep">›</span>
+      <span class="current">Lesson 5 of 5</span>
+    </div>
+    <div class="lesson-time">
+      <span>~8 min read</span>
+      <button class="complete-btn" aria-label="Mark lesson complete">Mark complete</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="lesson-body-wrap">
+<div class="wrap">
+<div class="lesson-layout">
+
+<article class="lesson-content">
+
+  <div class="callout-learn">
+    <div class="callout-label">What you'll learn</div>
+    <ul>
+      <li>Why file formats are the single biggest onboarding blocker</li>
+      <li>The specific format problems that stall business clients</li>
+      <li>What to ask your vendor about file flexibility</li>
+      <li>The workarounds that keep onboarding moving</li>
+    </ul>
+  </div>
+
+  <h1>Removing file-format friction</h1>
+
+  <h2>The blocker nobody warns you about.</h2>
+  <p>A business client says yes. They're ready. Then onboarding stalls for two months because their accounting software exports an issued check file your platform won't accept. This is the most common, least discussed adoption killer in Positive Pay.</p>
+  <p>The business uses whatever accounting software they use. Your platform has to accept whatever that software exports. When it doesn't, the friction lands on your treasury team and the business client, and enthusiasm dies in the gap.</p>
+
+  <h2>The specific problems.</h2>
+  <p>Three format problems stall onboarding repeatedly:</p>
+  <p><strong>Missing data fields.</strong> Some accounting software doesn't export a full MICR line or an account number in the issued check file. If your platform requires those fields rigidly, the file rejects.</p>
+  <p><strong>Header mismatches.</strong> If a platform requires exact header names ("Account Number" vs "Acct #" vs "account_number"), a business client's export breaks on a naming difference that has nothing to do with the data.</p>
+  <p><strong>Format types.</strong> Some accounting software exports headerless files, fixed-length files, or non-standard delimited files. A rigid platform handles one format and rejects the rest.</p>
+
+  <h2>What to ask your vendor.</h2>
+  <p>Three questions:</p>
+  <ol>
+    <li><em>Can your platform accept an issued check file without a header, and without an account number, by letting us map field positions?</em></li>
+    <li><em>What accounting software exports have you successfully ingested? Name them.</em></li>
+    <li><em>When a business client's file doesn't load, what's your support process and typical turnaround?</em></li>
+  </ol>
+  <p>A modern platform answers all three cleanly. A legacy platform makes file format the business client's problem.</p>
+
+  <h2>The workarounds that keep things moving.</h2>
+  <p><strong>Build multiple file format profiles.</strong> If your platform lets you save format templates, build one for each common accounting software your business clients use. Reuse them.</p>
+  <p><strong>Use headerless mapping.</strong> If your platform supports it, headerless files with position-based field mapping sidestep the header-name matching problem entirely.</p>
+  <p><strong>Pre-build from transaction history.</strong> For ACH especially, pull the business client's transaction history and build their initial ruleset before go-live, so day one isn't an exception flood.</p>
+  <p>The long-term fix is a vendor with file-agnostic ingestion. The short-term fix is your own library of saved format profiles.</p>
+
+  <div class="callout-do">
+    <div class="callout-label">Do this</div>
+    <p>Survey your enrolled and prospective business clients on what accounting software they use. Build a saved format profile for the top three. That single project removes the most common onboarding stall.</p>
+  </div>
+
+  <h2>What's next.</h2>
+  <p>You've completed Track 2. You can now measure your program, drive enrollment with two proven levers, train clients so they stick, design pilots that produce signal, and remove the friction that stalls onboarding. Track 3 covers the internal sales motion.</p>
+
+  <div class="quiz">
+  <div class="quiz-head"><span class="eyebrow">Self-check</span><h3>3 quick questions</h3></div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">Why are file formats such a common onboarding blocker?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Business clients don't want to share data</div>
+      <div class="quiz-option"><span class="q-letter">B</span> The business uses whatever accounting software it uses — and rigid platforms reject non-standard exports</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Regulators restrict file sharing</div>
+      <div class="quiz-option"><span class="q-letter">D</span> File formats change every year</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. The business uses whatever accounting software it uses. When your platform can't accept that export, enthusiasm dies in the gap.</div>
+    <div class="quiz-feedback incorrect">Not quite. The business uses whatever accounting software it uses. Rigid platforms reject non-standard exports, and that friction kills onboarding momentum.</div>
+  </div>
+  <div class="quiz-question" data-correct="1">
+    <div class="q-text">What's the long-term fix for file-format friction?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Telling business clients to switch accounting software</div>
+      <div class="quiz-option"><span class="q-letter">B</span> A vendor with file-agnostic ingestion</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Manual data entry</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Avoiding ACH Positive Pay</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. The long-term fix is a vendor with file-agnostic ingestion. The short-term fix is your own library of saved format profiles.</div>
+    <div class="quiz-feedback incorrect">Not quite. The long-term fix is a vendor with file-agnostic ingestion — one that accepts whatever the business exports.</div>
+  </div>
+  <div class="quiz-question" data-correct="2">
+    <div class="q-text">What's a workaround that keeps onboarding moving today?</div>
+    <div class="quiz-options">
+      <div class="quiz-option"><span class="q-letter">A</span> Refusing clients with non-standard files</div>
+      <div class="quiz-option"><span class="q-letter">B</span> Requiring all clients to use one accounting platform</div>
+      <div class="quiz-option"><span class="q-letter">C</span> Building a library of saved file format profiles for common accounting software</div>
+      <div class="quiz-option"><span class="q-letter">D</span> Onboarding only large businesses</div>
+    </div>
+    <div class="quiz-feedback correct">Correct. A library of saved format profiles for the accounting software your clients actually use is the fastest way to remove onboarding stalls.</div>
+    <div class="quiz-feedback incorrect">Not quite. Build a library of saved file format profiles for the accounting software your business clients use most. Reuse them for every new enrollment.</div>
+  </div>
+</div>
+
+  <div class="lesson-nav">
+    <a href="/positivepay/track-2/lesson-4/"><span class="nav-dir">← Previous</span><span class="nav-title">Why most pilots fail</span></a>
+    <a href="/positivepay/track-3/" class="next-link"><span class="nav-dir">Next lesson →</span><span class="nav-title">Browse Track 3</span></a>
+  </div>
+
+</article>
+
+<aside class="lesson-sidebar">
+  <div class="sidebar-card">
+    <div class="sc-label">Lesson asset</div>
+    <h4>The File-Format Readiness Survey</h4>
+    <p>A short survey to send business clients before onboarding. Surfaces format issues before they stall the process.</p>
+    <a href="../../assets/pdfs/file-format-readiness-survey.pdf" class="sidebar-download" download>
+      <span class="dl-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+      <span class="dl-info"><div class="name">The File-Format Readiness Survey</div><div class="type">PDF · 1 page</div></span>
+    </a>
+  </div>
+
+  <div class="sidebar-cta">
+    <div class="sc-label">Talk to AFS</div>
+    <h4>Ready to put this into practice?</h4>
+    <p>We work with community FIs at every stage of this journey.</p>
+    <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn-sm">Book a call →</a>
+  </div>
+</aside>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
