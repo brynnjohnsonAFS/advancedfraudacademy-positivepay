@@ -324,9 +324,51 @@
         '<h3 class="afa-gate-title">Enroll free to read this lesson</h3>' +
         '<p class="afa-gate-sub">The Academy is free. Takes 60 seconds to enroll. Your progress is saved automatically once you\'re in.</p>' +
         '<a href="/positivepay/#enroll" class="btn btn-primary afa-gate-btn">Enroll free →</a>' +
-        '<p class="afa-gate-note">Already enrolled? <a href="/positivepay/#enroll">Re-enter your email</a> to unlock.</p>' +
+        '<div class="afa-gate-divider"><span>Already enrolled?</span></div>' +
+        '<div class="afa-gate-unlock">' +
+          '<input type="email" class="afa-gate-email" placeholder="Enter your email to unlock" autocomplete="email"/>' +
+          '<button type="button" class="afa-gate-unlock-btn">Unlock</button>' +
+        '</div>' +
+        '<p class="afa-gate-unlock-err" style="display:none">Please enter a valid email address.</p>' +
       '</div>';
     wrap.appendChild(overlay);
+
+    // Inline unlock: set localStorage and remove gate without re-enrolling
+    var emailInput = overlay.querySelector('.afa-gate-email');
+    var unlockBtn = overlay.querySelector('.afa-gate-unlock-btn');
+    var errMsg = overlay.querySelector('.afa-gate-unlock-err');
+
+    function doUnlock() {
+      var val = emailInput.value.trim();
+      if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+        errMsg.style.display = 'block';
+        emailInput.focus();
+        return;
+      }
+      errMsg.style.display = 'none';
+      try { localStorage.setItem('afa_user_email', val); } catch (e) {}
+      // Animate out and remove gate
+      wrap.classList.add('afa-gate-unlocking');
+      setTimeout(function () {
+        if (wrap.parentNode) {
+          wrap.parentNode.insertBefore(content, wrap);
+          wrap.parentNode.removeChild(wrap);
+        }
+        // Re-enable the complete button
+        if (btn) {
+          btn.disabled = false;
+          btn.style.opacity = '';
+          btn.style.cursor = '';
+          btn.style.pointerEvents = '';
+          btn.title = '';
+        }
+      }, 350);
+    }
+
+    unlockBtn.addEventListener('click', doUnlock);
+    emailInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doUnlock();
+    });
 
     // Disable the mark-complete button
     if (btn) {
