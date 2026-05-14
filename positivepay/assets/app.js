@@ -282,12 +282,69 @@
     }, 5500);
   }
 
+  /* ── Enrollment gate ── */
+  function isEnrolled() {
+    try {
+      return !!localStorage.getItem('afa_user_email');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function initEnrollmentGate() {
+    // Only gate on lesson pages (have a lesson-body-wrap and complete-btn)
+    var body = document.querySelector('.lesson-body-wrap');
+    var btn = document.querySelector('.complete-btn');
+    if (!body || !btn) return;
+
+    // If enrolled, nothing to do
+    if (isEnrolled()) return;
+
+    // Find the main content column
+    var content = document.querySelector('.lesson-content');
+    if (!content) return;
+
+    // Wrap the content in a gate container
+    var wrap = document.createElement('div');
+    wrap.className = 'afa-gate-wrap';
+    content.parentNode.insertBefore(wrap, content);
+    wrap.appendChild(content);
+
+    // Inject the gate overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'afa-gate-overlay';
+    overlay.innerHTML =
+      '<div class="afa-gate-card">' +
+        '<div class="afa-gate-lock">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>' +
+            '<path d="M7 11V7a5 5 0 0 1 10 0v4"/>' +
+          '</svg>' +
+        '</div>' +
+        '<h3 class="afa-gate-title">Enroll free to read this lesson</h3>' +
+        '<p class="afa-gate-sub">The Academy is free. Takes 60 seconds to enroll. Your progress is saved automatically once you\'re in.</p>' +
+        '<a href="/positivepay/#enroll" class="btn btn-primary afa-gate-btn">Enroll free →</a>' +
+        '<p class="afa-gate-note">Already enrolled? <a href="/positivepay/#enroll">Re-enter your email</a> to unlock.</p>' +
+      '</div>';
+    wrap.appendChild(overlay);
+
+    // Disable the mark-complete button
+    if (btn) {
+      btn.disabled = true;
+      btn.title = 'Enroll to unlock lessons';
+      btn.style.opacity = '0.4';
+      btn.style.cursor = 'default';
+      btn.style.pointerEvents = 'none';
+    }
+  }
+
   /* ── Boot ── */
   function boot() {
     initCompleteButton();
     initQuizzes();
     updateLessonListChecks();
     checkAndShowTrackComplete();
+    initEnrollmentGate();
   }
 
   if (document.readyState === 'loading') {

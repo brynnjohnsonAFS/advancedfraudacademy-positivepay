@@ -51,7 +51,7 @@
         <div class="step-num">1</div>
         <div class="step-body">
           <h4>Start Track 1 now.</h4>
-          <p>No need to wait for the email. Five lessons, about 50 minutes of total reading. Your progress is saved automatically.</p>
+          <p>No need to wait for the email. Six lessons, about 60 minutes of total reading. Your progress is saved automatically.</p>
           <a href="/positivepay/track-1/lesson-1/" class="btn btn-primary" style="margin-top:14px;height:44px;padding:0 20px;font-size:13px">Start Lesson 1 →</a>
         </div>
       </div>
@@ -60,7 +60,7 @@
         <div class="step-num">2</div>
         <div class="step-body">
           <h4>Follow AFS on LinkedIn.</h4>
-          <p>We post new content, peer benchmarks, and fraud data throughout the year. We post peer benchmarks and fraud data between track launches too.</p>
+          <p>We post peer benchmarks, fraud data, and new Academy content throughout the year.</p>
           <a href="https://www.linkedin.com/company/advanced-fraud-solutions" target="_blank" rel="noopener" class="btn btn-ghost-light" style="margin-top:14px;height:44px;padding:0 20px;font-size:13px">Follow on LinkedIn →</a>
         </div>
       </div>
@@ -76,7 +76,7 @@
 
     </div>
 
-    <p style="text-align:center;font-size:13.5px;color:var(--fg-3);margin-top:36px;line-height:1.6">If the welcome email doesn't land in your inbox in the next 10 minutes, check your spam folder. From there, mark us as a trusted sender so we don't disappear next month.</p>
+    <p style="text-align:center;font-size:13.5px;color:var(--fg-3);margin-top:36px;line-height:1.6">If the welcome email doesn't land in your inbox in the next 10 minutes, check your spam folder. Mark us as a trusted sender so we don't disappear next month.</p>
   </div>
 </section>
 
@@ -84,9 +84,9 @@
 <section style="padding-bottom:96px">
   <div class="wrap">
     <div style="background:var(--afs-gray-2);border-radius:24px;padding:56px;text-align:center">
-      <span class="eyebrow muted" style="display:block;margin-bottom:12px">What's coming</span>
-      <h2 style="font-size:34px;margin-bottom:12px">Track 2: The Adoption Playbook is live now.</h2>
-      <p style="font-size:17px;max-width:560px;margin:0 auto 28px;color:var(--fg-2)">The Adoption Playbook — the 4 levers that get business clients from enrolled to engaged, the fraud-as-trigger script, and a 60-day onboarding plan for your first 30 clients.</p>
+      <span class="eyebrow muted" style="display:block;margin-bottom:12px">Five tracks, all live</span>
+      <h2 style="font-size:34px;margin-bottom:12px">26 lessons waiting for you.</h2>
+      <p style="font-size:17px;max-width:560px;margin:0 auto 28px;color:var(--fg-2)">From Foundations through Operations & Compliance — the full Academy is open. Work at your own pace and earn your Practitioner or Strategist certificate when you're done.</p>
       <a href="/positivepay/curriculum/" class="btn btn-ghost-light">See the full curriculum →</a>
     </div>
   </div>
@@ -123,11 +123,25 @@
     </div>
     <div class="footer-bottom">
       <div>© 2026 Advanced Fraud Solutions, Inc.</div>
-      <div class="links"><a href="/positivepay/privacy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
+      <div class="links"><a href="https://advancedfraudsolutions.com/privacy-policy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
     </div>
   </div>
 </footer>
 
+
+<script>
+// Mark the user as enrolled so the lesson gate unlocks immediately.
+// The email was captured to localStorage on form submit (homepage script).
+// This page is also a safe place to re-confirm enrollment if that key is missing.
+(function () {
+  try {
+    if (!localStorage.getItem('afa_user_email')) {
+      // Fallback: mark enrolled with a placeholder so the gate opens
+      localStorage.setItem('afa_user_email', 'enrolled');
+    }
+  } catch (e) {}
+})();
+</script>
 
 <script type="text/javascript">
   piAId = '784193';
