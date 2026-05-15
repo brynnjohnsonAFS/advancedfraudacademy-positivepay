@@ -299,7 +299,13 @@
     // Always log to console so you can verify events fire correctly
     console.log('[AFA track]', action, data);
 
-    var payload = { action: action, email: email, page: window.location.pathname };
+    var h1 = document.querySelector('article h1');
+    var payload = {
+      action: action,
+      email: email,
+      page: window.location.pathname,
+      lesson_name: h1 ? h1.textContent.trim() : ''
+    };
     if (data) {
       Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
     }
