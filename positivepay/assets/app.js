@@ -308,32 +308,12 @@
       Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
     }
 
-    var iframe = document.createElement('iframe');
-    iframe.name = 'afa_track_' + Date.now();
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    var body = Object.keys(payload).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(payload[k]);
+    }).join('&');
 
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = TRACK_ENDPOINT;
-    form.target = iframe.name;
-    form.style.display = 'none';
-
-    Object.keys(payload).forEach(function (k) {
-      var input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = k;
-      input.value = payload[k];
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(function () {
-      if (form.parentNode) form.parentNode.removeChild(form);
-      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-    }, 5000);
+    var blob = new Blob([body], { type: 'application/x-www-form-urlencoded' });
+    navigator.sendBeacon(TRACK_ENDPOINT, blob);
   }
 
   /* ── Enrollment gate ── */
