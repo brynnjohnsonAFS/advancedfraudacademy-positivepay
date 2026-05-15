@@ -315,6 +315,7 @@
     fetch(TRACK_ENDPOINT, {
       method: 'POST',
       mode: 'no-cors',
+      redirect: 'manual',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body
     }).catch(function () {});
