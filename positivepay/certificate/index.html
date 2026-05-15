@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Certificate — Modern Positive Pay Academy</title>
 <meta name="description" content="Claim your Positive Pay Foundations certificate from the Modern Positive Pay Academy."/>
+<meta property="og:title" content="Positive Pay Foundations — Certificate of Completion"/>
+<meta property="og:description" content="Awarded by the Modern Positive Pay Academy by Advanced Fraud Solutions. Free, structured education for community bank and credit union treasury professionals."/>
+<meta property="og:image" content="https://advancedfraudacademy.com/positivepay/assets/cert-og.png"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/certificate/"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <link rel="stylesheet" href="../assets/tokens.css"/>
 <link rel="stylesheet" href="../assets/styles.css"/>
 <script src="../assets/app.js" defer></script>
@@ -180,7 +186,7 @@
     <h1 style="font-size:40px;margin-bottom:16px">You've completed Track 1.</h1>
     <p style="font-size:18px;line-height:1.65;color:var(--fg-2);margin-bottom:8px">Claim your Positive Pay Foundations certificate. Enter your details and we'll generate a shareable credential. It takes about 30 seconds, and it's free.</p>
 
-    <form class="cert-form" id="cert-form" action="http://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl" method="POST">
+    <form class="cert-form" id="cert-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-05-13/672cl" method="POST">
       <div class="cert-form-row">
         <label>First name<input type="text" name="FirstName" required placeholder="Jane"/></label>
         <label>Last name<input type="text" name="LastName" required placeholder="Smith"/></label>
@@ -260,9 +266,12 @@
     </div>
 
     <div class="cert-actions">
-      <a href="https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=Positive+Pay+Foundations&organizationName=Advanced+Fraud+Solutions&issueYear=2026&certUrl=https%3A%2F%2Fadvancedfraudacademy.com%2Fpositivepay%2Fcertificate%2F" target="_blank" rel="noopener" class="btn btn-primary">Share on LinkedIn →</a>
+      <button class="btn btn-primary" onclick="shareLinkedIn()">Share on LinkedIn →</button>
       <button class="btn btn-ghost-light" id="copy-link-btn" onclick="copyLink()">Copy link</button>
       <a href="/positivepay/track-2/" class="btn btn-ghost-light">Continue to Track 2 →</a>
+    </div>
+    <div id="li-toast" style="display:none;margin-top:12px;padding:12px 16px;background:var(--afs-gray-2);border-radius:10px;font-size:13.5px;color:var(--ink);line-height:1.5">
+      Post text copied to clipboard — paste it in LinkedIn. Tag <strong>@Advanced Fraud Solutions</strong> by typing @ and selecting the company.
     </div>
 
     <p class="cert-footer-note">The Modern Positive Pay Academy is free education for community bank and credit union treasury professionals, built and maintained by Advanced Fraud Solutions.</p>
@@ -410,6 +419,20 @@
     boot();
   }
 })();
+
+function shareLinkedIn() {
+  var name = document.getElementById('cert-display-name').textContent.trim();
+  var post = "I just earned the Positive Pay Foundations certificate from the Modern Positive Pay Academy — free, structured education for community bank and credit union treasury professionals.\n\nTrack 1 covers the modern definition of Positive Pay, business payment fraud benchmarks, and how high-performing FIs think about client adoption. Four more tracks to go.\n\nhttps://advancedfraudacademy.com/positivepay/certificate/\n\n@Advanced Fraud Solutions";
+
+  navigator.clipboard.writeText(post).then(function() {
+    var toast = document.getElementById('li-toast');
+    toast.style.display = 'block';
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fadvancedfraudacademy.com%2Fpositivepay%2Fcertificate%2F', '_blank');
+  }).catch(function() {
+    // Clipboard failed — just open LinkedIn
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fadvancedfraudacademy.com%2Fpositivepay%2Fcertificate%2F', '_blank');
+  });
+}
 
 function copyLink() {
   navigator.clipboard.writeText(window.location.href).then(function() {
