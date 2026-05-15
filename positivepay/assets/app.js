@@ -47,8 +47,7 @@
         saveProgress(p);
         markDone(btn);
         updateLessonListChecks();
-        // Fire Pardot activity for lesson completion
-        firePardotEvent('/positivepay/completed/' + id + '/');
+        trackEvent('lesson_complete', { lesson_id: id });
 
         // Show toast, then navigate to track overview
         var parts = window.location.pathname.split('/').filter(Boolean);
@@ -124,9 +123,12 @@
             }
           }
 
-          // Track quiz answer: /positivepay/quiz/track-1/lesson-1/q1/correct/
           var result = (idx === correctIndex) ? 'correct' : 'incorrect';
-          firePardotEvent('/positivepay/quiz/' + lessonId + '/q' + (qIdx + 1) + '/' + result + '/');
+          trackEvent('quiz_answer', {
+            lesson_id: lessonId,
+            question: 'q' + (qIdx + 1),
+            result: result
+          });
         });
       });
     });
@@ -192,8 +194,7 @@
       localStorage.setItem(celebKey, '1');
     } catch (e) {}
 
-    // Fire track-level completion event to Pardot
-    firePardotEvent('/positivepay/completed/track-' + trackNum + '/');
+    trackEvent('track_complete', { track: trackNum, lessons: total });
 
     showTrackCompleteModal(trackNum, total);
   }
@@ -287,17 +288,36 @@
     }, 5500);
   }
 
-  /* ── Pardot event helper ── */
-  function firePardotEvent(path) {
-    var url = window.location.origin + path;
-    if (typeof piTracker === 'function') {
-      try { piTracker(url); } catch (e) {}
-    } else {
-      // Pardot script still loading — retry once it's ready
-      window.addEventListener('load', function () {
-        try { if (typeof piTracker === 'function') piTracker(url); } catch (e) {}
-      }, { once: true });
+  /* ── Activity tracking ── */
+  // Paste your Pardot Form Handler URL below.
+  // In Pardot: Marketing > Forms > Form Handlers > New Form Handler
+  // Add fields: email, action, lesson_id, question, result, track, page
+  var TRACK_ENDPOINT = 'https://go.advancedfraudsolutions.com/l/783193/2026-05-14/67431i';
+
+  function trackEvent(action, data) {
+    var email = '';
+    try { email = localStorage.getItem('afa_user_email') || ''; } catch (e) {}
+
+    // Always log to console so you can verify events fire correctly
+    console.log('[AFA track]', action, data);
+
+    if (!TRACK_ENDPOINT) return;
+
+    var payload = { action: action, email: email, page: window.location.pathname };
+    if (data) {
+      Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
     }
+
+    var body = Object.keys(payload).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(payload[k]);
+    }).join('&');
+
+    fetch(TRACK_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).catch(function () {});
   }
 
   /* ── Enrollment gate ── */
