@@ -13,11 +13,10 @@ module.exports = async function handler(req, res) {
 
   let pardotStatus = null;
   try {
-    const r = await fetch('https://go.advancedfraudsolutions.com/l/783193/2026-05-14/67431i', {
+    const r = await fetch('https://hook.us2.make.com/t9jglsyawveob5p7lserkqwovdxupsuv', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body,
-      redirect: 'manual'
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
     pardotStatus = r.status;
   } catch (e) {
