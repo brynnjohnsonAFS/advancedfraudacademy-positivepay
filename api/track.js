@@ -11,14 +11,19 @@ export default async function handler(req, res) {
     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(payload[k]))
     .join('&');
 
+  let pardotStatus = null;
   try {
-    await fetch('https://go.advancedfraudsolutions.com/l/783193/2026-05-14/67431i', {
+    const r = await fetch('https://go.advancedfraudsolutions.com/l/783193/2026-05-14/67431i', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body,
       redirect: 'manual'
     });
-  } catch (e) {}
+    pardotStatus = r.status;
+  } catch (e) {
+    console.error('[track] Pardot fetch error:', e.message);
+  }
 
-  res.status(200).json({ ok: true });
+  console.log('[track] payload:', body, '| pardot status:', pardotStatus);
+  res.status(200).json({ ok: true, pardotStatus });
 }
