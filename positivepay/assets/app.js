@@ -292,8 +292,6 @@
   // Paste your Pardot Form Handler URL below.
   // In Pardot: Marketing > Forms > Form Handlers > New Form Handler
   // Add fields: email, action, lesson_id, question, result, track, page
-  var TRACK_ENDPOINT = 'https://go.advancedfraudsolutions.com/l/783193/2026-05-14/67431i';
-
   function trackEvent(action, data) {
     var email = '';
     try { email = localStorage.getItem('afa_user_email') || ''; } catch (e) {}
@@ -301,19 +299,16 @@
     // Always log to console so you can verify events fire correctly
     console.log('[AFA track]', action, data);
 
-    if (!TRACK_ENDPOINT) return;
-
     var payload = { action: action, email: email, page: window.location.pathname };
     if (data) {
       Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
     }
 
-    var body = Object.keys(payload).map(function (k) {
-      return encodeURIComponent(k) + '=' + encodeURIComponent(payload[k]);
-    }).join('&');
-
-    var blob = new Blob([body], { type: 'application/x-www-form-urlencoded' });
-    navigator.sendBeacon(TRACK_ENDPOINT, blob);
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function () {});
   }
 
   /* ── Enrollment gate ── */
