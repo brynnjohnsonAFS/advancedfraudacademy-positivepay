@@ -3,202 +3,202 @@
 <head>
 <meta charset="utf-8"/>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
   * { margin:0;padding:0;box-sizing:border-box }
   body {
     width:1200px;height:630px;overflow:hidden;
-    background:#0E0E0E;
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:#000000;
+    font-family:'Aileron','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     color:#ffffff;
   }
 
   .cert {
     width:1200px;height:630px;
-    display:grid;
-    grid-template-columns:1fr 380px;
     position:relative;
     overflow:hidden;
-  }
-
-  /* ── Left panel ── */
-  .left {
-    padding:56px 60px;
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
-    position:relative;
-    background:#0E0E0E;
+    padding:52px 64px 44px;
   }
 
-  /* Subtle dot grid */
-  .left::before {
-    content:'';
+  /* Red left accent bar */
+  .left-bar {
     position:absolute;
-    inset:0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size:28px 28px;
-    pointer-events:none;
+    left:0;top:0;bottom:0;
+    width:6px;
+    background:#C70200;
   }
 
-  .top { position:relative;z-index:1 }
+  /* Large decorative AFS grid icon — right side */
+  .deco-grid {
+    position:absolute;
+    right:-24px;
+    top:50%;
+    transform:translateY(-50%);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    width:400px;
+    height:400px;
+  }
 
-  .logo { height:32px;width:auto;display:block;filter:brightness(0) invert(1) }
+  .deco-grid-cell {
+    background:rgba(255,255,255,0.07);
+    border-radius:6px;
+  }
 
-  .center { position:relative;z-index:1 }
+  /* Match AFS logo: top-right cell is red accent */
+  .deco-grid-cell.red {
+    background:rgba(199,2,0,0.5);
+  }
+
+  /* Top row */
+  .top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:0;
+    position:relative;
+    z-index:1;
+  }
+
+  .logo {
+    height:30px;width:auto;display:block;
+    filter:brightness(0) invert(1);
+  }
+
+  .top-badge {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.3);
+  }
+
+  .top-badge-dot {
+    width:6px;height:6px;
+    border-radius:50%;
+    background:#ADE25D;
+    flex-shrink:0;
+  }
+
+  /* Center content */
+  .center {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-right:340px;
+    position:relative;
+    z-index:1;
+  }
 
   .eyebrow {
-    font-size:11px;font-weight:700;
-    letter-spacing:0.2em;text-transform:uppercase;
-    color:rgba(255,255,255,0.35);
-    margin-bottom:20px;
-    display:flex;align-items:center;gap:10px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:#C70200;
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:14px;
   }
 
   .eyebrow::before {
     content:'';
-    display:inline-block;
-    width:24px;height:2px;
+    display:block;
+    width:28px;height:2px;
     background:#C70200;
+    flex-shrink:0;
   }
 
   .title {
-    font-size:68px;font-weight:900;
+    font-size:80px;
+    font-weight:900;
     letter-spacing:-0.04em;
-    line-height:0.92;
+    line-height:0.88;
     color:#ffffff;
-    margin-bottom:24px;
+    margin-bottom:28px;
   }
 
-  .title .accent { color:#ADE25D }
+  .title .accent {
+    color:#ADE25D;
+  }
 
   .desc {
-    font-size:17px;color:rgba(255,255,255,0.5);
-    font-weight:400;line-height:1.55;
-    max-width:520px;
+    font-size:16px;
+    color:rgba(255,255,255,0.42);
+    line-height:1.55;
+    font-weight:400;
+    max-width:480px;
   }
 
+  /* Bottom row */
   .bottom {
-    position:relative;z-index:1;
-    display:flex;align-items:center;gap:20px;
-  }
-
-  .issuer-text {
-    font-size:13px;font-weight:600;
-    color:rgba(255,255,255,0.35);
-    letter-spacing:0.02em;
-  }
-
-  .dot { color:rgba(255,255,255,0.15);margin:0 4px }
-
-  /* ── Right panel ── */
-  .right {
-    background:#C70200;
     display:flex;
-    flex-direction:column;
     align-items:center;
-    justify-content:center;
-    padding:48px 40px;
+    justify-content:space-between;
     position:relative;
-    overflow:hidden;
+    z-index:1;
+    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,0.1);
   }
 
-  /* Geometric circle accent */
-  .right::before {
-    content:'';
-    position:absolute;
-    top:-80px;right:-80px;
-    width:320px;height:320px;
-    border-radius:50%;
-    border:56px solid rgba(255,255,255,0.08);
-  }
-
-  .right::after {
-    content:'';
-    position:absolute;
-    bottom:-100px;left:-60px;
-    width:260px;height:260px;
-    border-radius:50%;
-    border:40px solid rgba(0,0,0,0.12);
-  }
-
-  .badge {
-    position:relative;z-index:1;
-    display:flex;flex-direction:column;
+  .bottom-left {
+    display:flex;
     align-items:center;
-    gap:6px;
-    text-align:center;
+    gap:18px;
   }
 
-  .badge-icon {
-    width:72px;height:72px;
-    background:rgba(255,255,255,0.15);
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:20px;
+  .complete-pill {
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:#ADE25D;
+    color:#000000;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    padding:7px 14px;
+    border-radius:3px;
+    flex-shrink:0;
   }
 
-  .badge-icon svg {
-    width:36px;height:36px;
-    stroke:#ffffff;stroke-width:2.5;
-    fill:none;stroke-linecap:round;stroke-linejoin:round;
+  .complete-pill svg {
+    width:12px;height:12px;
+    stroke:#000000;
+    stroke-width:2.8;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
   }
 
-  .badge-label {
-    font-size:10px;font-weight:800;
-    letter-spacing:0.22em;text-transform:uppercase;
-    color:rgba(255,255,255,0.6);
-    margin-bottom:4px;
+  .meta-text {
+    font-size:12px;
+    font-weight:600;
+    color:rgba(255,255,255,0.25);
+    letter-spacing:0.1em;
+    text-transform:uppercase;
   }
 
-  .badge-title {
-    font-size:22px;font-weight:900;
-    letter-spacing:-0.02em;
-    color:#ffffff;
-    line-height:1.15;
-    margin-bottom:6px;
+  .url-text {
+    font-size:12px;
+    font-weight:500;
+    color:rgba(255,255,255,0.22);
+    letter-spacing:0.04em;
   }
 
-  .badge-sub {
-    font-size:13px;font-weight:500;
-    color:rgba(255,255,255,0.6);
-    line-height:1.4;
-  }
-
-  .divider {
-    width:40px;height:1px;
-    background:rgba(255,255,255,0.2);
-    margin:24px 0;
-    position:relative;z-index:1;
-  }
-
-  .track-info {
-    position:relative;z-index:1;
-    text-align:center;
-  }
-
-  .track-num {
-    font-size:56px;font-weight:900;
-    letter-spacing:-0.04em;
-    color:#ffffff;
-    line-height:1;
-  }
-
-  .track-num sup {
-    font-size:22px;
-    vertical-align:super;
-    color:rgba(255,255,255,0.6);
-  }
-
-  .track-of {
-    font-size:12px;font-weight:700;
-    letter-spacing:0.14em;text-transform:uppercase;
-    color:rgba(255,255,255,0.5);
-    margin-top:4px;
-  }
-
+  /* Bottom green accent bar */
   .green-bar {
     position:absolute;
     bottom:0;left:0;right:0;
-    height:5px;
+    height:4px;
     background:#ADE25D;
   }
 </style>
@@ -206,46 +206,53 @@
 <body>
 <div class="cert">
 
-  <div class="left">
-    <div class="top">
-      <img src="afa-logo.png" alt="Advanced Fraud Academy" class="logo"/>
-    </div>
+  <div class="left-bar"></div>
 
-    <div class="center">
-      <div class="eyebrow">Certificate of Completion</div>
-      <div class="title">
-        Positive Pay<br/>
-        <span class="accent">Foundations.</span>
-      </div>
-      <div class="desc">Awarded to treasury professionals who completed Track 1 of the Modern Positive Pay Academy — fraud prevention, adoption strategy, and program benchmarking.</div>
-    </div>
+  <!-- Decorative AFS grid icon (3×3, top-right cell red) -->
+  <div class="deco-grid">
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell red"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+    <div class="deco-grid-cell"></div>
+  </div>
 
-    <div class="bottom">
-      <div class="issuer-text">
-        Advanced Fraud Solutions <span class="dot">·</span> advancedfraudacademy.com/positivepay
-      </div>
+  <!-- Top -->
+  <div class="top">
+    <img src="afa-logo.png" alt="Advanced Fraud Academy" class="logo"/>
+    <div class="top-badge">
+      <div class="top-badge-dot"></div>
+      Advanced Fraud Academy
     </div>
   </div>
 
-  <div class="right">
-    <div class="badge">
-      <div class="badge-icon">
+  <!-- Center -->
+  <div class="center">
+    <div class="eyebrow">Certificate of Completion</div>
+    <div class="title">
+      Positive Pay<br/>
+      <span class="accent">Foundations.</span>
+    </div>
+    <div class="desc">Awarded to treasury professionals who completed Track 1 of the Modern Positive Pay Academy — fraud prevention, adoption strategy, and program benchmarking.</div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom">
+    <div class="bottom-left">
+      <div class="complete-pill">
         <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+        Track 1 Complete
       </div>
-      <div class="badge-label">Track Complete</div>
-      <div class="badge-title">Positive Pay<br/>Foundations</div>
-      <div class="badge-sub">6 of 6 lessons</div>
+      <div class="meta-text">6 of 6 Lessons &nbsp;·&nbsp; 1 of 5 Tracks</div>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="track-info">
-      <div class="track-num">1<sup>st</sup></div>
-      <div class="track-of">of 5 tracks</div>
-    </div>
-
-    <div class="green-bar"></div>
+    <div class="url-text">advancedfraudacademy.com/positivepay</div>
   </div>
+
+  <div class="green-bar"></div>
 
 </div>
 </body>
