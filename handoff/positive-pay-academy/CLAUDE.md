@@ -1,6 +1,6 @@
 # CLAUDE.md — Modern Positive Pay Academy site
 
-You are working on the Modern Positive Pay Academy — a free educational platform for community bank and credit union treasury professionals, built and maintained by Advanced Fraud Solutions (AFS). The site lives at **advancedfraudacademy.com/positivepay**.
+You are working on the Modern Positive Pay Academy — a free educational platform for community FI treasury professionals, built and maintained by Advanced Fraud Solutions (AFS). The site lives at **advancedfraudacademy.com/positivepay**.
 
 ## Audience
 
