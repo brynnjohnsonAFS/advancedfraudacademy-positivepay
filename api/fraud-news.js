@@ -17,7 +17,7 @@ var FEEDS = [
   {
     name: 'DOJ',
     type: 'rss',
-    url: 'https://www.justice.gov/feeds/opa/justice-news.xml'
+    url: 'https://www.justice.gov/feeds/justice-news.xml'
   },
   {
     name: 'Krebs on Security',
@@ -30,9 +30,14 @@ var FEEDS = [
     url: 'https://www.securityweek.com/feed/'
   },
   {
-    name: 'FinCEN',
+    name: 'ABA Banking Journal',
     type: 'rss',
-    url: 'https://www.fincen.gov/news/rss.xml'
+    url: 'https://bankingjournal.aba.com/feed/'
+  },
+  {
+    name: 'BleepingComputer',
+    type: 'rss',
+    url: 'https://www.bleepingcomputer.com/feed/'
   }
 ];
 
