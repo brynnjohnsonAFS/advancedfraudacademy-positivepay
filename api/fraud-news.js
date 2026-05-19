@@ -66,7 +66,15 @@ var KEYWORDS = [
   { pattern: /\bfinancial\s+institution\s+fraud\b/i, category: 'FI fraud' },
   { pattern: /\bembezzl/i,                         category: 'Embezzlement' },
   { pattern: /\bcheck\s+scheme\b/i,                category: 'Check fraud' },
-  { pattern: /\bmail\s+theft\b/i,                  category: 'Check fraud' } // a common precursor to check washing
+  { pattern: /\bmail\s+theft\b/i,                  category: 'Check fraud' }, // a common precursor to check washing
+  { pattern: /\bscheme\s+to\s+defraud\b/i,         category: 'Fraud scheme' },
+  { pattern: /\bmoney\s+mule\b/i,                  category: 'Money mules' },
+  { pattern: /\bdeposit\s+fraud\b/i,               category: 'Deposit fraud' },
+  { pattern: /\belder\s+fraud\b/i,                 category: 'Elder fraud' },
+  { pattern: /\bromance\s+scam\b/i,                category: 'Elder fraud' },
+  { pattern: /\bsynthetic\s+identit/i,             category: 'Identity fraud' },
+  { pattern: /\baccount\s+takeover\b/i,            category: 'ATO' },
+  { pattern: /\bcheck\s+verification\b/i,          category: 'Check fraud' }
 ];
 
 // ── Tiny regex-based RSS / Atom parser ───────────────────────────────────────
