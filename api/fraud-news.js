@@ -124,16 +124,26 @@ var KEYWORDS = [
 
 function decodeEntities(s) {
   if (!s) return '';
-  return s
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]+>/g, '') // strip inline HTML
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#(\d+);/g, function (_, code) { return String.fromCharCode(parseInt(code, 10)); })
-    .replace(/&nbsp;/g, ' ')
+  // Order matters: unwrap CDATA, decode entities FIRST (so entity-escaped HTML
+  // like &lt;a href=...&gt; becomes real tags), then strip tags.
+  // Run the entity decode twice to catch double-encoded content
+  // (Google News descriptions are often &amp;lt;a&amp;gt;… i.e. double-escaped).
+  var out = s
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
+  for (var i = 0; i < 2; i++) {
+    out = out
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&apos;/g, "'")
+      .replace(/&#(\d+);/g, function (_, code) { return String.fromCharCode(parseInt(code, 10)); })
+      .replace(/&#x([0-9a-f]+);/gi, function (_, code) { return String.fromCharCode(parseInt(code, 16)); })
+      .replace(/&nbsp;/g, ' ');
+  }
+  return out
+    .replace(/<[^>]+>/g, '')   // strip HTML tags (now that they're real tags, not entities)
     .replace(/\s+/g, ' ')
     .trim();
 }
