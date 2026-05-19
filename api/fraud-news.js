@@ -223,19 +223,24 @@ async function fetchFeed(feed) {
       // and strip the " - Publication Name" suffix that Google appends to titles
       var sourceName = feed.name;
       var title = it.title || '';
+      var summary = it.summary || '';
       if (feed.googleNews && it.sourceName) {
         sourceName = it.sourceName;
         // Strip trailing " - Publication" — handles unicode hyphens too
         var suffix = new RegExp('\\s+[-‐-―]\\s+' +
           it.sourceName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*$');
         title = title.replace(suffix, '').trim();
+        // Google News RSS doesn't carry real article excerpts — the <description>
+        // is just the title + publication name repeated. Drop it to avoid the
+        // redundant-summary UX bug. The title alone is informative.
+        summary = '';
       }
       return {
         title: title,
         url: it.url,
         source: sourceName,
         publishedAt: it.pubDate ? new Date(it.pubDate).toISOString() : null,
-        summary: it.summary ? it.summary.slice(0, 400) : ''
+        summary: summary ? summary.slice(0, 400) : ''
       };
     }).filter(function (it) {
       if (!it.title || !it.url) return false;
@@ -270,15 +275,43 @@ function tagItem(item) {
   return cats;
 }
 
-// ── Dedupe by URL ────────────────────────────────────────────────────────────
+// ── Dedupe ───────────────────────────────────────────────────────────────────
+// Two passes: URL (exact) and normalized title (catches syndicated copies of
+// the same story published by multiple outlets).
+
+function normalizeTitle(t) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/[‘’“”'']/g, "'")                                     // smart quotes → straight
+    .replace(/'s\b/g, '')                                          // collapse possessives ("newsom's" → "newsom")
+    .replace(/[^a-z0-9 ]+/g, ' ')                                  // strip punctuation
+    .replace(/\b(gov|govs|former|federal|feds|fbi|doj|the|a|an|to|of|for|and|in|at|on)\b/g, '') // strip common words for fuzzier matching
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// First N words of normalized title — used as a fuzzy dedup key so syndicated
+// versions of the same story (different outlets, slight rewording) collapse.
+function titleKey(t) {
+  var n = normalizeTitle(t);
+  return n.split(' ').slice(0, 5).join(' ');
+}
 
 function dedupe(items) {
-  var seen = {};
+  var seenUrls = {};
+  var seenTitles = {};
   var out = [];
   for (var i = 0; i < items.length; i++) {
-    var key = (items[i].url || '').split('#')[0];
-    if (!key || seen[key]) continue;
-    seen[key] = true;
+    var urlKey = (items[i].url || '').split('#')[0];
+    if (!urlKey || seenUrls[urlKey]) continue;
+
+    var tk = titleKey(items[i].title);
+    // Require all 5 words present (i.e., the title was substantial enough).
+    // Otherwise short titles like "Bank fraud scheme" would over-dedup.
+    if (tk && tk.split(' ').length >= 5 && seenTitles[tk]) continue;
+
+    seenUrls[urlKey] = true;
+    if (tk) seenTitles[tk] = true;
     out.push(items[i]);
   }
   return out;
