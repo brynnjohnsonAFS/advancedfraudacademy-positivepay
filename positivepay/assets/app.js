@@ -468,7 +468,7 @@
       '@keyframes afa-tick-pulse{0%,100%{opacity:1}50%{opacity:0.4}}' +
       '.afa-ticker__viewport{flex:1;overflow:hidden;position:relative;min-width:0;height:100%}' +
       '.afa-ticker__viewport::after{content:"";position:absolute;top:0;right:0;width:80px;height:100%;background:linear-gradient(to right,transparent,#0E0E0E);pointer-events:none}' +
-      '.afa-ticker__track{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:afa-tick-scroll 90s linear infinite;will-change:transform}' +
+      '.afa-ticker__track{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:afa-tick-scroll 240s linear infinite;will-change:transform}' +
       '.afa-ticker:hover .afa-ticker__track,.afa-ticker:focus-within .afa-ticker__track{animation-play-state:paused}' +
       '@keyframes afa-tick-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}' +
       '.afa-ticker__item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-size:13.5px;color:rgba(255,255,255,0.92);text-decoration:none;transition:color 120ms ease}' +
@@ -522,7 +522,7 @@
     // Duplicate the track for a seamless infinite scroll
     return '<div class="afa-ticker" role="region" aria-label="Latest fraud news">' +
              '<div class="afa-ticker__inner">' +
-               '<div class="afa-ticker__label"><span class="afa-ticker__dot" aria-hidden="true"></span>Fraud Wire</div>' +
+               '<div class="afa-ticker__label"><span class="afa-ticker__dot" aria-hidden="true"></span>Fraud Watch</div>' +
                '<div class="afa-ticker__viewport">' +
                  '<div class="afa-ticker__track">' +
                    itemHTML +
