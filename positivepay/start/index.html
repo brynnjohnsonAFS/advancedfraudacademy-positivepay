@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Find Your Starting Point — Modern Positive Pay Academy</title>
+<meta name="description" content="A 30-second diagnostic that picks the right Positive Pay lessons for where your FI is today. Based on real community FI starting points."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/start/"/>
+<meta property="og:title" content="Find Your Starting Point — Modern Positive Pay Academy"/>
+<meta property="og:description" content="30 seconds. We'll route you to the lessons that fit your situation — whether you don't offer PP yet, have low adoption, or want to monetize a mature program."/>
+<link rel="stylesheet" href="../assets/tokens.css"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<script src="../assets/app.js" defer></script>
+<style>
+  /* ── Diagnostic page styles ────────────────────────────── */
+  .diag-hero { padding: 96px 0 36px }
+  .diag-hero h1 { font-size: 56px; letter-spacing: -0.025em; margin: 16px 0 14px; line-height: 1.05 }
+  .diag-hero .lede { font-size: 18px; line-height: 1.6; color: var(--fg-2); max-width: 660px }
+  @media (max-width: 720px) { .diag-hero h1 { font-size: 40px } }
+
+  /* Breadcrumb / trail */
+  .diag-trail { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 20px 24px; background: var(--afs-gray-2); border-radius: 12px; margin-bottom: 32px; font-size: 13px; font-weight: 600 }
+  .diag-trail-label { color: var(--fg-3); letter-spacing: 1.4px; text-transform: uppercase; font-size: 11px; font-weight: 700; padding-right: 4px }
+  .diag-trail-step { display: inline-flex; align-items: center; gap: 6px; color: var(--ink) }
+  .diag-trail-step button { background: transparent; border: none; padding: 0; color: var(--ink); font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--afs-gray-1); transition: text-decoration-color 120ms ease }
+  .diag-trail-step button:hover { text-decoration-color: var(--afs-red) }
+  .diag-trail-sep { color: var(--fg-3); font-weight: 400 }
+  .diag-trail-reset { margin-left: auto; font-size: 12px; color: var(--fg-3); background: transparent; border: none; cursor: pointer; font-family: inherit; font-weight: 600; padding: 4px 8px; border-radius: 6px; transition: all 120ms ease }
+  .diag-trail-reset:hover { color: var(--afs-red); background: #fff }
+
+  /* The "flow" container — animated transitions between steps */
+  .diag-flow { min-height: 420px; position: relative }
+  .diag-step { animation: diag-fade-in 360ms ease both }
+  @keyframes diag-fade-in {
+    from { opacity: 0; transform: translateY(12px) }
+    to   { opacity: 1; transform: translateY(0) }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .diag-step { animation: none }
+  }
+
+  .diag-question { font-size: 13px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--afs-red); margin-bottom: 14px }
+  .diag-prompt { font-size: 32px; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 32px; font-weight: 700; max-width: 720px }
+  @media (max-width: 720px) { .diag-prompt { font-size: 24px } }
+
+  /* Option cards — the branching nodes */
+  .diag-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+  @media (max-width: 760px) { .diag-options { grid-template-columns: 1fr } }
+  .diag-option { display: flex; flex-direction: column; gap: 8px; text-align: left; padding: 24px 26px; background: #fff; border: 1.5px solid var(--afs-gray-1); border-radius: 16px; cursor: pointer; font-family: inherit; transition: all 160ms ease; position: relative; overflow: hidden }
+  .diag-option:hover { border-color: var(--ink); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.08) }
+  .diag-option:focus-visible { outline: 3px solid var(--afs-red); outline-offset: 3px }
+  .diag-option-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--fg-3) }
+  .diag-option-tag { background: var(--afs-gray-2); padding: 4px 9px; border-radius: 6px; color: var(--fg-2) }
+  .diag-option-arrow { width: 24px; height: 24px; border-radius: 50%; background: var(--afs-gray-2); display: flex; align-items: center; justify-content: center; color: var(--ink); transition: all 160ms ease; font-size: 14px; font-weight: 700 }
+  .diag-option:hover .diag-option-arrow { background: var(--afs-red); color: #fff; transform: translateX(2px) }
+  .diag-option-title { font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: -0.005em; margin: 4px 0 4px }
+  .diag-option-blurb { font-size: 14px; line-height: 1.55; color: var(--fg-2); font-weight: 500; margin: 0 }
+
+  /* Visual connectors between steps */
+  .diag-connector { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 10px 0 6px; color: var(--fg-3) }
+  .diag-connector::before { content: ""; display: block; width: 1.5px; height: 18px; background: var(--afs-gray-1) }
+  .diag-connector::after { content: "▼"; font-size: 9px; color: var(--afs-gray-1); margin-top: -2px }
+
+  /* ── Leaf (results) view ────────────────────────────────── */
+  .diag-leaf { padding-top: 8px }
+  .diag-leaf-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--afs-red); margin-bottom: 12px }
+  .diag-leaf-headline { font-size: 40px; letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 16px; font-weight: 800; color: var(--ink) }
+  @media (max-width: 720px) { .diag-leaf-headline { font-size: 30px } }
+  .diag-leaf-intro { font-size: 17px; line-height: 1.6; color: var(--fg-2); max-width: 660px; margin-bottom: 36px }
+
+  .diag-lessons-label { font-size: 11.5px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--fg-3); margin: 0 0 18px; display: flex; align-items: center; gap: 10px }
+  .diag-lessons-label::after { content: ""; flex: 1; height: 1px; background: var(--afs-gray-1) }
+  .diag-lessons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px }
+  .diag-lesson { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 20px; padding: 18px 20px; background: #fff; border: 1.5px solid var(--afs-gray-1); border-radius: 14px; text-decoration: none; color: inherit; transition: all 160ms ease }
+  .diag-lesson:hover { border-color: var(--ink); transform: translateX(4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06) }
+  .diag-lesson-num { font-size: 22px; font-weight: 800; color: var(--afs-red); letter-spacing: -0.02em; font-variant-numeric: tabular-nums }
+  .diag-lesson-meta { font-size: 10.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--fg-3); margin-bottom: 4px }
+  .diag-lesson-title { font-size: 16.5px; font-weight: 700; color: var(--ink); line-height: 1.35; letter-spacing: -0.005em }
+  .diag-lesson-arr { font-size: 18px; color: var(--fg-3); transition: color 160ms ease }
+  .diag-lesson:hover .diag-lesson-arr { color: var(--afs-red) }
+  @media (max-width: 600px) { .diag-lesson { grid-template-columns: 40px 1fr auto; gap: 14px; padding: 16px } .diag-lesson-num { font-size: 18px } }
+
+  .diag-leaf-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 12px }
+  .diag-leaf-meta { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--afs-gray-1); font-size: 13.5px; color: var(--fg-2); line-height: 1.6 }
+  .diag-leaf-meta b { color: var(--ink) }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/start/" style="color:var(--afs-red)">Start here</a>
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/news/">News</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="/positivepay/product/">The Product</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="diag-hero">
+  <div class="wrap" style="max-width:880px">
+    <span class="eyebrow">Find your starting point</span>
+    <h1>Tell us where you are.<br/>We'll show you what to read first.</h1>
+    <p class="lede">A 30-second diagnostic. Pick the situation closest to yours and we'll route you to the 4–5 lessons that fit. No email required.</p>
+  </div>
+</section>
+
+<section style="padding-bottom:96px">
+  <div class="wrap" style="max-width:880px">
+
+    <!-- Breadcrumb / path trail -->
+    <div class="diag-trail" id="diag-trail" hidden></div>
+
+    <!-- Flow container — we render the active step here -->
+    <div class="diag-flow" id="diag-flow" aria-live="polite"></div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:28px;width:auto;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/start/">Find your starting point</a></li>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/news/">Fraud News</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/product/">The Product</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="https://advancedfraudsolutions.com/privacy-policy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Decision tree definition ──────────────────────────────────────────────
+  // Each "step" is a question with options. Each option either points to
+  // another step (branching) or to a leaf (terminal recommendation).
+  var STEPS = {
+    start: {
+      eyebrow: 'Question 1 of 1–2',
+      prompt: 'Where are you with Positive Pay today?',
+      options: [
+        {
+          id: 'A',
+          tag: 'No PP yet',
+          title: "We don't offer Positive Pay yet.",
+          blurb: "Considering it. Need to understand the case, the cost, and what to buy.",
+          to: 'leaf-A'
+        },
+        {
+          id: 'B',
+          tag: 'Low adoption',
+          title: "We have it — but under 25% of business clients use it.",
+          blurb: "The product is live. Adoption isn't. Something's not landing.",
+          to: 'B'
+        },
+        {
+          id: 'C',
+          tag: 'Growing',
+          title: "We're growing (25–75%). Want to accelerate.",
+          blurb: "Real momentum. Now we want a sales motion, not a one-off.",
+          to: 'leaf-C'
+        },
+        {
+          id: 'D',
+          tag: 'High adoption',
+          title: "We're at 75%+ adoption. Want to mature and monetize.",
+          blurb: "Adoption is solved. The next move is pricing, retention, and revenue.",
+          to: 'leaf-D'
+        }
+      ]
+    },
+    B: {
+      eyebrow: 'Question 2 of 2',
+      prompt: "What's blocking adoption?",
+      options: [
+        {
+          id: 'B1',
+          tag: 'Push problem',
+          title: "We haven't really pushed enrollment.",
+          blurb: "The product is there. We just haven't built the motion that gets clients in.",
+          to: 'leaf-B1'
+        },
+        {
+          id: 'B2',
+          tag: 'Platform problem',
+          title: "The platform is clunky. File friction, manual steps, mobile gaps.",
+          blurb: "Clients sign up, hit friction, stop using it. The tool is the bottleneck.",
+          to: 'leaf-B2'
+        },
+        {
+          id: 'B3',
+          tag: 'Value problem',
+          title: "Clients don't see the value. They tolerate it, not use it.",
+          blurb: "They enrolled because we asked. They're not engaged because they don't get it.",
+          to: 'leaf-B3'
+        }
+      ]
+    }
+  };
+
+  // ── Leaf definitions ─────────────────────────────────────────────────────
+  // Each leaf has a headline, intro, and ordered lesson sequence.
+  var LEAVES = {
+    'leaf-A': {
+      headline: 'Build your internal case.',
+      intro: "You're not selling Positive Pay to clients yet. You're selling it to your CEO, your board, and your treasury committee. This path gives you the modern definition, the fraud math, the revenue math, and the buying paths community FIs actually take — in the order that builds the case.",
+      lessons: [
+        { track: 1, lesson: 1, title: 'What Positive Pay actually is in 2026' },
+        { track: 1, lesson: 4, title: 'The state of business payment fraud' },
+        { track: 4, lesson: 2, title: 'The non-interest income math' },
+        { track: 1, lesson: 5, title: 'Direct vs. partner: how community FIs actually buy Positive Pay' },
+        { track: 1, lesson: 6, title: "The Positive Pay Buyer's Guide" }
+      ]
+    },
+    'leaf-B1': {
+      headline: 'Manufacture the enrollment moment.',
+      intro: "Low adoption with no platform problem means the motion isn't there. Two enrollment levers have worked for real FIs — fraud-as-trigger built a 100+ client book at one community FI, the liability letter pulled 16 signups in 48 hours at another. This path teaches both, plus the metrics that tell you they're working.",
+      lessons: [
+        { track: 2, lesson: 1, title: 'The 5 adoption metrics that matter' },
+        { track: 2, lesson: 2, title: 'Two enrollment levers: fraud-as-trigger and the liability letter' },
+        { track: 2, lesson: 3, title: 'Training your business clients' },
+        { track: 3, lesson: 3, title: 'Handling the five most common objections' }
+      ]
+    },
+    'leaf-B2': {
+      headline: 'Friction is the problem. Diagnose it.',
+      intro: "If clients enroll and disengage, the platform is doing the un-selling. This path walks the file-format friction that kills onboarding, the two-products-in-one frame that explains why most legacy systems stall, and the Buyer's Guide that maps the upgrade path — whether you switch vendors or push for a fix.",
+      lessons: [
+        { track: 2, lesson: 5, title: 'Removing file-format friction' },
+        { track: 1, lesson: 2, title: 'Two products in one: why most legacy systems stall' },
+        { track: 1, lesson: 6, title: "The Positive Pay Buyer's Guide (use for upgrade evaluation)" },
+        { track: 1, lesson: 5, title: 'Direct vs. partner: your re-buy options' }
+      ]
+    },
+    'leaf-B3': {
+      headline: 'Re-train the value proposition.',
+      intro: "Clients tolerating Positive Pay is a teaching problem, not a product problem. They never understood the why. This path retrains the value — what to lead with (check vs. ACH vs. Payee Match), how to design pilots that don't quietly un-enroll, and the discovery questions that change how business clients see the product.",
+      lessons: [
+        { track: 2, lesson: 3, title: 'Training your business clients' },
+        { track: 2, lesson: 4, title: "Why most pilots fail (and the one trait of the ones that don't)" },
+        { track: 3, lesson: 2, title: 'Conversation starters and discovery questions' },
+        { track: 1, lesson: 3, title: 'Check vs ACH vs Payee Match: which to lead with' }
+      ]
+    },
+    'leaf-C': {
+      headline: 'Build a real sales motion.',
+      intro: "Momentum without a motion stalls at 50%. This path turns sporadic wins into a repeatable system — the joint TMO + Relationship Manager call that lifts close rates, segmentation that tells you which clients to call this week, and the levers and outreach sequences that scale.",
+      lessons: [
+        { track: 3, lesson: 1, title: 'The joint TMO and Relationship Manager call' },
+        { track: 3, lesson: 5, title: 'Identifying and prioritizing high-risk client segments' },
+        { track: 2, lesson: 2, title: 'Two enrollment levers that work' },
+        { track: 3, lesson: 4, title: 'The 3-email outreach sequence' }
+      ]
+    },
+    'leaf-D': {
+      headline: 'Make it a revenue line.',
+      intro: "75%+ adoption means you've built something most community FIs haven't. Now it's a balance-sheet asset, not just a fraud tool. This path covers the pricing models that actually work, the NII math that makes the case to your board, the retention moat that keeps your commercial book sticky, and what a mature program looks like end-to-end.",
+      lessons: [
+        { track: 4, lesson: 1, title: 'Pricing models that actually work' },
+        { track: 4, lesson: 2, title: 'The non-interest income math' },
+        { track: 4, lesson: 3, title: 'The retention moat' },
+        { track: 4, lesson: 5, title: 'What a mature Positive Pay program looks like' }
+      ]
+    }
+  };
+
+  // ── State ────────────────────────────────────────────────────────────────
+  var state = {
+    history: ['start'],  // step ids visited; last item is current
+    trail: []            // option labels for breadcrumb
+  };
+
+  var flowEl  = document.getElementById('diag-flow');
+  var trailEl = document.getElementById('diag-trail');
+
+  function escapeHTML(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderTrail() {
+    if (!state.trail.length) {
+      trailEl.hidden = true;
+      trailEl.innerHTML = '';
+      return;
+    }
+    var html = '<span class="diag-trail-label">Your path</span>';
+    state.trail.forEach(function (step, i) {
+      if (i > 0) html += '<span class="diag-trail-sep">→</span>';
+      html += '<span class="diag-trail-step">' +
+                '<button type="button" data-back-to="' + i + '">' + escapeHTML(step) + '</button>' +
+              '</span>';
+    });
+    html += '<button type="button" class="diag-trail-reset" id="diag-reset">Start over ↺</button>';
+    trailEl.innerHTML = html;
+    trailEl.hidden = false;
+
+    // Wire backtrack buttons
+    Array.prototype.forEach.call(trailEl.querySelectorAll('[data-back-to]'), function (btn) {
+      btn.addEventListener('click', function () {
+        var i = parseInt(btn.getAttribute('data-back-to'), 10);
+        backtrackTo(i);
+      });
+    });
+    var reset = document.getElementById('diag-reset');
+    if (reset) reset.addEventListener('click', resetFlow);
+  }
+
+  function renderStep(stepId) {
+    var step = STEPS[stepId];
+    if (!step) return;
+    var optHTML = step.options.map(function (opt) {
+      return '<button type="button" class="diag-option" data-next="' + escapeHTML(opt.to) +
+             '" data-label="' + escapeHTML(opt.title) + '">' +
+               '<div class="diag-option-head">' +
+                 '<span class="diag-option-tag">' + escapeHTML(opt.tag) + '</span>' +
+                 '<span class="diag-option-arrow" aria-hidden="true">→</span>' +
+               '</div>' +
+               '<div class="diag-option-title">' + escapeHTML(opt.title) + '</div>' +
+               '<p class="diag-option-blurb">' + escapeHTML(opt.blurb) + '</p>' +
+             '</button>';
+    }).join('');
+
+    flowEl.innerHTML =
+      '<div class="diag-step">' +
+        '<div class="diag-question">' + escapeHTML(step.eyebrow) + '</div>' +
+        '<h2 class="diag-prompt">' + escapeHTML(step.prompt) + '</h2>' +
+        '<div class="diag-options">' + optHTML + '</div>' +
+      '</div>';
+
+    // Wire option clicks
+    Array.prototype.forEach.call(flowEl.querySelectorAll('.diag-option'), function (btn) {
+      btn.addEventListener('click', function () {
+        var next  = btn.getAttribute('data-next');
+        var label = btn.getAttribute('data-label');
+        goNext(next, label);
+      });
+    });
+
+    // Scroll into view smoothly on transitions (not on initial load)
+    if (state.trail.length) {
+      flowEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function renderLeaf(leafId) {
+    var leaf = LEAVES[leafId];
+    if (!leaf) { resetFlow(); return; }
+
+    var lessonsHTML = leaf.lessons.map(function (l, idx) {
+      var url = '/positivepay/track-' + l.track + '/lesson-' + l.lesson + '/';
+      var meta = 'Track ' + l.track + ' · Lesson ' + l.lesson;
+      return '<a class="diag-lesson" href="' + escapeHTML(url) + '">' +
+               '<span class="diag-lesson-num">' + (idx + 1) + '</span>' +
+               '<span>' +
+                 '<div class="diag-lesson-meta">' + escapeHTML(meta) + '</div>' +
+                 '<div class="diag-lesson-title">' + escapeHTML(l.title) + '</div>' +
+               '</span>' +
+               '<span class="diag-lesson-arr" aria-hidden="true">→</span>' +
+             '</a>';
+    }).join('');
+
+    var firstURL = '/positivepay/track-' + leaf.lessons[0].track + '/lesson-' + leaf.lessons[0].lesson + '/';
+
+    flowEl.innerHTML =
+      '<div class="diag-step diag-leaf">' +
+        '<div class="diag-leaf-eyebrow">Your recommended path</div>' +
+        '<h2 class="diag-leaf-headline">' + escapeHTML(leaf.headline) + '</h2>' +
+        '<p class="diag-leaf-intro">' + escapeHTML(leaf.intro) + '</p>' +
+        '<div class="diag-lessons-label">Read in this order</div>' +
+        '<div class="diag-lessons">' + lessonsHTML + '</div>' +
+        '<div class="diag-leaf-cta">' +
+          '<a class="btn btn-primary" href="' + escapeHTML(firstURL) + '">Start with Lesson 1 →</a>' +
+          '<a class="btn btn-ghost-light" href="/positivepay/curriculum/">Browse full curriculum</a>' +
+        '</div>' +
+        '<div class="diag-leaf-meta">' +
+          '<b>Why this path?</b> These four to five lessons were picked from the 26-lesson curriculum because they speak directly to your situation. You can read the rest later — or jump in here.' +
+        '</div>' +
+      '</div>';
+
+    // Fire Pardot/analytics event (anonymous OK)
+    trackDiagnostic(leafId);
+
+    flowEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function goNext(nextId, label) {
+    state.trail.push(label);
+    state.history.push(nextId);
+    renderTrail();
+    if (nextId.indexOf('leaf-') === 0) {
+      renderLeaf(nextId);
+    } else {
+      renderStep(nextId);
+    }
+  }
+
+  function backtrackTo(trailIndex) {
+    // trailIndex is the position in state.trail to roll back TO (keep items < trailIndex)
+    state.trail = state.trail.slice(0, trailIndex);
+    state.history = state.history.slice(0, trailIndex + 1); // history[0] is always 'start'
+    renderTrail();
+    var current = state.history[state.history.length - 1];
+    if (current && STEPS[current]) {
+      renderStep(current);
+    } else {
+      resetFlow();
+    }
+  }
+
+  function resetFlow() {
+    state = { history: ['start'], trail: [] };
+    renderTrail();
+    renderStep('start');
+  }
+
+  // ── Tracking ─────────────────────────────────────────────────────────────
+  function trackDiagnostic(leafId) {
+    try {
+      var email = '';
+      try { email = localStorage.getItem('afa_user_email') || ''; } catch (e) {}
+      var payload = {
+        action: 'diagnostic_complete',
+        leaf: leafId,
+        path: state.trail.join(' → '),
+        page: window.location.pathname,
+        email: email
+      };
+      // Fire-and-forget — don't await, don't block UI
+      if (window.fetch) {
+        fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(function () {});
+      }
+    } catch (e) { /* silent */ }
+  }
+
+  // ── Boot ─────────────────────────────────────────────────────────────────
+  renderStep('start');
+})();
+</script>
+
+<script type="text/javascript">
+  piAId = '784193';
+  piCId = '199064';
+  (function() {
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = 'https://pi.pardot.com/pd.js';
+      var c = document.getElementsByTagName('script')[0];
+      c.parentNode.insertBefore(s, c);
+    }
+    if (window.attachEvent) { window.attachEvent('onload', async_load); }
+    else { window.addEventListener('load', async_load, false); }
+  })();
+</script>
+</body>
+</html>
