@@ -430,3 +430,153 @@
     boot();
   }
 })();
+
+/* ============================================================
+   Fraud-news footer ticker
+   ------------------------------------------------------------
+   Auto-injects a thin scrolling marquee of recent fraud news
+   into <footer class="footer"> on every page. Data comes from
+   /api/fraud-news (Vercel function). Honors prefers-reduced-motion.
+   Cached in localStorage for 15 min to avoid hammering on every
+   page navigation.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var TICKER_CACHE_KEY = 'afa_news_cache_v1';
+  var TICKER_CACHE_MS = 15 * 60 * 1000; // 15 minutes
+  var TICKER_MAX_ITEMS = 12;
+  var NEWS_PAGE = '/positivepay/news/';
+
+  // Don't double-render if the news page is showing the full feed inline
+  // (the ticker is still useful even on /news/, but skip if explicitly disabled)
+  if (document.documentElement.getAttribute('data-no-ticker') === 'true') return;
+
+  function escapeHTML(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function injectStyles() {
+    if (document.getElementById('afa-ticker-styles')) return;
+    var css =
+      '.afa-ticker{position:relative;background:#0E0E0E;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;color:#fff;font-family:inherit}' +
+      '.afa-ticker__inner{display:flex;align-items:center;gap:0;height:42px}' +
+      '.afa-ticker__label{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 18px;height:100%;background:var(--afs-red,#C70200);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#fff;position:relative;z-index:2}' +
+      '.afa-ticker__label .afa-ticker__dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:afa-tick-pulse 1.6s ease-in-out infinite}' +
+      '@keyframes afa-tick-pulse{0%,100%{opacity:1}50%{opacity:0.4}}' +
+      '.afa-ticker__viewport{flex:1;overflow:hidden;position:relative;min-width:0;height:100%}' +
+      '.afa-ticker__viewport::after{content:"";position:absolute;top:0;right:0;width:80px;height:100%;background:linear-gradient(to right,transparent,#0E0E0E);pointer-events:none}' +
+      '.afa-ticker__track{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:afa-tick-scroll 90s linear infinite;will-change:transform}' +
+      '.afa-ticker:hover .afa-ticker__track,.afa-ticker:focus-within .afa-ticker__track{animation-play-state:paused}' +
+      '@keyframes afa-tick-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}' +
+      '.afa-ticker__item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-size:13.5px;color:rgba(255,255,255,0.92);text-decoration:none;transition:color 120ms ease}' +
+      '.afa-ticker__item:hover{color:#fff}' +
+      '.afa-ticker__item:hover .afa-ticker__title{text-decoration:underline;text-underline-offset:3px}' +
+      '.afa-ticker__src{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--academy-green,#ADE25D);flex-shrink:0}' +
+      '.afa-ticker__title{font-weight:500;color:#fff}' +
+      '.afa-ticker__sep{color:rgba(255,255,255,0.25);flex-shrink:0;font-size:10px}' +
+      '.afa-ticker__all{flex-shrink:0;padding:0 18px;height:100%;display:flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:0.5px;color:#fff;background:rgba(255,255,255,0.06);border-left:1px solid rgba(255,255,255,0.08);text-decoration:none;transition:background 120ms ease}' +
+      '.afa-ticker__all:hover{background:rgba(255,255,255,0.12)}' +
+      '@media(max-width:600px){.afa-ticker__label{padding:0 12px;font-size:10px;letter-spacing:1.2px}.afa-ticker__all{padding:0 12px;font-size:10px}.afa-ticker__item{padding:0 20px;font-size:12.5px}}' +
+      '@media(prefers-reduced-motion:reduce){.afa-ticker__track{animation:afa-tick-fade 36s steps(1,end) infinite;transform:none}.afa-ticker__viewport::after{display:none}@keyframes afa-tick-fade{0%,100%{transform:translateX(0)}}}';
+    var style = document.createElement('style');
+    style.id = 'afa-ticker-styles';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function getCache() {
+    try {
+      var raw = localStorage.getItem(TICKER_CACHE_KEY);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj || !obj.fetchedAt || !Array.isArray(obj.items)) return null;
+      if (Date.now() - obj.fetchedAt > TICKER_CACHE_MS) return null;
+      return obj;
+    } catch (e) { return null; }
+  }
+
+  function setCache(items) {
+    try {
+      localStorage.setItem(TICKER_CACHE_KEY, JSON.stringify({
+        fetchedAt: Date.now(),
+        items: items
+      }));
+    } catch (e) {}
+  }
+
+  function buildTickerHTML(items) {
+    if (!items || !items.length) return '';
+
+    var itemHTML = items.slice(0, TICKER_MAX_ITEMS).map(function (it) {
+      return '<a class="afa-ticker__item" href="' + escapeHTML(it.url) +
+             '" target="_blank" rel="noopener">' +
+             '<span class="afa-ticker__src">' + escapeHTML(it.source) + '</span>' +
+             '<span class="afa-ticker__sep">|</span>' +
+             '<span class="afa-ticker__title">' + escapeHTML(it.title) + '</span>' +
+             '</a>';
+    }).join('<span class="afa-ticker__sep" aria-hidden="true">•</span>');
+
+    // Duplicate the track for a seamless infinite scroll
+    return '<div class="afa-ticker" role="region" aria-label="Latest fraud news">' +
+             '<div class="afa-ticker__inner">' +
+               '<div class="afa-ticker__label"><span class="afa-ticker__dot" aria-hidden="true"></span>Fraud Wire</div>' +
+               '<div class="afa-ticker__viewport">' +
+                 '<div class="afa-ticker__track">' +
+                   itemHTML +
+                   '<span class="afa-ticker__sep" aria-hidden="true">•</span>' +
+                   itemHTML +
+                 '</div>' +
+               '</div>' +
+               '<a class="afa-ticker__all" href="' + NEWS_PAGE + '">All news →</a>' +
+             '</div>' +
+           '</div>';
+  }
+
+  function injectTicker(items) {
+    if (!items || !items.length) return;
+
+    // Mount as the first child of <footer class="footer">
+    var footer = document.querySelector('footer.footer');
+    if (!footer) return;
+    if (footer.querySelector('.afa-ticker')) return; // already injected
+
+    injectStyles();
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML = buildTickerHTML(items);
+    var el = wrap.firstChild;
+    if (el) footer.insertBefore(el, footer.firstChild);
+  }
+
+  function loadAndInject() {
+    var cached = getCache();
+    if (cached) {
+      injectTicker(cached.items);
+      return; // Fresh cache — skip the network round-trip
+    }
+
+    // No (or stale) cache → fetch
+    fetch('/api/fraud-news')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data || !Array.isArray(data.items)) return;
+        setCache(data.items);
+        injectTicker(data.items);
+      })
+      .catch(function (e) {
+        // Silent fail — ticker is supplemental, not critical
+        if (window.console) console.warn('[ticker] fetch failed:', e.message);
+      });
+  }
+
+  function boot() { loadAndInject(); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
