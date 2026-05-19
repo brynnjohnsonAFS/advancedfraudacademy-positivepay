@@ -454,12 +454,28 @@
   }
 
   // ── Tracking ─────────────────────────────────────────────────────────────
+  // Human-readable category label per leaf. Used in the `action` field so it
+  // shows up in audit logs even if the Make/Sheets schema only maps email + action.
+  var LEAF_CATEGORIES = {
+    'leaf-A':  "Don't offer PP yet",
+    'leaf-B1': "Low adoption — Push problem (haven't pushed enrollment)",
+    'leaf-B2': "Low adoption — Platform problem (clunky / friction)",
+    'leaf-B3': "Low adoption — Value problem (clients don't see it)",
+    'leaf-C':  "Growing (25–75%) — want to accelerate",
+    'leaf-D':  "High adoption (75%+) — want to monetize"
+  };
+
   function trackDiagnostic(leafId) {
     try {
       var email = '';
       try { email = localStorage.getItem('afa_user_email') || ''; } catch (e) {}
+      var category = LEAF_CATEGORIES[leafId] || leafId;
       var payload = {
-        action: 'diagnostic_complete',
+        // `action` is the field already visible in the audit log — make it
+        // descriptive so the category shows up without any Make/Sheet changes
+        action: 'diagnostic_complete: ' + category,
+        // Structured fields for when the Sheet/Make schema gets extended:
+        category: category,
         leaf: leafId,
         path: state.trail.join(' → '),
         page: window.location.pathname,
