@@ -461,13 +461,13 @@
   function injectStyles() {
     if (document.getElementById('afa-ticker-styles')) return;
     var css =
-      '.afa-ticker{position:relative;background:#0E0E0E;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;color:#fff;font-family:inherit}' +
-      '.afa-ticker__inner{display:flex;align-items:center;gap:0;height:42px}' +
-      '.afa-ticker__label{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 18px;height:100%;background:var(--afs-red,#C70200);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#fff;position:relative;z-index:2}' +
+      '.afa-ticker{position:relative;background:#1A1A1A;overflow:hidden;color:#fff;font-family:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04)}' +
+      '.afa-ticker__inner{display:flex;align-items:center;gap:0;height:48px}' +
+      '.afa-ticker__label{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 20px;height:100%;background:var(--afs-red,#C70200);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#fff;position:relative;z-index:2}' +
       '.afa-ticker__label .afa-ticker__dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:afa-tick-pulse 1.6s ease-in-out infinite}' +
       '@keyframes afa-tick-pulse{0%,100%{opacity:1}50%{opacity:0.4}}' +
       '.afa-ticker__viewport{flex:1;overflow:hidden;position:relative;min-width:0;height:100%}' +
-      '.afa-ticker__viewport::after{content:"";position:absolute;top:0;right:0;width:80px;height:100%;background:linear-gradient(to right,transparent,#0E0E0E);pointer-events:none}' +
+      '.afa-ticker__viewport::after{content:"";position:absolute;top:0;right:0;width:80px;height:100%;background:linear-gradient(to right,transparent,#1A1A1A);pointer-events:none}' +
       '.afa-ticker__track{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:afa-tick-scroll 240s linear infinite;will-change:transform}' +
       '.afa-ticker:hover .afa-ticker__track,.afa-ticker:focus-within .afa-ticker__track{animation-play-state:paused}' +
       '@keyframes afa-tick-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}' +
@@ -538,17 +538,18 @@
   function injectTicker(items) {
     if (!items || !items.length) return;
 
-    // Mount as the first child of <footer class="footer">
+    // Mount just BEFORE <footer class="footer"> — sits as its own visual strip
+    // between page content and footer, sidestepping the footer's 80px top padding
     var footer = document.querySelector('footer.footer');
-    if (!footer) return;
-    if (footer.querySelector('.afa-ticker')) return; // already injected
+    if (!footer || !footer.parentNode) return;
+    if (document.querySelector('.afa-ticker')) return; // already injected
 
     injectStyles();
 
     var wrap = document.createElement('div');
     wrap.innerHTML = buildTickerHTML(items);
     var el = wrap.firstChild;
-    if (el) footer.insertBefore(el, footer.firstChild);
+    if (el) footer.parentNode.insertBefore(el, footer);
   }
 
   function loadAndInject() {
