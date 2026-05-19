@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Fraud News — Modern Positive Pay Academy</title>
+<meta name="description" content="A running log of check fraud, ACH fraud, BEC, and wire fraud news relevant to community FIs. Aggregated from public sources, updated continuously."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/news/"/>
+<meta property="og:title" content="Fraud News — Modern Positive Pay Academy"/>
+<meta property="og:description" content="A running log of check, ACH, BEC, and wire fraud news for community FI treasury teams."/>
+<link rel="stylesheet" href="../assets/tokens.css"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<script src="../assets/app.js" defer></script>
+<style>
+  /* ── News page styles ── */
+  .news-hero { padding: 96px 0 32px }
+  .news-hero h1 { font-size: 56px; letter-spacing: -0.025em; margin: 16px 0 14px }
+  .news-hero .lede { font-size: 18px; line-height: 1.6; color: var(--fg-2); max-width: 680px }
+  .news-meta { display: flex; align-items: center; gap: 14px; margin-top: 22px; font-size: 13px; font-weight: 600; color: var(--fg-3) }
+  .news-meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--academy-green, #ADE25D); display: inline-block; box-shadow: 0 0 0 4px rgba(173,226,93,0.18); animation: news-pulse 2s ease-in-out infinite }
+  @keyframes news-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(173,226,93,0.18) } 50% { box-shadow: 0 0 0 8px rgba(173,226,93,0) } }
+
+  .news-filters { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 28px; border-bottom: 1px solid var(--afs-gray-1); margin-bottom: 28px }
+  .news-filter { padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--afs-gray-1); background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 120ms ease; font-family: inherit; letter-spacing: 0.2px }
+  .news-filter:hover { border-color: var(--ink) }
+  .news-filter[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink) }
+
+  .news-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--afs-gray-1) }
+  .news-item { display: grid; grid-template-columns: 130px 1fr; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--afs-gray-1); align-items: start }
+  @media (max-width: 720px) { .news-item { grid-template-columns: 1fr; gap: 8px } }
+  .news-when { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--fg-3); padding-top: 4px }
+  .news-source { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--afs-red); margin-top: 6px }
+  .news-title { display: block; font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.4; text-decoration: none; margin: 6px 0 8px; letter-spacing: -0.005em; transition: color 120ms ease }
+  .news-title:hover { color: var(--afs-red) }
+  .news-summary { font-size: 14.5px; line-height: 1.6; color: var(--fg-2); margin: 0 0 10px }
+  .news-cats { display: flex; flex-wrap: wrap; gap: 6px }
+  .news-cat { display: inline-block; padding: 3px 9px; border-radius: 6px; background: var(--afs-gray-2); font-size: 11px; font-weight: 700; color: var(--fg-2); letter-spacing: 0.3px }
+
+  .news-empty { padding: 64px 0; text-align: center; color: var(--fg-3); font-size: 15px }
+  .news-loading { padding: 48px 0; text-align: center; color: var(--fg-3); font-size: 14px }
+  .news-loading::after { content: ''; display: inline-block; width: 14px; height: 14px; margin-left: 10px; border-radius: 50%; border: 2px solid var(--afs-gray-1); border-top-color: var(--afs-red); animation: news-spin 0.8s linear infinite; vertical-align: middle }
+  @keyframes news-spin { to { transform: rotate(360deg) } }
+
+  .news-error { padding: 32px; background: var(--afs-gray-2); border-radius: 12px; color: var(--fg-2); font-size: 14px; line-height: 1.55 }
+
+  .news-disclaimer { margin-top: 48px; padding: 20px 24px; background: var(--afs-gray-2); border-radius: 12px; font-size: 13px; line-height: 1.6; color: var(--fg-2) }
+  .news-disclaimer b { color: var(--ink) }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/news/" style="color:var(--afs-red)">News</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="/positivepay/product/">The Product</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="news-hero">
+  <div class="wrap" style="max-width:880px">
+    <span class="eyebrow">Fraud news</span>
+    <h1>Every check, ACH, and BEC fraud<br/>story worth knowing.</h1>
+    <p class="lede">A running log of business payment fraud news relevant to community FIs. Aggregated from FBI, DOJ, Krebs on Security, SecurityWeek, and FinCEN — filtered for the patterns your treasury team actually needs to see.</p>
+    <div class="news-meta">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="news-status">Loading latest stories…</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:96px">
+  <div class="wrap" style="max-width:880px">
+    <div class="news-filters" id="news-filters" role="toolbar" aria-label="Filter by category"></div>
+    <div id="news-list" class="news-list" aria-live="polite">
+      <div class="news-loading">Fetching the latest fraud news</div>
+    </div>
+    <div class="news-disclaimer">
+      <b>About this feed:</b> Stories are aggregated from public press releases and security journalism. We don't edit headlines or summaries — they come straight from the source. Inclusion isn't endorsement. The feed refreshes roughly every 30 minutes.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:28px;width:auto;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/news/">Fraud News</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/product/">The Product</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="https://advancedfraudsolutions.com/privacy-policy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var listEl = document.getElementById('news-list');
+  var filtersEl = document.getElementById('news-filters');
+  var statusEl = document.getElementById('news-status');
+  var ALL = [];
+  var activeFilter = 'All';
+
+  function timeAgo(iso) {
+    if (!iso) return '';
+    var t = Date.parse(iso);
+    if (isNaN(t)) return '';
+    var diff = (Date.now() - t) / 1000;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+    var d = new Date(t);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function escapeHTML(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderFilters(cats) {
+    var html = '';
+    var all = ['All'].concat(cats);
+    all.forEach(function (c) {
+      html += '<button type="button" class="news-filter" data-cat="' + escapeHTML(c) +
+              '" aria-pressed="' + (c === activeFilter ? 'true' : 'false') + '">' +
+              escapeHTML(c) + '</button>';
+    });
+    filtersEl.innerHTML = html;
+    Array.prototype.forEach.call(filtersEl.querySelectorAll('.news-filter'), function (btn) {
+      btn.addEventListener('click', function () {
+        activeFilter = btn.getAttribute('data-cat');
+        Array.prototype.forEach.call(filtersEl.querySelectorAll('.news-filter'), function (b) {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        renderList();
+      });
+    });
+  }
+
+  function renderList() {
+    var items = activeFilter === 'All'
+      ? ALL
+      : ALL.filter(function (it) { return (it.categories || []).indexOf(activeFilter) !== -1; });
+
+    if (!items.length) {
+      listEl.innerHTML = '<div class="news-empty">No stories in this category yet. Try another filter.</div>';
+      return;
+    }
+
+    var html = '';
+    items.forEach(function (it) {
+      var cats = (it.categories || []).map(function (c) {
+        return '<span class="news-cat">' + escapeHTML(c) + '</span>';
+      }).join('');
+      html +=
+        '<article class="news-item">' +
+          '<div class="news-when">' + escapeHTML(timeAgo(it.publishedAt)) +
+            '<span class="news-source">' + escapeHTML(it.source) + '</span>' +
+          '</div>' +
+          '<div>' +
+            '<a class="news-title" href="' + escapeHTML(it.url) + '" target="_blank" rel="noopener">' +
+              escapeHTML(it.title) + '</a>' +
+            (it.summary ? '<p class="news-summary">' + escapeHTML(it.summary) + '</p>' : '') +
+            '<div class="news-cats">' + cats + '</div>' +
+          '</div>' +
+        '</article>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function collectCategories(items) {
+    var seen = {};
+    items.forEach(function (it) {
+      (it.categories || []).forEach(function (c) { seen[c] = (seen[c] || 0) + 1; });
+    });
+    return Object.keys(seen).sort(function (a, b) { return seen[b] - seen[a]; });
+  }
+
+  fetch('/api/fraud-news')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      ALL = (data && data.items) || [];
+      if (!ALL.length) {
+        statusEl.textContent = 'No stories available right now. Check back shortly.';
+        listEl.innerHTML = '<div class="news-empty">No fraud-relevant stories matched the current sources. The feed refreshes every 30 minutes.</div>';
+        return;
+      }
+      var when = data.fetchedAt ? new Date(data.fetchedAt) : new Date();
+      statusEl.textContent = ALL.length + ' stories · last updated ' + when.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      renderFilters(collectCategories(ALL));
+      renderList();
+    })
+    .catch(function (e) {
+      console.error('[news] fetch failed:', e);
+      statusEl.textContent = 'Feed temporarily unavailable.';
+      listEl.innerHTML = '<div class="news-error">We couldn\'t load the feed just now. Refresh the page in a few minutes, or check back later — the sources may be temporarily unreachable.</div>';
+    });
+})();
+</script>
+
+<script type="text/javascript">
+  piAId = '784193';
+  piCId = '199064';
+  (function() {
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = 'https://pi.pardot.com/pd.js';
+      var c = document.getElementsByTagName('script')[0];
+      c.parentNode.insertBefore(s, c);
+    }
+    if (window.attachEvent) { window.attachEvent('onload', async_load); }
+    else { window.addEventListener('load', async_load, false); }
+  })();
+</script>
+</body>
+</html>
