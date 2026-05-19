@@ -8,6 +8,12 @@
 'use strict';
 
 // ── Source feeds ─────────────────────────────────────────────────────────────
+// Per-feed metadata:
+//   googleNews:     true → parse <source> for the real publication, strip
+//                          " - Publication" suffix from titles
+//   audienceFilter: true → only keep items whose title/summary mentions a
+//                          bank, credit union, FI, or related audience term
+//   maxAgeDays:     number → drop items older than N days
 var FEEDS = [
   {
     name: 'FBI',
@@ -38,8 +44,43 @@ var FEEDS = [
     name: 'BleepingComputer',
     type: 'rss',
     url: 'https://www.bleepingcomputer.com/feed/'
+  },
+
+  // ── Google News searches ──────────────────────────────────────────────────
+  // Google Alerts-style aggregation. Queries combine the fraud term with
+  // audience terms so Google does the first-pass relevance filtering.
+  // We then apply: max 30 days old + audience keyword must be present in the
+  // title or summary. Source is extracted from the embedded <source> tag.
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, audienceFilter: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22check+fraud%22+(bank+OR+%22credit+union%22+OR+%22financial+institution%22)&hl=en-US&gl=US&ceid=US:en'
+  },
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, audienceFilter: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22wire+fraud%22+(bank+OR+%22credit+union%22+OR+%22financial+institution%22)&hl=en-US&gl=US&ceid=US:en'
+  },
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, audienceFilter: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22ACH+fraud%22+OR+%22ACH+scam%22+(bank+OR+%22credit+union%22+OR+%22financial+institution%22)&hl=en-US&gl=US&ceid=US:en'
+  },
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, audienceFilter: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22check+washing%22+(bank+OR+%22credit+union%22+OR+mail+OR+treasury)&hl=en-US&gl=US&ceid=US:en'
   }
 ];
+
+// ── Audience-relevance filter ────────────────────────────────────────────────
+// For Google News results, the story must mention at least one of these
+// so we don't pollute the ticker with unrelated retail/consumer fraud.
+var AUDIENCE_PATTERN = /\b(bank|banking|credit\s+union|financial\s+institution|community\s+FI|FDIC|NCUA|treasury|commercial\s+deposit|business\s+account|business\s+client|business\s+payment)\b/i;
 
 // ── Keyword filter ───────────────────────────────────────────────────────────
 // A story must match at least one of these (in title or summary) to be included.
@@ -116,7 +157,9 @@ function parseRss(xml) {
       summary: decodeEntities(
         firstMatch(b, /<description[^>]*>([\s\S]*?)<\/description>/i) ||
         firstMatch(b, /<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i)
-      )
+      ),
+      // Google News RSS includes <source url="...">Publication Name</source>
+      sourceName: decodeEntities(firstMatch(b, /<source[^>]*>([\s\S]*?)<\/source>/i))
     });
   }
   return items;
@@ -161,15 +204,43 @@ async function fetchFeed(feed) {
     }
     var xml = await res.text();
     var parsed = feed.type === 'atom' ? parseAtom(xml) : parseRss(xml);
+
+    var nowMs = Date.now();
+    var maxAgeMs = feed.maxAgeDays ? feed.maxAgeDays * 24 * 60 * 60 * 1000 : null;
+
     return parsed.map(function (it) {
+      // For Google News: use the embedded publication name as the source,
+      // and strip the " - Publication Name" suffix that Google appends to titles
+      var sourceName = feed.name;
+      var title = it.title || '';
+      if (feed.googleNews && it.sourceName) {
+        sourceName = it.sourceName;
+        // Strip trailing " - Publication" — handles unicode hyphens too
+        var suffix = new RegExp('\\s+[-‐-―]\\s+' +
+          it.sourceName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*$');
+        title = title.replace(suffix, '').trim();
+      }
       return {
-        title: it.title,
+        title: title,
         url: it.url,
-        source: feed.name,
+        source: sourceName,
         publishedAt: it.pubDate ? new Date(it.pubDate).toISOString() : null,
         summary: it.summary ? it.summary.slice(0, 400) : ''
       };
-    }).filter(function (it) { return it.title && it.url; });
+    }).filter(function (it) {
+      if (!it.title || !it.url) return false;
+      // Recency filter (per-feed)
+      if (maxAgeMs && it.publishedAt) {
+        var age = nowMs - Date.parse(it.publishedAt);
+        if (age > maxAgeMs) return false;
+      }
+      // Audience-relevance filter (per-feed) — must mention bank/CU/FI/etc.
+      if (feed.audienceFilter) {
+        var hay = (it.title || '') + ' ' + (it.summary || '');
+        if (!AUDIENCE_PATTERN.test(hay)) return false;
+      }
+      return true;
+    });
   } catch (e) {
     console.warn('[fraud-news]', feed.name, 'fetch error:', e.message);
     return [];
