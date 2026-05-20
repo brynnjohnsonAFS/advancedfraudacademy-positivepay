@@ -12,6 +12,11 @@
    See README.md › FONTS for swap instructions.
    ============================================================ */
 
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/300.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/600.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/700.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/800.css");
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
 
 :root {
