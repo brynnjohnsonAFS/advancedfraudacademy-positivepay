@@ -21,6 +21,7 @@
 
   /* Breadcrumb / trail */
   .diag-trail { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 20px 24px; background: var(--afs-gray-2); border-radius: 12px; margin-bottom: 32px; font-size: 13px; font-weight: 600 }
+  .diag-trail[hidden] { display: none }  /* override the display:flex when the trail is hidden on initial load */
   .diag-trail-label { color: var(--fg-3); letter-spacing: 1.4px; text-transform: uppercase; font-size: 11px; font-weight: 700; padding-right: 4px }
   .diag-trail-step { display: inline-flex; align-items: center; gap: 6px; color: var(--ink) }
   .diag-trail-step button { background: transparent; border: none; padding: 0; color: var(--ink); font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--afs-gray-1); transition: text-decoration-color 120ms ease }
@@ -413,7 +414,7 @@
           '<a class="btn btn-ghost-light" href="/positivepay/curriculum/">Browse full curriculum</a>' +
         '</div>' +
         '<div class="diag-leaf-meta">' +
-          '<b>Why this path?</b> These four to five lessons were picked from the 27-lesson curriculum because they speak directly to your situation. You can read the rest later — or jump in here.' +
+          '<b>Why this path?</b> These four to five lessons were picked from the 26-lesson curriculum because they speak directly to your situation. You can read the rest later — or jump in here.' +
         '</div>' +
       '</div>';
 
