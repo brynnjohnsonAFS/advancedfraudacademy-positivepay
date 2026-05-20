@@ -12,12 +12,11 @@
    See README.md › FONTS for swap instructions.
    ============================================================ */
 
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/300.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/400.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/600.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/700.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/800.css");
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
+@font-face { font-family: 'Aileron'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/aileron-300.woff2') format('woff2'); }
+@font-face { font-family: 'Aileron'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/aileron-400.woff2') format('woff2'); }
+@font-face { font-family: 'Aileron'; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/aileron-600.woff2') format('woff2'); }
+@font-face { font-family: 'Aileron'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/aileron-700.woff2') format('woff2'); }
+@font-face { font-family: 'Aileron'; font-style: normal; font-weight: 800; font-display: swap; src: url('fonts/aileron-800.woff2') format('woff2'); }
 
 :root {
   /* ── BRAND COLOR ─────────────────────────────────────── */
