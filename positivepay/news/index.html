@@ -46,6 +46,17 @@
 
   .news-disclaimer { margin-top: 48px; padding: 20px 24px; background: var(--afs-gray-2); border-radius: 12px; font-size: 13px; line-height: 1.6; color: var(--fg-2) }
   .news-disclaimer b { color: var(--ink) }
+
+  /* ── Sales digest (internal-flavored, but public) ── */
+  .news-digest { margin-top: 20px; padding: 22px 24px; background: #fff; border: 1.5px solid var(--afs-gray-1); border-radius: 12px; font-size: 13.5px; line-height: 1.6; color: var(--fg-2) }
+  .news-digest h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.005em }
+  .news-digest p { margin: 0 0 14px }
+  .news-digest .digest-buttons { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+  .news-digest .digest-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.2px; transition: background 120ms ease; font-family: inherit; border: none; cursor: pointer }
+  .news-digest .digest-btn:hover { background: var(--afs-red) }
+  .news-digest .digest-btn svg { width: 14px; height: 14px }
+  .news-digest .digest-help { font-size: 12.5px; color: var(--fg-3); margin-top: 12px }
+  .news-digest .digest-help code { background: var(--afs-gray-2); padding: 1px 6px; border-radius: 4px; font-size: 12px }
 </style>
 </head>
 <body>
@@ -88,6 +99,26 @@
     </div>
     <div class="news-disclaimer">
       <b>About this feed:</b> Stories are aggregated from public press releases and security journalism. We don't edit headlines or summaries — they come straight from the source. Inclusion isn't endorsement. The feed refreshes roughly every 30 minutes.
+    </div>
+
+    <div class="news-digest">
+      <h3>Geo-tagged digest (CSV)</h3>
+      <p>Download a CSV of the same stories, tagged by US state, city, and region. Sorted by state, then newest first. Multi-state and unknown-location stories grouped at the bottom.</p>
+      <div class="digest-buttons">
+        <a class="digest-btn" href="/api/fraud-digest-csv?days=7" download>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 0 1 .75.75v7.69l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V1.75A.75.75 0 0 1 8 1Z"/><path d="M2.75 13a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z"/></svg>
+          Last 7 days
+        </a>
+        <a class="digest-btn" href="/api/fraud-digest-csv?days=14" download>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 0 1 .75.75v7.69l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V1.75A.75.75 0 0 1 8 1Z"/><path d="M2.75 13a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z"/></svg>
+          Last 14 days
+        </a>
+        <a class="digest-btn" href="/api/fraud-digest-csv?days=30" download>
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 0 1 .75.75v7.69l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V1.75A.75.75 0 0 1 8 1Z"/><path d="M2.75 13a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z"/></svg>
+          Last 30 days
+        </a>
+      </div>
+      <p class="digest-help">Filter by state with a query param, e.g. <code>?days=14&amp;state=MI</code>. Confidence values (<code>high</code>, <code>medium</code>, <code>low</code>) help you scan ambiguous geo tags — high-confidence rows come from federal-district phrases (<i>"Eastern District of Michigan"</i>), <code>City, ST</code> patterns, or unambiguous major-city mentions.</p>
     </div>
   </div>
 </section>
