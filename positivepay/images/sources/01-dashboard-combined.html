@@ -161,7 +161,7 @@
     <!-- TOP RIGHT: Exceptions by Decision [Combined] -->
     <section class="panel">
       <div class="panel-head">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 6.5"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 1-9.96-10v10z"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/></svg>
         Exceptions by Decision [Combined]
       </div>
       <div class="panel-body">
@@ -173,14 +173,19 @@
           <div class="donut">
             <svg viewBox="0 0 100 100">
               <!-- Return: 170/265 = 64.15% → 169.3 of 263.9 circumference -->
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#C70200" stroke-width="22"
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#C70200" stroke-width="14"
                       stroke-dasharray="169.3 94.6"/>
               <!-- Pay: 95/265 = 35.85% → 94.6 -->
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#5BA679" stroke-width="22"
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#5BA679" stroke-width="14"
                       stroke-dasharray="94.6 169.3" stroke-dashoffset="-169.3"/>
             </svg>
-            <div class="donut-label" style="top: 18px; right: -30px; font-weight: 500">95</div>
-            <div class="donut-label" style="bottom: 30px; right: -36px; font-weight: 500">170</div>
+            <!-- Leader line to "95" -->
+            <svg style="position:absolute;top:0;left:0;width:100%;height:100%;transform:none;pointer-events:none">
+              <line x1="180" y1="50" x2="218" y2="48" stroke="#999" stroke-width="0.6"/>
+              <line x1="180" y1="170" x2="220" y2="170" stroke="#999" stroke-width="0.6"/>
+            </svg>
+            <div class="donut-label" style="top: 38px; right: -30px; font-weight: 500">95</div>
+            <div class="donut-label" style="bottom: 38px; right: -36px; font-weight: 500">170</div>
           </div>
         </div>
       </div>
