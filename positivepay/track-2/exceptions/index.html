@@ -15,37 +15,62 @@
 <link rel="stylesheet" href="../../assets/styles.css"/>
 <script src="../../assets/app.js" defer></script>
 <style>
-  /* Lesson screenshot styling — used only on this lesson */
-  .lesson-fig { margin: 28px 0 12px; padding: 0 }
+  /* ── Lesson screenshot styling — academy-modern card frame ────── */
+  .lesson-fig {
+    margin: 44px 0 18px;
+    padding: 0;
+    position: relative;
+  }
   .lesson-screenshot {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 1px solid var(--afs-gray-1);
     background: var(--afs-gray-2);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
-    min-height: 280px;            /* keeps layout stable if image is still loading or missing */
+    box-shadow:
+      0 30px 70px -22px rgba(14, 14, 14, 0.22),
+      0 4px 14px rgba(14, 14, 14, 0.05);
+    min-height: 200px;
   }
   .lesson-fig figcaption {
-    font-size: 13.5px;
+    font-size: 14px;
     color: var(--fg-2);
-    line-height: 1.55;
-    padding: 14px 4px 0;
-    font-style: italic;
+    line-height: 1.6;
+    padding: 22px 8px 0;
     font-weight: 500;
+    letter-spacing: -0.003em;
+    max-width: 760px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
   }
+  .lesson-fig figcaption::before {
+    /* Small AFS-red marker reads as "this caption belongs to that image" */
+    content: "";
+    flex-shrink: 0;
+    width: 3px;
+    margin-top: 6px;
+    align-self: stretch;
+    background: var(--afs-red);
+    border-radius: 2px;
+    min-height: 14px;
+  }
+
   /* 2-up grid for back-to-back board-defensible screenshots */
   .lesson-fig-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin: 28px 0 12px;
+    gap: 28px;
+    margin: 40px 0 16px;
   }
   .lesson-fig-grid .lesson-fig { margin: 0 }
+  .lesson-fig-grid figcaption { font-size: 13px; padding-top: 14px }
+
   @media (max-width: 760px) {
-    .lesson-fig-grid { grid-template-columns: 1fr; gap: 20px }
-    .lesson-screenshot { min-height: 200px }
+    .lesson-fig-grid { grid-template-columns: 1fr; gap: 24px }
+    .lesson-screenshot { min-height: 140px }
+    .lesson-fig { margin: 32px 0 14px }
   }
 
   /* Soft demo CTA card — distinct from sidebar styling */

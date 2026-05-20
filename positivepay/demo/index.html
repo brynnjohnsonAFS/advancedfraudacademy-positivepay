@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Positive Pay by AFS — Interactive Demo</title>
+<meta name="description" content="Click through a real fraud event end-to-end. Exception flagged, decision made, file delivered. A working interactive mock of the AFS Positive Pay platform — no signup, no recording."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/demo/"/>
+<meta property="og:title" content="Positive Pay by AFS — Interactive Demo"/>
+<meta property="og:description" content="See modern Positive Pay in action. Click through a real fraud event end-to-end — no signup, no recording."/>
+<meta property="og:image" content="https://advancedfraudacademy.com/positivepay/demo/demo-og.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Positive Pay by AFS — Interactive Demo"/>
+<meta name="twitter:description" content="See modern Positive Pay in action. Click through a real fraud event end-to-end — no signup, no recording."/>
+<meta name="twitter:image" content="https://advancedfraudacademy.com/positivepay/demo/demo-og.png"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/300.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/600.css">
@@ -534,7 +544,7 @@
 <section class="footer-cta">
   <h2>Want to see this with your FI's data?</h2>
   <p>Book a 20-minute walkthrough. We'll configure the platform around your environment and answer the questions that matter to your team.</p>
-  <a href="/positivepay/product#demo" class="btn btn-primary">Book a demo →</a>
+  <a href="/positivepay/product#demo" class="btn btn-primary" onclick="trackDemoEvent('demo_book_demo_click')">Book a demo →</a>
   <div class="footer-mark">Advanced Fraud Solutions · advancedfraudacademy.com</div>
 </section>
 
@@ -913,6 +923,7 @@
     banner.innerHTML = '<div class="icon">▶</div><div>Guided tour: a fraud event end-to-end. Use Next to advance, Back to step back.</div>';
     document.getElementById('tour-bar').classList.remove('hidden');
     showTourStep();
+    trackDemoEvent('demo_tour_start');
   }
 
   function showTourStep() {
@@ -927,7 +938,7 @@
 
   function nextTourStep() {
     if (tourIndex < TOUR_STEPS.length - 1) { tourIndex++; showTourStep(); }
-    else { startExplore(); }
+    else { trackDemoEvent('demo_tour_finish'); startExplore(); }
   }
   function prevTourStep() {
     if (tourIndex > 0) { tourIndex--; showTourStep(); }
@@ -946,6 +957,32 @@
       document.querySelectorAll('.hotspot.open').forEach(h => h.classList.remove('open'));
     }
   });
+
+  // =========== ANALYTICS ===========
+  // Mirrors the academy app.js trackEvent pattern → /api/track → Make webhook.
+  function trackDemoEvent(action, data) {
+    let email = '';
+    try { email = localStorage.getItem('afa_user_email') || ''; } catch (e) {}
+    const payload = Object.assign({ action, email, page: window.location.pathname }, data || {});
+    try { console.log('[AFA demo track]', action, payload); } catch (e) {}
+    try {
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  // =========== OG SCREENSHOT MODE ===========
+  // ?og=1 auto-dismisses the welcome and renders the home screen so that
+  // Chrome headless can capture demo-og.png cleanly. No-op for normal visits.
+  if (new URLSearchParams(window.location.search).get('og') === '1') {
+    document.getElementById('welcome')?.classList.add('hidden');
+    document.getElementById('tour-bar')?.classList.add('hidden');
+    renderScreen('home');
+  }
 </script>
 
 </body>
