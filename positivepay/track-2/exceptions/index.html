@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lesson 6: Exceptions — Track 2 — Modern Positive Pay Academy</title>
+<meta name="description" content="The Exceptions queue is the screen Positive Pay lives or dies on. A walk-through of dashboards, exception detail views, default decision logging, and decision-file automation — with real product screenshots."/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="https://advancedfraudacademy.com/positivepay/track-2/exceptions/"/>
+<meta property="og:title" content="Exceptions: the screen Positive Pay lives or dies on"/>
+<meta property="og:description" content="A walk-through of dashboards, exception detail, default decision logging, and decision-file delivery — with real product views from the AFS Positive Pay platform."/>
+<meta property="og:image" content="https://advancedfraudacademy.com/positivepay/images/exceptions-lesson-01-dashboard-combined.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="../../assets/tokens.css"/>
+<link rel="stylesheet" href="../../assets/styles.css"/>
+<script src="../../assets/app.js" defer></script>
+<style>
+  /* Lesson screenshot styling — used only on this lesson */
+  .lesson-fig { margin: 28px 0 12px; padding: 0 }
+  .lesson-screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--afs-gray-1);
+    background: var(--afs-gray-2);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+    min-height: 280px;            /* keeps layout stable if image is still loading or missing */
+  }
+  .lesson-fig figcaption {
+    font-size: 13.5px;
+    color: var(--fg-2);
+    line-height: 1.55;
+    padding: 14px 4px 0;
+    font-style: italic;
+    font-weight: 500;
+  }
+  /* 2-up grid for back-to-back board-defensible screenshots */
+  .lesson-fig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 28px 0 12px;
+  }
+  .lesson-fig-grid .lesson-fig { margin: 0 }
+  @media (max-width: 760px) {
+    .lesson-fig-grid { grid-template-columns: 1fr; gap: 20px }
+    .lesson-screenshot { min-height: 200px }
+  }
+
+  /* Soft demo CTA card — distinct from sidebar styling */
+  .demo-cta {
+    margin-top: 28px;
+    padding: 24px 26px;
+    background: linear-gradient(135deg, #1A1A1A, #0E0E0E);
+    color: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .demo-cta .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
+    text-transform: uppercase; color: var(--academy-green, #ADE25D);
+    margin-bottom: 10px;
+  }
+  .demo-cta h4 { font-size: 18px; line-height: 1.3; color: #fff; margin: 0 0 8px; font-weight: 700 }
+  .demo-cta p { font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.78); margin: 0 0 16px }
+  .demo-cta .btn { display: inline-flex; padding: 10px 16px; font-size: 13px }
+
+  /* Pull-quote variation matched to lessons */
+  .pull-quote { margin: 36px 0; padding: 24px 28px; background: var(--afs-gray-2); border-left: 4px solid var(--afs-red); border-radius: 0 12px 12px 0 }
+  .pull-quote p { font-size: 17px; line-height: 1.5; font-weight: 600; color: var(--ink); margin: 0 0 10px; font-style: italic }
+  .pull-quote cite { font-size: 12.5px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--fg-3); font-style: normal }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a href="/positivepay/" class="brand">
+      <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block">
+    </a>
+    <nav class="nav-links">
+      <a href="/positivepay/start/">Start here</a>
+      <a href="/positivepay/curriculum/">Curriculum</a>
+      <a href="/positivepay/news/">News</a>
+      <a href="/positivepay/about/">About</a>
+      <a href="/positivepay/product/">The Product</a>
+      <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="nav-cta">Talk to AFS</a>
+    </nav>
+  </div>
+</header>
+
+<div class="lesson-meta-bar">
+  <div class="wrap lesson-meta-row">
+    <div class="lesson-breadcrumb">
+      <a href="/positivepay/track-2/">Track 2: The Adoption Playbook</a>
+      <span class="sep">›</span>
+      <span class="current">Lesson 6 of 6</span>
+    </div>
+    <div class="lesson-time">
+      <span>~10 min read</span>
+      <button class="complete-btn" aria-label="Mark lesson complete">Mark complete</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="lesson-body-wrap">
+<div class="wrap">
+<div class="lesson-layout">
+
+<article class="lesson-content">
+
+  <div class="callout-learn">
+    <div class="callout-label">What you'll learn</div>
+    <ul>
+      <li>Why the Exceptions queue is the screen that determines whether your program actually works</li>
+      <li>What a healthy exception looks like end-to-end (with real product views)</li>
+      <li>How the system handles exceptions nobody decisions before cutoff</li>
+      <li>Where the board-ready numbers actually live</li>
+      <li>How decision file delivery turns Positive Pay from a portal into automation</li>
+    </ul>
+  </div>
+
+  <h1>Exceptions: the screen Positive Pay lives or dies on.</h1>
+
+  <h2>Start with the dashboard.</h2>
+  <p>Most treasury teams open Positive Pay in the morning and land on the home dashboard. The view splits three ways: combined, check-only, ACH-only. Each shows exception count, dollar volume, decision mix, and the top reasons fraud is getting flagged.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-01-dashboard-combined.png"
+         alt="Positive Pay home dashboard, combined view: 37 exceptions, $74,535 in flagged volume, donut chart showing 95 paid and 170 returned over six months, with bar chart of exception reasons."
+         loading="eager"
+         decoding="async"/>
+    <figcaption>The combined view tells you the program's state in one glance. 37 exceptions, $74,535 in flagged volume, 95 paid and 170 returned over six months.</figcaption>
+  </figure>
+
+  <p>This is the screen that turns "how's Positive Pay going" into a one-look answer. But the dashboard is the summary. The work happens deeper.</p>
+
+  <h2>The Exceptions queue.</h2>
+  <p>The queue is the screen that determines whether your program works. A check or ACH came in, it didn't match the issued file or the authorization, and now somebody has to make a pay-or-return decision before cutoff.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-04-exceptions-queue.png"
+         alt="Exceptions History queue showing 7 items with status, decision badges, and Mark as Reviewed workflow control."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>The Exceptions History view. Every exception, its status, its decision, and whether it's been reviewed. Mark as Reviewed is the workflow control.</figcaption>
+  </figure>
+
+  <p>If exceptions are buried, missed, or routed to the wrong person, fraud gets paid. If they're easy to find and easy to decision, fraud gets stopped. There is no middle ground.</p>
+
+  <h2>Anatomy of an exception.</h2>
+  <p>Click into a single exception and you see exactly what the system flagged and why. Mismatched fields are highlighted in red, with the specific reason called out.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-05-exception-detail-3437.png"
+         alt="Check exception detail view (exception 3437) showing Amount and Payee fields both flagged in red against the issued check record."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>Two flags on one check. The amount doesn't match the issued check, and neither does the payee name. A decisioner has everything they need to return this in one screen.</figcaption>
+  </figure>
+
+  <p>The cleaner this screen is, the higher your Decision Rate metric (Lesson 2.1). Business clients decision their own exceptions when the call is obvious. They default to your team when it isn't.</p>
+
+  <p>The system also catches relationships humans would miss — like a duplicate presented check using the same number.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-07-exception-detail-12279.png"
+         alt="Check exception detail view (exception 12279) with a Duplicate Presented Check exists callout linking to the duplicate."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>This exception isn't just a payee mismatch. The system flagged that a duplicate presented check exists, with a link to view it. That's the kind of pattern a teller would not spot in time.</figcaption>
+  </figure>
+
+  <h2>The matching logic, visualized.</h2>
+  <p>Every exception is a comparison between the issued check the business client uploaded and the presented check that hit the account. You can pull up both sides at once.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-08-issued-check-modal.png"
+         alt="Issued Check Data modal showing the source record: routing, account, check number, amount, issue date, payee, stop payment status, voided status."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>The issued check record the system was matching against. Routing, account, check number, amount, issue date, payee, stop payment status, voided status. This is the "truth" the presented item failed to match.</figcaption>
+  </figure>
+
+  <h2>The system catches what humans miss.</h2>
+  <p>Here's a feature most FIs don't know exists until we show them: the Default Decision Log.</p>
+  <p>If a business client doesn't decision an exception by cutoff, the system applies the configured default (pay or return) and logs it. Every default is captured so you can show your board exactly what happened, when, and to which exceptions.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-09-default-decision-log.png"
+         alt="Default Decision Log table under Settings — every cutoff event and defaulted exception, fully logged with timestamp and action taken."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>Every cutoff event, every defaulted exception, fully logged. This is what protects you when a business client says "we didn't see it."</figcaption>
+  </figure>
+
+  <p>This matters for two reasons. First, it means exceptions never just disappear. Second, it gives you a clean audit trail when a client disputes a decision they didn't make.</p>
+
+  <div class="callout-do">
+    <div class="callout-label">Do this</div>
+    <p>Pull last month's Default Decision Log. The number of defaulted exceptions tells you exactly which business clients need a training refresh.</p>
+  </div>
+
+  <h2>Where the board-defensible numbers live.</h2>
+  <p>Two questions come up constantly:</p>
+  <ol>
+    <li>"How many exceptions did we have last month, and what did we do with them?"</li>
+    <li>"What fraud did we actually catch?"</li>
+  </ol>
+  <p>Both answers live on the dashboard's check-only and ACH-only views, broken down by reason and return reason.</p>
+
+  <div class="lesson-fig-grid">
+    <figure class="lesson-fig">
+      <img class="lesson-screenshot"
+           src="/positivepay/images/exceptions-lesson-02-dashboard-check-only.png"
+           alt="Positive Pay home dashboard, Check Only view: 33 exceptions, $71,935 in flagged volume, reason chart and return reason chart."
+           loading="lazy"
+           decoding="async"/>
+      <figcaption>Check exceptions by reason — wrong payee dominates, wrong amount second, check number not found third. By return reason, not authorized leads, then signature missing, then altered/fictitious. These are the slides you bring to the board.</figcaption>
+    </figure>
+    <figure class="lesson-fig">
+      <img class="lesson-screenshot"
+           src="/positivepay/images/exceptions-lesson-03-dashboard-ach-only.png"
+           alt="Positive Pay home dashboard, ACH Only view: 4 exceptions, $2,600 in flagged volume, SEC code chart and return reason chart."
+           loading="lazy"
+           decoding="async"/>
+      <figcaption>ACH side is smaller but the same logic. WEB is the dominant SEC code, insufficient funds is the leading return reason. Use these for Nacha-aligned reporting.</figcaption>
+    </figure>
+  </div>
+
+  <h2>The unlock: decision file delivery and automation.</h2>
+  <p>Here's the part most FIs don't realize is on the table.</p>
+  <p>Once decisions are made on exceptions, the system generates a decision file the FI's core consumes. Most FIs assume the only option is to log in and download it. That's not the case.</p>
+  <p>Modern Positive Pay platforms can deliver the decision file anywhere your core can consume it: SFTP to a path the core polls, a pickup queue, even an API call or webhook directly into the core if it supports them.</p>
+
+  <figure class="lesson-fig">
+    <img class="lesson-screenshot"
+         src="/positivepay/images/exceptions-lesson-10-settings-overview.png"
+         alt="Settings hub showing Decision Files, API, Web Hooks, Notification Templates, Automatic Check Decision Rules, and Automatic ACH Decision Rules tiles."
+         loading="lazy"
+         decoding="async"/>
+    <figcaption>The Settings hub. Decision Files, API, Web Hooks, Notification Templates, Automatic Check Decision Rules, Automatic ACH Decision Rules — the configuration surface for turning Positive Pay from a portal into a service that runs in the background.</figcaption>
+  </figure>
+
+  <p>This is the difference between Positive Pay as "another portal we have to log into" and Positive Pay as "a service running in the background." It's also the conversation starter for broader core automation — increasingly where treasury programs are headed.</p>
+
+  <blockquote class="pull-quote">
+    <p>"We didn't know we could send the file straight to our core via SFTP. Once we turned it on, our ops team stopped touching the portal. That's when adoption actually stuck."</p>
+    <cite>VP, $2B community FI · 8 branches</cite>
+  </blockquote>
+
+  <h2>What's next.</h2>
+  <p>You've finished Track 2: The Adoption Playbook. Track 3 (The Internal Sales Motion) covers how to actually move enrolled clients from "yes" to "active."</p>
+
+  <div class="quiz">
+    <div class="quiz-head"><span class="eyebrow">Self-check</span><h3>3 quick questions</h3></div>
+
+    <div class="quiz-question" data-correct="1">
+      <div class="q-text">Which Positive Pay metric most directly depends on a clean Exceptions screen?</div>
+      <div class="quiz-options">
+        <div class="quiz-option"><span class="q-letter">A</span> Enrollment rate</div>
+        <div class="quiz-option"><span class="q-letter">B</span> Decision rate</div>
+        <div class="quiz-option"><span class="q-letter">C</span> Days to onboard</div>
+        <div class="quiz-option"><span class="q-letter">D</span> Non-interest income</div>
+      </div>
+      <div class="quiz-feedback correct">Correct. Decision rate. Business clients decision their own exceptions when the screen makes the decision obvious. A clean Exceptions screen drives the number; a confusing one tanks it.</div>
+      <div class="quiz-feedback incorrect">Not quite. Decision rate is the one most tied to Exceptions screen quality — business clients self-decision when the call is obvious, and default to your team when it isn't.</div>
+    </div>
+
+    <div class="quiz-question" data-correct="1">
+      <div class="q-text">What happens to an exception that nobody decisions before cutoff?</div>
+      <div class="quiz-options">
+        <div class="quiz-option"><span class="q-letter">A</span> It expires and the transaction is paid automatically</div>
+        <div class="quiz-option"><span class="q-letter">B</span> The system applies the configured default and logs it</div>
+        <div class="quiz-option"><span class="q-letter">C</span> It rolls to the next business day</div>
+        <div class="quiz-option"><span class="q-letter">D</span> It's escalated to the FI's fraud team manually</div>
+      </div>
+      <div class="quiz-feedback correct">Correct. The system applies the configured default (pay or return) and captures it in the Default Decision Log. Nothing disappears, every default is auditable.</div>
+      <div class="quiz-feedback incorrect">Not quite. The system applies the configured default and writes it to the Default Decision Log — so exceptions never just disappear, and you have a clean audit trail.</div>
+    </div>
+
+    <div class="quiz-question" data-correct="1">
+      <div class="q-text">What does decision file delivery let you do?</div>
+      <div class="quiz-options">
+        <div class="quiz-option"><span class="q-letter">A</span> Email exceptions to clients</div>
+        <div class="quiz-option"><span class="q-letter">B</span> Send the decision file anywhere your core can consume it — SFTP, pickup queue, API, webhook</div>
+        <div class="quiz-option"><span class="q-letter">C</span> Skip the exception decision entirely</div>
+        <div class="quiz-option"><span class="q-letter">D</span> Replace your core</div>
+      </div>
+      <div class="quiz-feedback correct">Correct. That's the feature that turns the portal into automation — once it's wired up, your ops team stops touching the portal day-to-day.</div>
+      <div class="quiz-feedback incorrect">Not quite. The unlock is the decision file going wherever your core can consume it — SFTP, pickup queue, API, webhook. That's what turns the portal into a background service.</div>
+    </div>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="/positivepay/track-2/lesson-5/"><span class="nav-dir">← Previous</span><span class="nav-title">Removing file-format friction</span></a>
+    <a href="/positivepay/track-3/" class="next-link"><span class="nav-dir">Next →</span><span class="nav-title">Track 3: The Internal Sales Motion</span></a>
+  </div>
+
+</article>
+
+<aside class="lesson-sidebar">
+  <div class="sidebar-card">
+    <div class="callout-label" style="margin-bottom:10px">Sidebar asset</div>
+    <h4 style="font-size:16px;font-weight:700;margin:0 0 8px;line-height:1.3">The Exceptions Workflow Checklist</h4>
+    <p style="font-size:13.5px;line-height:1.55;color:var(--fg-2);margin:0 0 14px">A one-page audit of your current setup: queue visibility, default decision config, notifications, decisioning UX, reporting, and file delivery.</p>
+    <a href="#" class="btn btn-ghost-light" style="display:inline-flex;font-size:13px;padding:8px 14px" data-asset="exceptions-workflow-checklist">Download checklist →</a>
+  </div>
+
+  <div class="demo-cta">
+    <div class="label">See it in your environment</div>
+    <h4>The screens above are real. Want to see them with your data?</h4>
+    <p>This lesson uses screenshots from the AFS Positive Pay platform. A 20-minute walkthrough — your data, your team's questions, no slide deck.</p>
+    <a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener" class="btn btn-primary">Book a 20-min walkthrough →</a>
+  </div>
+</aside>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/positivepay/" class="brand">
+          <img src="/positivepay/assets/afa-logo.png" alt="Advanced Fraud Academy" style="height:auto;width:200px;display:block;filter:brightness(0) invert(1)">
+        </a>
+        <p>Free, structured education for the community FI treasury professionals running Positive Pay programs across the U.S.</p>
+        <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:8px">© 2026 Advanced Fraud Solutions, Inc.</p>
+      </div>
+      <div>
+        <h4>Academy</h4>
+        <ul>
+          <li><a href="/positivepay/start/">Find your starting point</a></li>
+          <li><a href="/positivepay/curriculum/">Curriculum</a></li>
+          <li><a href="/positivepay/news/">Fraud News</a></li>
+          <li><a href="/positivepay/about/">About</a></li>
+          <li><a href="/positivepay/product/">The Product</a></li>
+          <li><a href="/positivepay/#enroll">Enroll</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>AFS</h4>
+        <ul>
+          <li><a href="https://www.advancedfraudsolutions.com/products" target="_blank" rel="noopener">Products</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/customers" target="_blank" rel="noopener">Customer Stories</a></li>
+          <li><a href="https://www.advancedfraudsolutions.com/contact" target="_blank" rel="noopener">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Advanced Fraud Solutions, Inc.</div>
+      <div class="links"><a href="https://advancedfraudsolutions.com/privacy-policy/">Privacy</a><a href="/positivepay/terms/">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+
+<script type="text/javascript">
+  piAId = '784193';
+  piCId = '199064';
+  (function() {
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = 'https://pi.pardot.com/pd.js';
+      var c = document.getElementsByTagName('script')[0];
+      c.parentNode.insertBefore(s, c);
+    }
+    if (window.attachEvent) { window.attachEvent('onload', async_load); }
+    else { window.addEventListener('load', async_load, false); }
+  })();
+</script>
+</body>
+</html>
