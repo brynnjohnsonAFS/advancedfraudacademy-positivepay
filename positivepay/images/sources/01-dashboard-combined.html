@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="_mockup-shell.css"/>
+<style>
+  /* Dashboard panel internals */
+  .ex-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding-bottom: 14px; }
+  .ex-stat-num { font-size: 64px; font-weight: 300; line-height: 1; color: #A8B5C5; letter-spacing: -0.01em; }
+  .ex-stat-num.money { font-size: 60px; }
+  .ex-stat-lbl { font-size: 11.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: #6B6B6B; margin-top: 8px; }
+
+  /* Monthly bar chart */
+  .bar-chart { display: flex; flex-direction: column; gap: 4px; flex: 1; min-height: 0; }
+  .bar-chart-area {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    align-items: end;
+    border-bottom: 1px solid #E5E5E5;
+    background-image: linear-gradient(to top, #F1F1F1 1px, transparent 1px);
+    background-size: 100% 25%;
+    padding: 8px 0;
+    gap: 8px;
+    min-height: 0;
+  }
+  .bar-chart-bar {
+    background: #A8B5C5;
+    width: 100%;
+    border-radius: 1px;
+  }
+  .bar-chart-axis {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    text-align: center;
+    font-size: 11.5px;
+    color: #4B4B4B;
+    padding-top: 6px;
+    gap: 8px;
+  }
+
+  /* Donut */
+  .donut-panel { display: flex; align-items: center; justify-content: center; gap: 36px; flex: 1; min-height: 0; }
+  .donut { width: 220px; height: 220px; position: relative; flex-shrink: 0; }
+  .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; }
+  .donut-legend-item { display: flex; align-items: center; gap: 9px; font-weight: 500; color: #2C2C2C; }
+  .donut-legend-item .swatch { width: 22px; height: 2.5px; }
+  .donut-label { position: absolute; font-size: 13px; color: #4B4B4B; }
+
+  /* Horizontal bar chart (reasons / SEC code) */
+  .hbar-chart { flex: 1; display: flex; flex-direction: column; gap: 12px; min-height: 0; padding: 4px 4px; }
+  .hbar-row { display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; font-size: 12.5px; color: #2C2C2C; }
+  .hbar-row .lbl { text-align: right; }
+  .hbar-row .track { position: relative; height: 11px; background: transparent; }
+  .hbar-row .fill { height: 100%; background: #A8B5C5; border-radius: 1px; }
+  .hbar-chart-axis-bg {
+    flex: 1;
+    background-image:
+      linear-gradient(to right, #EEEEEE 1px, transparent 1px),
+      linear-gradient(to bottom, #FAFAFA 1px, transparent 1px);
+    background-size: calc(100% / 5) 100%, 100% 100%;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Top nav ───────────────────────────────────────────────────── -->
+<header class="topnav">
+  <div class="topnav-logo">
+    <div class="grid">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="wordmark"><span class="l1">Advanced</span><span class="l2">Fraud Solutions<sup>™</sup></span></div>
+  </div>
+  <nav class="topnav-items">
+    <a class="topnav-item active" href="#">
+      <svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg>
+      Home
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+      Issued Checks
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Presented Checks
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      Teller
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 7h13l-3-3M3 7l3 3M21 17H8l3 3M21 17l-3-3"/></svg>
+      ACH
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+      Exceptions
+    </a>
+    <a class="topnav-item" href="#">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 4.27 16.96l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.5.45 1.21.58 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.25.6.84 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </a>
+  </nav>
+  <div class="topnav-user">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+    Sarah Mitchell
+  </div>
+</header>
+<div class="nav-strip"></div>
+
+<!-- ── Main content ──────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Dashboard tabs -->
+  <div class="dash-tabs">
+    <div class="dash-tab active">Combined View <span class="check">✓</span></div>
+    <div class="dash-tab">Check Only</div>
+    <div class="dash-tab">ACH Only</div>
+  </div>
+
+  <!-- 4-quadrant grid -->
+  <div class="dash-grid">
+
+    <!-- TOP LEFT: Exceptions [6-Month Combined] -->
+    <section class="panel">
+      <div class="panel-head">
+        <svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M21 7v6h-6"/></svg>
+        Exceptions [6-Month Combined]
+      </div>
+      <div class="panel-body">
+        <div class="ex-stat-row">
+          <div>
+            <div class="ex-stat-num">37</div>
+            <div class="ex-stat-lbl">Total Exceptions</div>
+          </div>
+          <div>
+            <div class="ex-stat-num money">$74,535</div>
+            <div class="ex-stat-lbl">Total Exception Amount</div>
+          </div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-chart-area">
+            <div class="bar-chart-bar" style="height:10%"></div>
+            <div class="bar-chart-bar" style="height:32%"></div>
+            <div class="bar-chart-bar" style="height:12%"></div>
+            <div class="bar-chart-bar" style="height:55%"></div>
+            <div class="bar-chart-bar" style="height:92%"></div>
+            <div class="bar-chart-bar" style="height:14%"></div>
+          </div>
+          <div class="bar-chart-axis">
+            <span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP RIGHT: Exceptions by Decision [Combined] -->
+    <section class="panel">
+      <div class="panel-head">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 6.5"/></svg>
+        Exceptions by Decision [Combined]
+      </div>
+      <div class="panel-body">
+        <div class="donut-panel">
+          <div class="donut-legend">
+            <div class="donut-legend-item"><span class="swatch" style="background:#C70200"></span>Return</div>
+            <div class="donut-legend-item"><span class="swatch" style="background:#5BA679"></span>Pay</div>
+          </div>
+          <div class="donut">
+            <svg viewBox="0 0 100 100">
+              <!-- Return: 170/265 = 64.15% → 169.3 of 263.9 circumference -->
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#C70200" stroke-width="22"
+                      stroke-dasharray="169.3 94.6"/>
+              <!-- Pay: 95/265 = 35.85% → 94.6 -->
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#5BA679" stroke-width="22"
+                      stroke-dasharray="94.6 169.3" stroke-dashoffset="-169.3"/>
+            </svg>
+            <div class="donut-label" style="top: 18px; right: -30px; font-weight: 500">95</div>
+            <div class="donut-label" style="bottom: 30px; right: -36px; font-weight: 500">170</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM LEFT: Exceptions by Reason [Check Only] -->
+    <section class="panel">
+      <div class="panel-head">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="14" y2="6"/><line x1="3" y1="18" x2="10" y2="18"/></svg>
+        Exceptions by Reason [Check Only]
+      </div>
+      <div class="panel-body">
+        <div class="hbar-chart">
+          <div class="hbar-row"><div class="lbl">Wrong Payee</div><div class="track"><div class="fill" style="width:88%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Wrong Amount</div><div class="track"><div class="fill" style="width:72%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Check # Not Found</div><div class="track"><div class="fill" style="width:48%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Over Limit</div><div class="track"><div class="fill" style="width:28%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Duplicate Presented Check</div><div class="track"><div class="fill" style="width:22%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Exact Match</div><div class="track"><div class="fill" style="width:16%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Routing # Not Found</div><div class="track"><div class="fill" style="width:14%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Stale Date</div><div class="track"><div class="fill" style="width:12%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Reverse Positive Pay</div><div class="track"><div class="fill" style="width:9%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">Account # Not Found</div><div class="track"><div class="fill" style="width:7%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM RIGHT: Exceptions by SEC Code [ACH Only] -->
+    <section class="panel">
+      <div class="panel-head">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="14" y2="6"/><line x1="3" y1="18" x2="10" y2="18"/></svg>
+        Exceptions by SEC Code [ACH Only]
+      </div>
+      <div class="panel-body">
+        <div class="hbar-chart">
+          <div class="hbar-row"><div class="lbl">WEB</div><div class="track"><div class="fill" style="width:92%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">BOC</div><div class="track"><div class="fill" style="width:10%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">POS</div><div class="track"><div class="fill" style="width:10%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">TEL</div><div class="track"><div class="fill" style="width:7%"></div></div></div>
+          <div class="hbar-row"><div class="lbl">TRX</div><div class="track"><div class="fill" style="width:7%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ── Red footer bar ────────────────────────────────────────────── -->
+<footer class="footerbar">
+  <div class="left">
+    <b>ADVANCED FRAUD SOLUTIONS</b>
+    <span class="tag">[uat-release]</span>
+  </div>
+  <div class="right">
+    <span>© Copyright Advanced Fraud Solutions 2005-2026</span>
+    <span class="sep">|</span>
+    <span>All Rights Reserved</span>
+    <span class="sep">|</span>
+    <span>Privacy Policy</span>
+  </div>
+</footer>
+
+</body>
+</html>

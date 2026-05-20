@@ -1,0 +1,338 @@
+/* ============================================================
+   Mockup shell — matches the actual AFS Positive Pay product UI.
+   Horizontal top nav with icon column, red accent strip under
+   the nav, white content area, red footer bar with build tag.
+   Subtle brand-aligned typography polish via Manrope, but the
+   structure stays faithful to the product so the screenshots
+   read as the real thing.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 1440px;
+  height: 900px;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #2C2C2C;
+  background: #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top nav (white horizontal bar) ──────────────────────────────── */
+.topnav {
+  background: #fff;
+  height: 76px;
+  display: flex;
+  align-items: stretch;
+  padding: 0 30px;
+  position: relative;
+  flex-shrink: 0;
+}
+.topnav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 30px;
+}
+.topnav-logo .grid {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+}
+.topnav-logo .grid span { background: #1F1F1F; border-radius: 1px; }
+.topnav-logo .grid span:nth-child(2) { background: #C70200; }
+.topnav-logo .grid span:nth-child(4) { background: #1F1F1F; }
+.topnav-logo .grid span:nth-child(7) { background: #C70200; }
+.topnav-logo .grid span:nth-child(9) { background: #1F1F1F; }
+.topnav-logo .wordmark {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: #2C2C2C;
+  letter-spacing: -0.01em;
+}
+.topnav-logo .wordmark .l1 { display: block; }
+.topnav-logo .wordmark .l2 { display: block; color: #C70200; font-weight: 700; }
+.topnav-logo .wordmark sup { font-size: 8px; color: #6B6B6B; font-weight: 600; }
+
+.topnav-items {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 0 auto;
+}
+.topnav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 22px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #4B4B4B;
+  text-decoration: none;
+  cursor: default;
+}
+.topnav-item svg {
+  width: 18px; height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+}
+.topnav-item.active { color: #2C2C2C; font-weight: 600; }
+.topnav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #C70200;
+}
+
+.topnav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2C;
+}
+.topnav-user svg {
+  width: 20px; height: 20px;
+  stroke: currentColor; fill: none; stroke-width: 1.5;
+}
+
+/* Red accent strip directly under the nav */
+.nav-strip {
+  height: 4px;
+  background: #C70200;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* ── Main content area ───────────────────────────────────────────── */
+.main {
+  flex: 1;
+  background: #F5F5F5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sub-toolbar shared by some pages */
+.subtoolbar {
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4B4B4B;
+  flex-shrink: 0;
+}
+.subtoolbar .crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: #F5F5F5;
+  border-radius: 6px;
+}
+.subtoolbar .crumb svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.subtoolbar .spacer { flex: 1; }
+.subtoolbar .right-btns { display: flex; gap: 10px; align-items: center; }
+
+/* Tab pills (dashboard) */
+.dash-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  padding: 14px 0 20px;
+  background: #F5F5F5;
+}
+.dash-tab {
+  height: 42px;
+  padding: 0 36px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #C7C7C7;
+  background: #fff;
+  color: #2C2C2C;
+  cursor: default;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dash-tab + .dash-tab { border-left: none; }
+.dash-tab:first-child { border-radius: 5px 0 0 5px; }
+.dash-tab:last-child { border-radius: 0 5px 5px 0; }
+.dash-tab.active {
+  background: #FCEAEA;
+  border-color: #C70200;
+  position: relative;
+  z-index: 2;
+}
+.dash-tab.active .check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Card panels (4-quadrant dashboard) */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 0 16px 16px;
+  flex: 1;
+  min-height: 0;
+}
+.panel {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel-head {
+  padding: 12px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2C2C2C;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #E0E0E0;
+  background: #FAFAFA;
+}
+.panel-head svg { width: 16px; height: 16px; stroke: #6B6B6B; fill: none; stroke-width: 1.6; }
+.panel-body {
+  flex: 1;
+  padding: 18px 20px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Generic helpers */
+.row { display: flex; align-items: center; gap: 10px; }
+.muted { color: #6B6B6B; }
+.mono { font-variant-numeric: tabular-nums; }
+
+/* ── Red footer bar ──────────────────────────────────────────────── */
+.footerbar {
+  height: 42px;
+  background: #C70200;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.footerbar .left { display: flex; align-items: center; gap: 14px; }
+.footerbar .left b { font-weight: 700; letter-spacing: 0.3px; }
+.footerbar .left .tag {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+.footerbar .right { display: flex; align-items: center; gap: 12px; font-weight: 500; }
+.footerbar .right .sep { opacity: 0.5; }
+
+/* ── Tables (shared between Issued Checks, Presented Checks, Queue) ── */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+.tbl thead th {
+  background: #DCE6F1;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C2C2C;
+  padding: 12px 14px;
+  border-right: 1px solid #C7D5E5;
+  border-bottom: 1px solid #B7C6D9;
+  white-space: nowrap;
+}
+.tbl thead th:last-child { border-right: none; }
+.tbl thead th .filt { float: right; opacity: 0.45; }
+.tbl tbody td {
+  padding: 11px 14px;
+  font-size: 13px;
+  color: #2C2C2C;
+  border-bottom: 1px solid #E8E8E8;
+  border-right: 1px solid #F0F0F0;
+  vertical-align: middle;
+}
+.tbl tbody td:last-child { border-right: none; }
+.tbl tbody tr:hover { background: #FAFAFA; }
+.tbl .pill-pay,
+.tbl .pill-ret {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.tbl .pill-pay { background: #E6F4EA; color: #1B8447; }
+.tbl .pill-ret { background: #FBE3E3; color: #C70200; }
+.tbl .link { color: #C70200; font-weight: 500; cursor: pointer; }
+.tbl .link-g { color: #1B8447; font-weight: 500; cursor: pointer; }
+.tbl .link-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: #F5F5F5;
+  border: 1px solid #DCDCDC;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #2C2C2C;
+  cursor: default;
+}
+
+/* Pagination */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #E0E0E0;
+  font-size: 12.5px;
+  color: #4B4B4B;
+}
+.pager .ctrls { display: flex; align-items: center; gap: 8px; }
+.pager .ctrls .nav { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; color: #6B6B6B; }
+.pager .ctrls .page-box { padding: 4px 10px; border: 1px solid #DCDCDC; border-radius: 4px; background: #fff; font-weight: 600; }

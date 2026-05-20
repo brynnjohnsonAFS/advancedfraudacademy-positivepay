@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Positive Pay by AFS — Interactive Demo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/aileron@5.2.5/800.css">
+<style>
+  :root {
+    --red: #C70200;
+    --red-dark: #9D0200;
+    --red-soft: #FBE5E5;
+    --green: #6B9B1F;
+    --green-soft: #F0F7DF;
+    --ink: #222222;
+    --ink-2: #404040;
+    --grey: #595959;
+    --grey-2: #999999;
+    --bg: #F7F8FA;
+    --card: #FFFFFF;
+    --line: #ECEEF1;
+    --line-soft: #F2F4F7;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.05);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 32px 64px rgba(0,0,0,0.08);
+  }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Aileron', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a,button { font: inherit; color: inherit; cursor: pointer; border: none; background: none; text-decoration: none; }
+
+  /* ============ WELCOME ============ */
+  .welcome {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #222222 0%, #2e2e2e 100%);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .welcome.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .welcome-inner { max-width: 720px; text-align: center; }
+  .welcome-eyebrow {
+    color: var(--red); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .welcome-title {
+    font-size: clamp(32px, 5vw, 56px); font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 16px;
+  }
+  .welcome-sub {
+    font-size: clamp(15px, 2vw, 18px); color: #c5c5c5; margin-bottom: 36px;
+    max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.55;
+  }
+  .welcome-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 26px; border-radius: 999px;
+    font-weight: 600; font-size: 15px;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary { background: var(--red); color: #fff; box-shadow: 0 4px 16px rgba(199,2,0,0.25); }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.25); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+  /* ============ APP CHROME ============ */
+  .app {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    margin: 24px auto;
+    max-width: 1200px;
+    min-height: 600px;
+    position: relative;
+  }
+  .topbar {
+    background: #fff;
+    border-bottom: 3px solid var(--red);
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex; align-items: center;
+    flex-shrink: 0;
+  }
+  .brand img { height: 30px; width: auto; display: block; }
+  .nav {
+    display: flex; gap: 2px; align-items: center;
+    overflow-x: auto;
+  }
+  .nav button {
+    padding: 8px 12px; font-size: 13px; font-weight: 500;
+    color: var(--ink-2); border-radius: 6px;
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.15s ease;
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav button:hover { background: #f3f4f6; color: var(--ink); }
+  .nav button.active { color: var(--red); background: #fff5f6; font-weight: 600; }
+  .nav button.active::after {
+    content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
+    border-bottom: 7px solid var(--red);
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--ink-2); white-space: nowrap;
+  }
+  .user-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--red), #FF6B6B);
+    color: #fff; font-weight: 700; font-size: 11px;
+    display: grid; place-items: center;
+  }
+  .crumb {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px; color: var(--grey);
+    display: flex; align-items: center; gap: 8px;
+    background: #FAFBFC;
+  }
+  .crumb-home { color: var(--grey-2); }
+  .crumb strong { color: var(--ink); font-weight: 600; }
+
+  /* ============ SCREEN VIEWPORT ============ */
+  .viewport {
+    position: relative;
+    padding: 20px;
+    min-height: 520px;
+    background: var(--bg);
+    animation: fadeIn 0.35s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ============ HOTSPOTS ============ */
+  .hotspot {
+    position: absolute;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff; font-weight: 700; font-size: 11px;
+    display: grid; place-items: center;
+    cursor: pointer; z-index: 20;
+    box-shadow: 0 4px 14px rgba(199,2,0,0.45);
+    transition: transform 0.15s ease;
+  }
+  .hotspot:hover { transform: scale(1.12); }
+  .hotspot::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    background: var(--red); opacity: 0.35;
+    animation: ping 2s ease-out infinite;
+  }
+  @keyframes ping {
+    0% { transform: scale(0.8); opacity: 0.4; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+  .hotspot-tooltip {
+    position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: #fff;
+    padding: 12px 14px; border-radius: 8px;
+    font-size: 12px; line-height: 1.5;
+    width: 240px; text-align: left;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    box-shadow: var(--shadow-lg);
+    z-index: 25;
+  }
+  .hotspot-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 7px solid transparent; border-top-color: var(--ink);
+  }
+  .hotspot.open .hotspot-tooltip {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  .hotspot-title {
+    font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: #ffb3bd; margin-bottom: 4px;
+  }
+
+  /* ============ COMMON UI ============ */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+  .badge.pay { background: var(--green-soft); color: var(--green); }
+  .badge.ret { background: var(--red-soft); color: var(--red); }
+  .badge.completed { background: #E6F4EC; color: var(--green); padding: 2px 6px; font-size: 10px; }
+  .table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    background: #fff; border-radius: 10px; overflow: hidden;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line);
+  }
+  .table th {
+    background: #DCE5F4; color: var(--ink); text-align: left;
+    padding: 10px 12px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--line);
+  }
+  .table td {
+    padding: 12px; border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-2); font-weight: 500;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .table tr.muted-ret td { color: var(--red); }
+  .toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; gap: 12px; flex-wrap: wrap;
+  }
+  .toolbar-left, .toolbar-right { display: flex; gap: 8px; align-items: center; }
+  .pill-btn {
+    padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    background: #fff; border: 1px solid var(--line); color: var(--ink-2);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .pill-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ============ HOME DASHBOARD ============ */
+  .view-toggle {
+    display: inline-flex; gap: 4px; background: #fff;
+    border: 1px solid var(--line); border-radius: 8px; padding: 4px;
+    margin: 0 auto 20px; box-shadow: var(--shadow-sm);
+  }
+  .view-toggle button {
+    padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    color: var(--grey);
+  }
+  .view-toggle button.active { background: var(--red); color: #fff; box-shadow: 0 2px 6px rgba(199,2,0,0.25); }
+  .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .dash-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px; box-shadow: var(--shadow-sm);
+  }
+  .dash-card .title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--grey-2); margin-bottom: 12px;
+  }
+  .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: flex-end; }
+  .kpi-num { font-size: 42px; font-weight: 800; letter-spacing: -0.025em; line-height: 1; color: #B0BBD0; }
+  .kpi-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--grey-2); margin-top: 4px; }
+  .bar-chart {
+    display: flex; align-items: flex-end; gap: 8px;
+    height: 100px; margin-top: 18px; padding: 0 4px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .bar-chart .bar {
+    flex: 1; background: #B0BBD0; border-radius: 3px 3px 0 0;
+    position: relative; transition: background 0.2s ease;
+  }
+  .bar-chart .bar:hover { background: var(--red); }
+  .bar-chart .label-row { display: flex; justify-content: space-around; margin-top: 6px; font-size: 10px; color: var(--grey-2); }
+  .donut-wrap { display: flex; align-items: center; gap: 16px; padding: 8px 0; }
+  .donut {
+    width: 130px; height: 130px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(var(--green) 0% 38%, var(--red) 38% 100%);
+    position: relative;
+  }
+  .donut::after {
+    content: ''; position: absolute; inset: 22px;
+    background: #fff; border-radius: 50%;
+  }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+  .donut-legend .dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .reason-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 12px; }
+  .reason-label { width: 130px; color: var(--ink-2); font-weight: 500; }
+  .reason-bar { flex: 1; height: 14px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
+  .reason-bar .fill { height: 100%; background: #6B82B6; border-radius: 3px; }
+
+  /* ============ EXCEPTIONS QUEUE ============ */
+  .check-col { width: 28px; }
+  .reviewed-bar {
+    background: #fff; border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 16px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+  }
+  .reviewed-action {
+    background: var(--ink); color: #fff;
+    padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  /* ============ EXCEPTION DETAIL MODAL ============ */
+  .modal-backdrop {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 30;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .modal {
+    background: #fff; border-radius: 12px;
+    width: 100%; max-width: 540px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: modalUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes modalUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .modal-head {
+    padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-head h3 { font-size: 16px; font-weight: 700; }
+  .modal-head .close { width: 28px; height: 28px; display: grid; place-items: center; color: var(--grey); border-radius: 6px; }
+  .modal-head .close:hover { background: var(--line-soft); }
+  .modal-body { padding: 16px 20px; }
+  .modal-section { background: #F4F1E8; padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+  .modal-link {
+    text-align: center; padding: 8px 0; color: var(--green); font-weight: 600; font-size: 13px;
+    border-bottom: 1px solid var(--line); margin-bottom: 12px;
+  }
+  .modal-row {
+    padding: 10px 12px; background: #F7F8FA;
+    border-radius: 6px; margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .modal-row.flag { background: #FDECEE; border: 1px solid #F8C4CB; }
+  .modal-row .lbl { color: var(--grey); margin-right: 6px; }
+  .modal-row .val { font-weight: 700; color: var(--ink); }
+  .modal-row .flag-msg { display: block; color: var(--red); font-size: 12px; margin-top: 4px; font-weight: 500; }
+  .modal-alert { color: var(--red); font-weight: 700; font-size: 13px; padding: 10px 0 4px; display: flex; align-items: center; gap: 6px; }
+
+  /* ============ SETTINGS HUB ============ */
+  .settings-panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+  .settings-panel h3 { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  .settings-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 640px) { .settings-grid { grid-template-columns: repeat(2, 1fr); } }
+  .tile {
+    background: #fff; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 10px; text-align: center;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+  }
+  .tile:hover { transform: translateY(-2px); border-color: var(--red); box-shadow: var(--shadow-sm); }
+  .tile-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: grid; place-items: center; margin: 0 auto 8px;
+    color: #fff; font-weight: 700; font-size: 14px;
+  }
+  .tile.blue .tile-icon { background: #3B82F6; }
+  .tile.green .tile-icon { background: var(--green); }
+  .tile.amber .tile-icon { background: #F59E0B; }
+  .tile.red .tile-icon { background: var(--red); }
+  .tile.purple .tile-icon { background: #8B5CF6; }
+  .tile.teal .tile-icon { background: #14B8A6; }
+  .tile-label { font-size: 11px; color: var(--ink-2); font-weight: 600; line-height: 1.3; }
+
+  /* ============ TELLER ============ */
+  .teller-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 24px; max-width: 720px; margin: 0 auto;
+    box-shadow: var(--shadow-sm);
+  }
+  .teller-head {
+    font-weight: 700; font-size: 14px;
+    padding-bottom: 12px; margin-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ink-2); }
+  .form-field label .req { color: var(--red); }
+  .form-field input {
+    width: 100%; padding: 10px 12px; border-radius: 6px;
+    border: 1px solid var(--line); font: inherit; font-size: 13px;
+    background: #fff; color: var(--ink);
+  }
+  .form-field input:focus { outline: 2px solid var(--red); outline-offset: -1px; }
+  .form-field input.filled { border-color: #3B82F6; }
+  .validate-btn {
+    margin-top: 18px;
+    width: 100%; padding: 12px 20px;
+    background: #3B82F6; color: #fff;
+    border-radius: 6px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  /* ============ ISSUED / PRESENTED / ACH TABLES ============ */
+  .table-compact td { padding: 9px 12px; font-size: 12.5px; }
+  .table-compact th { padding: 9px 12px; }
+  .link { color: var(--red); font-weight: 600; cursor: pointer; }
+  .link:hover { text-decoration: underline; }
+
+  /* ============ TOUR BAR ============ */
+  .tour-bar {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: #fff;
+    padding: 16px 20px 14px; border-radius: 12px;
+    display: flex; align-items: center; gap: 18px;
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    max-width: calc(100% - 48px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  }
+  .tour-bar.hidden { opacity: 0; pointer-events: none; visibility: hidden; transform: translateX(-50%) translateY(12px); }
+  .tour-step-num {
+    background: var(--red); color: #fff;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 700; font-size: 13px;
+    flex-shrink: 0;
+  }
+  .tour-text { flex: 1; font-size: 13.5px; line-height: 1.4; min-width: 200px; max-width: 460px; }
+  .tour-text strong { display: block; margin-bottom: 4px; font-size: 14.5px; }
+  .tour-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .tour-btn {
+    padding: 8px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,0.08); color: #fff;
+    transition: background 0.15s ease;
+  }
+  .tour-btn:hover { background: rgba(255,255,255,0.18); }
+  .tour-btn-primary { background: var(--red); }
+  .tour-btn-primary:hover { background: var(--red-dark); }
+  .tour-progress {
+    position: absolute; top: 0; left: 12px; right: 12px; height: 3px;
+    background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden;
+  }
+  .tour-progress-bar { height: 100%; background: var(--red); width: 0%; transition: width 0.4s ease; border-radius: 999px; }
+  .mode-banner {
+    background: var(--red-soft); color: var(--red-dark);
+    border: 1px solid #ffd5da;
+    padding: 10px 16px;
+    font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #ffd5da;
+  }
+  .mode-banner .icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--red); color: #fff;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer-cta {
+    background: var(--ink);
+    color: #fff;
+    padding: 48px 24px;
+    text-align: center;
+    margin-top: 40px;
+  }
+  .footer-cta h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 8px; font-weight: 700; letter-spacing: -0.01em; }
+  .footer-cta p { color: #c5c5c5; margin-bottom: 22px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .footer-mark { margin-top: 28px; font-size: 11px; color: #6a6a6a; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* hide some nav buttons on narrow screens */
+  @media (max-width: 720px) {
+    .nav button .nav-label { display: none; }
+    .nav button { padding: 8px 10px; }
+    .dash-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div class="welcome" id="welcome">
+  <div class="welcome-inner">
+    <div class="welcome-eyebrow">Modern Positive Pay Academy · Interactive Demo</div>
+    <h1 class="welcome-title">See modern Positive Pay in action.</h1>
+    <p class="welcome-sub">Click through a real fraud event end-to-end. Exception flagged, decision made, file delivered. No screenshots, no recordings. A working interactive mock of the AFS platform.</p>
+    <div class="welcome-actions">
+      <button class="btn btn-primary" onclick="startTour()">Take the guided tour →</button>
+      <button class="btn btn-ghost" onclick="startExplore()">Explore on my own</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="brand-assets/afs-logo-full-lockup-transparent.png" alt="Advanced Fraud Solutions" />
+    </div>
+    <nav class="nav" id="nav">
+      <button data-screen="home"><span>🏠</span><span class="nav-label">Home</span></button>
+      <button data-screen="issued"><span>📋</span><span class="nav-label">Issued Checks</span></button>
+      <button data-screen="presented"><span>📄</span><span class="nav-label">Presented</span></button>
+      <button data-screen="teller"><span>👤</span><span class="nav-label">Teller</span></button>
+      <button data-screen="ach"><span>🔄</span><span class="nav-label">ACH</span></button>
+      <button data-screen="exceptions"><span>🔔</span><span class="nav-label">Exceptions</span></button>
+      <button data-screen="settings"><span>⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
+    <div class="user-chip">
+      <div class="user-dot">SM</div>
+      <span>Sarah Mitchell</span>
+    </div>
+  </header>
+
+  <div class="mode-banner" id="modeBanner" style="display:none;"></div>
+
+  <!-- crumb -->
+  <div class="crumb">
+    <span class="crumb-home">🏠</span>
+    <span>›</span>
+    <strong id="crumb-screen">Home</strong>
+  </div>
+
+  <!-- viewport -->
+  <main class="viewport" id="viewport">
+    <!-- screen content injected here -->
+  </main>
+</div>
+
+<!-- TOUR BAR -->
+<div class="tour-bar hidden" id="tour-bar">
+  <div class="tour-progress"><div class="tour-progress-bar" id="tour-progress-bar"></div></div>
+  <div class="tour-step-num" id="tour-step-num">1</div>
+  <div class="tour-text" id="tour-text"><strong>Step</strong>Description.</div>
+  <div class="tour-actions">
+    <button class="tour-btn" onclick="prevTourStep()" id="tour-prev">← Back</button>
+    <button class="tour-btn tour-btn-primary" onclick="nextTourStep()" id="tour-next">Next →</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<section class="footer-cta">
+  <h2>Want to see this with your FI's data?</h2>
+  <p>Book a 20-minute walkthrough. We'll configure the platform around your environment and answer the questions that matter to your team.</p>
+  <a href="/positivepay/product#demo" class="btn btn-primary">Book a demo →</a>
+  <div class="footer-mark">Advanced Fraud Solutions · advancedfraudacademy.com</div>
+</section>
+
+<script>
+  // =========== SCREEN RENDERERS ===========
+  const SCREENS = {
+
+    home: () => ({
+      crumb: 'Home',
+      content: `
+        <div style="text-align:center;">
+          <div class="view-toggle">
+            <button class="active">Combined View</button>
+            <button>Check Only</button>
+            <button>ACH Only</button>
+          </div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="title">📈 Exceptions [6-Month Combined]</div>
+            <div class="kpi-row">
+              <div><div class="kpi-num">37</div><div class="kpi-lbl">Total exceptions</div></div>
+              <div><div class="kpi-num">$74,535</div><div class="kpi-lbl">Total exception amount</div></div>
+            </div>
+            <div class="bar-chart">
+              <div class="bar" style="height: 12%;"></div>
+              <div class="bar" style="height: 36%;"></div>
+              <div class="bar" style="height: 22%;"></div>
+              <div class="bar" style="height: 58%;"></div>
+              <div class="bar" style="height: 86%;"></div>
+              <div class="bar" style="height: 18%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-around;margin-top:6px;font-size:10px;color:var(--grey-2);font-weight:600;">
+              <span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="title">🥧 Exceptions by Decision [Combined]</div>
+            <div class="donut-wrap">
+              <div class="donut"></div>
+              <div class="donut-legend">
+                <div><span class="dot" style="background:var(--red)"></span><strong>Return</strong> · 170</div>
+                <div><span class="dot" style="background:var(--green)"></span><strong>Pay</strong> · 95</div>
+                <div style="font-size:11px;color:var(--grey);margin-top:4px;">Higher returns = more fraud caught</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="title">📊 Exceptions by Reason [Check Only]</div>
+            <div class="reason-row"><div class="reason-label">Wrong Payee</div><div class="reason-bar"><div class="fill" style="width:78%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">Wrong Amount</div><div class="reason-bar"><div class="fill" style="width:55%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">Check # Not Found</div><div class="reason-bar"><div class="fill" style="width:42%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">Over Limit</div><div class="reason-bar"><div class="fill" style="width:28%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">Duplicate Presented</div><div class="reason-bar"><div class="fill" style="width:18%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">Stale Date</div><div class="reason-bar"><div class="fill" style="width:12%"></div></div></div>
+          </div>
+          <div class="dash-card">
+            <div class="title">📊 Exceptions by SEC Code [ACH Only]</div>
+            <div class="reason-row"><div class="reason-label">WEB</div><div class="reason-bar"><div class="fill" style="width:88%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">BOC</div><div class="reason-bar"><div class="fill" style="width:14%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">POS</div><div class="reason-bar"><div class="fill" style="width:12%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">TEL</div><div class="reason-bar"><div class="fill" style="width:6%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">TRX</div><div class="reason-bar"><div class="fill" style="width:4%"></div></div></div>
+            <div class="reason-row"><div class="reason-label">CCD</div><div class="reason-bar"><div class="fill" style="width:3%"></div></div></div>
+          </div>
+        </div>
+      `,
+      hotspots: [
+        { x: '50%', y: 24, n: 1, title: 'View toggle', body: 'Combined, Check Only, ACH Only. The dashboard adapts to what you need to look at.' },
+        { x: 28, y: 38, n: 2, title: '6-month trend', body: '37 exceptions over six months, $74,535 in flagged volume. The summary your board wants in one chart.' },
+        { x: 78, y: 38, n: 3, title: 'Decision mix', body: '170 returned, 95 paid. The ratio that tells you whether your team is catching fraud or paying through it.' },
+      ]
+    }),
+
+    issued: () => ({
+      crumb: 'Issued Checks',
+      content: `
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="pill-btn">📊 Excel</div>
+            <div class="pill-btn">🔍 Search</div>
+          </div>
+          <div class="toolbar-right">
+            <div class="pill-btn">⬆️ Uploaded Checks</div>
+            <div class="pill-btn primary">＋ Add Check</div>
+          </div>
+        </div>
+        <table class="table table-compact">
+          <thead><tr><th>Client</th><th>Account</th><th>Routing #</th><th>Check #</th><th>Amount</th><th>Issue Date</th><th>Payee</th><th>Stop?</th><th>Voided?</th></tr></thead>
+          <tbody>
+            <tr><td>Cedar Valley Distribution</td><td>Payroll</td><td>122199983</td><td>11128</td><td>$500.00</td><td>02/26/2026</td><td>John Smith</td><td>No</td><td>No</td></tr>
+            <tr><td>Cedar Valley Distribution</td><td>Payroll</td><td>122199983</td><td>11126</td><td>$1,000.00</td><td>02/05/2026</td><td>Jane Doe</td><td>No</td><td>No</td></tr>
+            <tr><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>122199983</td><td>11127</td><td>$500.00</td><td>02/23/2026</td><td>Robert Johnson</td><td>No</td><td>No</td></tr>
+            <tr><td>Metro Auto Service</td><td>Checking</td><td>122199983</td><td>133</td><td>$100.00</td><td>02/25/2026</td><td>Mary Williams</td><td>No</td><td>No</td></tr>
+            <tr><td>Metro Auto Service</td><td>Checking</td><td>122199983</td><td>130</td><td>$100.00</td><td>02/25/2026</td><td>—</td><td>No</td><td>No</td></tr>
+            <tr><td>Greenfield Florists</td><td>Operating</td><td>111000026</td><td>500</td><td>$150.10</td><td>05/05/2026</td><td>—</td><td>No</td><td>No</td></tr>
+            <tr><td>Greenfield Florists</td><td>Operating</td><td>111000026</td><td>41</td><td>$140.00</td><td>04/15/2026</td><td>James Brown</td><td>No</td><td>No</td></tr>
+            <tr><td>Heritage Classic Cars</td><td>Expensive Habit</td><td>011301798</td><td>101</td><td>$100.00</td><td>03/20/2026</td><td>John Smith</td><td>No</td><td>No</td></tr>
+          </tbody>
+        </table>
+      `,
+      hotspots: [
+        { x: 20, y: 30, n: 1, title: 'Source of truth', body: 'Every authorized check the business client uploaded. Every presented item gets compared to this list.' },
+        { x: 78, y: 30, n: 2, title: 'Stop & Void status', body: 'A check stopped or voided after issue still gets matched and flagged correctly.' },
+      ]
+    }),
+
+    presented: () => ({
+      crumb: 'Presented Checks',
+      content: `
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="pill-btn">📊 Excel</div>
+            <div class="pill-btn">🔍 Search</div>
+          </div>
+          <div class="toolbar-right">
+            <div class="pill-btn">⬆️ Uploaded Checks</div>
+            <div class="pill-btn primary">＋ Add Check</div>
+          </div>
+        </div>
+        <table class="table table-compact">
+          <thead><tr><th>ID</th><th>Status</th><th>Decision</th><th>Client</th><th>Account</th><th>Check #</th><th>Amount</th><th>Presented</th><th>Payee</th><th>Issued Check</th></tr></thead>
+          <tbody>
+            <tr><td>21912</td><td><span class="badge completed">Completed</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>11141</td><td>$1,000.00</td><td>04/02/2026</td><td>John Doe</td><td><span class="link">👁 View</span></td></tr>
+            <tr><td>21509</td><td><span class="badge completed">Completed</span></td><td><span class="badge ret">↩ Return</span></td><td>Metro Auto Service</td><td>Checking</td><td>149</td><td>$200.00</td><td>03/31/2026</td><td>Paul Payee</td><td><span class="link">👁 View</span></td></tr>
+            <tr><td>16077</td><td><span class="badge completed">Completed</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>11144</td><td>$300.00</td><td>03/20/2026</td><td>Pre Decision Test</td><td>—</td></tr>
+            <tr><td>16075</td><td><span class="badge completed">Completed</span></td><td><span class="badge pay">$ Pay</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>10003</td><td>$200.00</td><td>03/20/2026</td><td>Pre Decision Test</td><td>—</td></tr>
+            <tr><td>16072</td><td><span class="badge completed">Completed</span></td><td><span class="badge pay">$ Pay</span></td><td>Heritage Classic Cars</td><td>Expensive Habit</td><td>101</td><td>$500.00</td><td>03/20/2026</td><td>John Smith</td><td><span class="link">👁 View</span></td></tr>
+            <tr><td>16057</td><td><span class="badge completed">Completed</span></td><td><span class="badge pay">$ Pay</span></td><td>Metro Auto Service</td><td>Checking</td><td>145</td><td>$100.00</td><td>03/19/2026</td><td>Paul Pay</td><td><span class="link">👁 View</span></td></tr>
+          </tbody>
+        </table>
+      `,
+      hotspots: [
+        { x: 30, y: 38, n: 1, title: 'Decision badges', body: 'Color-coded Pay / Return. Green is paid, red is returned. Instant visual triage.' },
+        { x: 88, y: 38, n: 2, title: 'Issued check link', body: 'Click View to pull up the original issued record alongside this presented item.' },
+      ]
+    }),
+
+    teller: () => ({
+      crumb: 'Teller › Validation',
+      content: `
+        <div class="teller-card">
+          <div class="teller-head">📄 Presented Check</div>
+          <div class="form-grid">
+            <div class="form-field"><label>Routing Number <span class="req">*</span></label><input type="text" class="filled" value="111000026" /></div>
+            <div class="form-field"><label>Account Number <span class="req">*</span></label><input type="text" placeholder="Account Number" /></div>
+            <div class="form-field"><label>Check Number <span class="req">*</span></label><input type="text" value="0" /></div>
+            <div class="form-field"><label>Amount <span class="req">*</span></label><input type="text" value="0" /></div>
+            <div class="form-field"><label>Presented Date <span class="req">*</span></label><input type="text" value="05/19/2026" /></div>
+            <div class="form-field"><label>Payee Name</label><input type="text" placeholder="Payee Name" /></div>
+          </div>
+          <button class="validate-btn">✓ Validate Check</button>
+        </div>
+      `,
+      hotspots: [
+        { x: 50, y: 65, n: 1, title: 'Point of presentment', body: 'A teller types routing, account, check #, amount, and payee. The system validates against issued data before the deposit is taken.' },
+      ]
+    }),
+
+    ach: () => ({
+      crumb: 'ACH',
+      content: `
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="pill-btn">📊 Excel</div>
+            <div class="pill-btn">🔍 Search</div>
+          </div>
+          <div class="toolbar-right">
+            <div class="pill-btn">⬆️ Uploaded ACH</div>
+            <div class="pill-btn primary">＋ Add ACH</div>
+          </div>
+        </div>
+        <table class="table table-compact">
+          <thead><tr><th>ID</th><th>Status</th><th>Decision</th><th>Client</th><th>Account</th><th>Originator</th><th>Routing #</th><th>Amount</th><th>SEC</th></tr></thead>
+          <tbody>
+            <tr><td>5152</td><td><span class="badge completed">Completed [Default]</span></td><td><span class="badge ret">↩ Return</span></td><td>Metro Auto Service</td><td>Checking</td><td>First Demo Bank</td><td>111000026</td><td>$100.00</td><td>WEB</td></tr>
+            <tr><td>4690</td><td><span class="badge completed">Completed [Default]</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>Sample Originator</td><td>122199983</td><td>$500.00</td><td>WEB</td></tr>
+            <tr><td>4634</td><td><span class="badge completed">Completed [Manual]</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>Sample Originator</td><td>122199983</td><td>$1,000.00</td><td>WEB</td></tr>
+            <tr><td>1532</td><td><span class="badge completed">Completed [Manual]</span></td><td><span class="badge pay">$ Pay</span></td><td>Northbridge Manufacturing</td><td>Primary Savings</td><td>Test</td><td>012345678</td><td>$7.00</td><td>WEB</td></tr>
+            <tr><td>697</td><td><span class="badge completed">Completed [Manual]</span></td><td><span class="badge pay">$ Pay</span></td><td>Northbridge Manufacturing</td><td>Primary Savings</td><td>Apex Leasing</td><td>123456789</td><td>$500.00</td><td>WEB</td></tr>
+            <tr><td>639</td><td><span class="badge completed">Completed [Auto]</span></td><td><span class="badge pay">$ Pay</span></td><td>Northbridge Manufacturing</td><td>Primary Savings</td><td>Apex Leasing</td><td>123456789</td><td>$4,500.00</td><td>WEB</td></tr>
+            <tr><td>278</td><td><span class="badge completed">Completed [Manual]</span></td><td><span class="badge pay">$ Pay</span></td><td>Cedar Valley Distribution</td><td>Payroll</td><td>Western Packaging</td><td>111000027</td><td>$2,500.00</td><td>WEB</td></tr>
+          </tbody>
+        </table>
+      `,
+      hotspots: [
+        { x: 26, y: 35, n: 1, title: 'Default vs Manual vs Auto', body: 'Tags show whether the business client decisioned this, the system applied the default at cutoff, or an Automatic Decision Rule fired.' },
+        { x: 70, y: 50, n: 2, title: 'Originator + SEC', body: 'Originator, company ID, SEC code. Everything Nacha-aligned reporting needs.' },
+      ]
+    }),
+
+    exceptions: () => ({
+      crumb: 'Exceptions › History',
+      content: `
+        <div class="reviewed-bar">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="pill-btn">📊 Excel</div>
+            <div class="pill-btn">🔍 Search</div>
+          </div>
+          <div class="reviewed-action">📦 Mark as Reviewed [0]</div>
+          <div class="pill-btn">💾 Saved Filters · Active ▾</div>
+        </div>
+        <table class="table table-compact">
+          <thead><tr><th class="check-col"><input type="checkbox" /></th><th>Reviewed</th><th>ID</th><th>Client</th><th>Business Client</th><th>Type</th><th>Decision</th><th>Routing</th><th>Account</th><th>Amount</th><th>Payee</th></tr></thead>
+          <tbody>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>277</td><td>AFS</td><td>Cedar Valley Distribution</td><td>ACH</td><td><span class="badge ret">↩ Return</span></td><td>111000027</td><td>Supplies</td><td>$500.00</td><td>Jones P.</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>5312</td><td>AFS</td><td>Riverside Veterinary</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011000138</td><td>004624388120</td><td>$1,800.00</td><td>—</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>5309</td><td>AFS</td><td>Riverside Veterinary</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011401533</td><td>3313656325</td><td>$330.58</td><td>—</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>3468</td><td>AFS</td><td>Cedar Valley Distribution</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011305202</td><td>123456789</td><td>$6,000.00</td><td>Matthew W.</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>3460</td><td>AFS</td><td>Cedar Valley Distribution</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011305202</td><td>Payroll</td><td>$10.00</td><td>—</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>3437</td><td>AFS</td><td>Cedar Valley Distribution</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011305202</td><td>Payroll</td><td>$2,000.00</td><td>James B.</td></tr>
+            <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>3055</td><td>AFS</td><td>Cedar Valley Distribution</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>111000026</td><td>Payroll</td><td>$1,850.00</td><td>Matthew W.</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--grey-2);margin-top:10px;text-align:right;">1 – 7 of 7 items</div>
+      `,
+      hotspots: [
+        { x: 52, y: 12, n: 1, title: 'Mark as Reviewed', body: 'Bulk-review action. Turns the queue into an audited workflow.' },
+        { x: 18, y: 38, n: 2, title: 'Reviewed status', body: 'Every exception tracks whether your team has audited the decision after the fact.' },
+        { x: 60, y: 38, n: 3, title: 'Decision badge', body: 'Pay or Return at a glance. Color-coded for triage.' },
+      ]
+    }),
+
+    exceptions_detail: () => ({
+      crumb: 'Exceptions › History › Check Exception [3437]',
+      content: `
+        ${SCREENS.exceptions().content}
+        <div class="modal-backdrop">
+          <div class="modal">
+            <div class="modal-head">
+              <h3>Exception Details</h3>
+              <div class="close">✕</div>
+            </div>
+            <div class="modal-body">
+              <div class="modal-section">📑 Check Exception [3437]</div>
+              <div class="modal-link">📝 View Issued Check Data</div>
+              <div class="modal-row"><span class="lbl">Exception Date</span><br><span class="val">04/11/26 1:53:13 PM (EDT)</span></div>
+              <div class="modal-row"><span class="lbl">Business Client</span> <span class="val">Cedar Valley Distribution</span></div>
+              <div class="modal-row"><span class="lbl">Routing #</span> <span class="val">011305202</span></div>
+              <div class="modal-row"><span class="lbl">Account #</span> <span class="val">Payroll</span></div>
+              <div class="modal-row"><span class="lbl">Check Number</span> <span class="val">4112025</span></div>
+              <div class="modal-row flag"><span class="lbl">Amount</span> <span class="val">$2,000.00</span><span class="flag-msg">⚠ Amount does not match the Issued Check</span></div>
+              <div class="modal-row"><span class="lbl">Presented Date</span> <span class="val">4/11/2026</span></div>
+              <div class="modal-row flag"><span class="lbl">Payee Name</span> <span class="val">James Brown</span><span class="flag-msg">⚠ Payee name does not match the Issued Check</span></div>
+              <div class="modal-alert">🔔 Duplicate Presented Check exists [View]</div>
+            </div>
+          </div>
+        </div>
+      `,
+      hotspots: [
+        { x: 50, y: 45, n: 1, title: 'Two flags, one check', body: 'Amount mismatched AND payee mismatched. Both highlighted red. A decisioner has everything they need to return this in one screen.' },
+        { x: 50, y: 78, n: 2, title: 'The pattern catch', body: 'The system also flagged that a duplicate presented check exists. The kind of pattern a teller would not spot in time.' },
+      ]
+    }),
+
+    settings: () => ({
+      crumb: 'Settings',
+      content: `
+        <div style="display:grid;grid-template-columns: repeat(3, 1fr);gap:14px;">
+          <div class="settings-panel">
+            <h3>👥 Account</h3>
+            <div class="settings-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="tile blue"><div class="tile-icon">ⓘ</div><div class="tile-label">Account<br>Settings</div></div>
+              <div class="tile green"><div class="tile-icon">🚚</div><div class="tile-label">Business<br>Clients</div></div>
+              <div class="tile amber"><div class="tile-icon">👥</div><div class="tile-label">Users</div></div>
+              <div class="tile red"><div class="tile-icon">🔒</div><div class="tile-label">Roles &<br>Permissions</div></div>
+              <div class="tile blue"><div class="tile-icon">🎨</div><div class="tile-label">Branding</div></div>
+              <div class="tile blue"><div class="tile-icon">📄</div><div class="tile-label">Billing<br>Reports</div></div>
+              <div class="tile green"><div class="tile-icon">📁</div><div class="tile-label">Decision<br>Files</div></div>
+              <div class="tile amber"><div class="tile-icon">📅</div><div class="tile-label">Holiday<br>Schedules</div></div>
+            </div>
+          </div>
+
+          <div class="settings-panel">
+            <h3>⚙️ Settings</h3>
+            <div class="settings-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="tile blue"><div class="tile-icon">📄</div><div class="tile-label">File<br>Formats</div></div>
+              <div class="tile blue"><div class="tile-icon">✉️</div><div class="tile-label">Notification<br>Templates</div></div>
+              <div class="tile green"><div class="tile-icon">🌿</div><div class="tile-label">Automatic Check<br>Decision Rules</div></div>
+              <div class="tile amber"><div class="tile-icon">👍</div><div class="tile-label">Check Approval<br>Rules</div></div>
+              <div class="tile green"><div class="tile-icon">🌿</div><div class="tile-label">Automatic ACH<br>Decision Rules</div></div>
+              <div class="tile amber"><div class="tile-icon">👍</div><div class="tile-label">ACH Approval<br>Rules</div></div>
+            </div>
+          </div>
+
+          <div class="settings-panel">
+            <h3>📊 Logs & API</h3>
+            <div class="settings-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="tile blue"><div class="tile-icon">🔔</div><div class="tile-label">Notification<br>Log</div></div>
+              <div class="tile amber"><div class="tile-icon">💡</div><div class="tile-label">Default Decision<br>Log</div></div>
+              <div class="tile red"><div class="tile-icon">🖥</div><div class="tile-label">System<br>Log</div></div>
+              <div class="tile green"><div class="tile-icon">📄</div><div class="tile-label">File<br>Processing</div></div>
+              <div class="tile purple"><div class="tile-icon">{ }</div><div class="tile-label">API</div></div>
+              <div class="tile teal"><div class="tile-icon">🪝</div><div class="tile-label">Web Hooks</div></div>
+            </div>
+          </div>
+        </div>
+      `,
+      hotspots: [
+        { x: 22, y: 78, n: 1, title: 'Decision Files', body: 'Where decision file delivery is configured. SFTP, pickup queue, API, webhook — wherever your core consumes.' },
+        { x: 52, y: 50, n: 2, title: 'Automatic Decision Rules', body: 'Configure pay-or-return defaults by client, exception type, and dollar threshold.' },
+        { x: 84, y: 75, n: 3, title: 'API + Web Hooks', body: 'Push exceptions into your core in real time. The automation unlock.' },
+        { x: 84, y: 55, n: 4, title: 'Default Decision Log', body: 'Every exception the system defaulted at cutoff, fully logged. Board-defensible audit trail.' },
+      ]
+    }),
+  };
+
+  // =========== TOUR SCRIPT ===========
+  const TOUR_STEPS = [
+    { screen: 'home', title: 'The morning view', body: 'Your treasury team opens Positive Pay and lands here. One look tells you the program state: 37 exceptions over six months, $74,535 in flagged volume. 170 returned, 95 paid.' },
+    { screen: 'exceptions', title: 'The queue is the workflow', body: 'When exceptions trigger, this is where your team lives. Every open item, every decision, every review status — all in one screen.' },
+    { screen: 'exceptions_detail', title: 'Anatomy of an exception', body: 'Click into any exception to see what the system flagged. Mismatched fields highlight red. Patterns like duplicate presented checks surface here too. A decisioner has the whole picture in one view.' },
+    { screen: 'ach', title: 'ACH runs the same way', body: 'Same workflow, same logic. SEC codes, originators, return reasons — all in one queue. Default, Manual, and Automatic decisions are tagged so you know who decisioned what.' },
+    { screen: 'settings', title: 'The configuration surface', body: 'Most FIs stop at "log in to make decisions." Modern Positive Pay starts here. Decision Files, API, Web Hooks, Notification Templates, Automatic Decision Rules.' },
+    { screen: 'settings', title: 'Decision file delivery', body: 'Configure SFTP, pickup queue, API, or webhook. Decisions flow straight to your core. The portal becomes invisible.' },
+    { screen: 'home', title: 'Back to the board view', body: 'Exception caught. Decision made. File delivered. The dashboard reflects it. The full loop runs in minutes.' },
+  ];
+
+  // =========== STATE ===========
+  let mode = null;
+  let currentScreen = 'home';
+  let tourIndex = 0;
+
+  // =========== RENDER ===========
+  function renderScreen(screenKey) {
+    const def = SCREENS[screenKey];
+    if (!def) return;
+    const { crumb, content, hotspots = [] } = def();
+    currentScreen = screenKey;
+    document.getElementById('crumb-screen').textContent = crumb;
+
+    // active nav state (normalize exceptions_detail back to exceptions)
+    const navKey = screenKey === 'exceptions_detail' ? 'exceptions' : screenKey;
+    document.querySelectorAll('.nav button').forEach(b => {
+      b.classList.toggle('active', b.dataset.screen === navKey);
+    });
+
+    const vp = document.getElementById('viewport');
+    vp.innerHTML = content + hotspots.map((h, i) => `
+      <div class="hotspot" style="left:${typeof h.x === 'number' ? h.x + '%' : h.x}; top:${typeof h.y === 'number' ? h.y + '%' : h.y};" onclick="toggleHotspot(this)">
+        ${h.n || (i+1)}
+        <div class="hotspot-tooltip">
+          <div class="hotspot-title">${h.title}</div>
+          ${h.body}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleHotspot(el) {
+    document.querySelectorAll('.hotspot.open').forEach(h => { if (h !== el) h.classList.remove('open'); });
+    el.classList.toggle('open');
+  }
+
+  // =========== MODES ===========
+  function hideWelcome() { document.getElementById('welcome').classList.add('hidden'); }
+
+  function startExplore() {
+    mode = 'explore';
+    hideWelcome();
+    const banner = document.getElementById('modeBanner');
+    banner.style.display = 'flex';
+    banner.innerHTML = '<div class="icon">i</div><div>Free explore mode. Click any tab to jump to that screen. Click pulsing red dots to see what each feature does.</div>';
+    document.getElementById('tour-bar').classList.add('hidden');
+    renderScreen('home');
+  }
+
+  function startTour() {
+    mode = 'tour';
+    tourIndex = 0;
+    hideWelcome();
+    const banner = document.getElementById('modeBanner');
+    banner.style.display = 'flex';
+    banner.innerHTML = '<div class="icon">▶</div><div>Guided tour: a fraud event end-to-end. Use Next to advance, Back to step back.</div>';
+    document.getElementById('tour-bar').classList.remove('hidden');
+    showTourStep();
+  }
+
+  function showTourStep() {
+    const step = TOUR_STEPS[tourIndex];
+    document.getElementById('tour-step-num').textContent = tourIndex + 1;
+    document.getElementById('tour-text').innerHTML = `<strong>${step.title}</strong>${step.body}`;
+    document.getElementById('tour-progress-bar').style.width = `${((tourIndex + 1) / TOUR_STEPS.length) * 100}%`;
+    document.getElementById('tour-prev').style.visibility = tourIndex === 0 ? 'hidden' : 'visible';
+    document.getElementById('tour-next').textContent = tourIndex === TOUR_STEPS.length - 1 ? 'Finish ✓' : 'Next →';
+    renderScreen(step.screen);
+  }
+
+  function nextTourStep() {
+    if (tourIndex < TOUR_STEPS.length - 1) { tourIndex++; showTourStep(); }
+    else { startExplore(); }
+  }
+  function prevTourStep() {
+    if (tourIndex > 0) { tourIndex--; showTourStep(); }
+  }
+
+  // =========== NAV ===========
+  document.querySelectorAll('.nav button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (mode === null) startExplore();
+      renderScreen(btn.dataset.screen);
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.hotspot')) {
+      document.querySelectorAll('.hotspot.open').forEach(h => h.classList.remove('open'));
+    }
+  });
+</script>
+
+</body>
+</html>
