@@ -583,3 +583,213 @@
     boot();
   }
 })();
+
+/* ============================================================
+   Enrollment prompt modal
+   ------------------------------------------------------------
+   Soft prompt that appears after a visitor has been on the site
+   for a "reasonable" amount of time (60s on page OR 60% scroll
+   depth, whichever comes first). Shown once per visitor; dismissed
+   = suppressed for 14 days. Skips pages where it would be
+   redundant or interruptive (lesson pages have their own gate,
+   start/thank-you/certificate are flows in progress or post-convert).
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var ENROLL_PROMPT_TIMER_MS  = 60 * 1000;          // 60s on page
+  var ENROLL_PROMPT_SCROLL    = 0.60;                // OR 60% scrolled
+  var DISMISS_SUPPRESS_MS     = 14 * 24 * 60 * 60 * 1000; // 14 days
+  var ENROLLED_KEY            = 'afa_user_email';
+  var DISMISSED_KEY           = 'afa_enroll_prompt_dismissed';
+  var ENROLL_URL              = '/positivepay/#enroll';
+
+  // Pages where the prompt would be redundant or interrupt a conversion flow.
+  function isSkippedPath() {
+    var p = window.location.pathname;
+    if (/\/positivepay\/track-[1-5]\/(lesson-[1-6]\/?|exceptions\/?)?$/i.test(p)) return true; // any track/lesson page
+    if (/\/positivepay\/start\/?$/.test(p))        return true;
+    if (/\/positivepay\/thank-you\/?$/.test(p))    return true;
+    if (/\/positivepay\/certificate\/?$/.test(p))  return true;
+    if (/\/positivepay\/terms\/?$/.test(p))        return true;
+    return false;
+  }
+
+  function alreadyEnrolled() {
+    try { return !!localStorage.getItem(ENROLLED_KEY); } catch (e) { return false; }
+  }
+
+  function recentlyDismissed() {
+    try {
+      var v = localStorage.getItem(DISMISSED_KEY);
+      if (!v) return false;
+      var ts = parseInt(v, 10);
+      if (!ts) return false;
+      return (Date.now() - ts) < DISMISS_SUPPRESS_MS;
+    } catch (e) { return false; }
+  }
+
+  function markDismissed() {
+    try { localStorage.setItem(DISMISSED_KEY, String(Date.now())); } catch (e) {}
+  }
+
+  function trackEvent(action) {
+    try {
+      var email = '';
+      try { email = localStorage.getItem(ENROLLED_KEY) || ''; } catch (e) {}
+      if (window.fetch) {
+        fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: action,
+            page: window.location.pathname,
+            email: email
+          }),
+          keepalive: true
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+
+  function injectStyles() {
+    if (document.getElementById('afa-enroll-styles')) return;
+    var css =
+      '.afa-enroll-backdrop{position:fixed;inset:0;background:rgba(14,14,14,0.55);backdrop-filter:blur(4px);z-index:9998;opacity:0;transition:opacity 240ms ease}' +
+      '.afa-enroll-backdrop.show{opacity:1}' +
+      '.afa-enroll-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);width:calc(100% - 32px);max-width:460px;background:#fff;border-radius:18px;box-shadow:0 40px 100px rgba(0,0,0,0.30),0 8px 24px rgba(0,0,0,0.12);z-index:9999;opacity:0;transition:opacity 280ms ease,transform 320ms cubic-bezier(0.16,1,0.3,1);font-family:inherit;overflow:hidden}' +
+      '.afa-enroll-modal.show{opacity:1;transform:translate(-50%,-50%)}' +
+      '.afa-enroll-modal__close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:transparent;color:#6B6B6B;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;font-size:18px;transition:background 120ms ease,color 120ms ease;z-index:2}' +
+      '.afa-enroll-modal__close:hover{background:#F4F5F7;color:#0E0E0E}' +
+      '.afa-enroll-modal__close svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none}' +
+      '.afa-enroll-modal__body{padding:32px 28px 28px}' +
+      '.afa-enroll-modal__eyebrow{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--afs-red,#C70200);margin-bottom:10px}' +
+      '.afa-enroll-modal__title{font-size:26px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;color:#0E0E0E;margin:0 0 10px}' +
+      '.afa-enroll-modal__sub{font-size:14.5px;font-weight:500;line-height:1.5;color:#4B5563;margin:0 0 20px}' +
+      '.afa-enroll-modal__list{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-direction:column;gap:10px}' +
+      '.afa-enroll-modal__list li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#374151;font-weight:500}' +
+      '.afa-enroll-modal__list li svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;color:var(--academy-green,#7BA73B);stroke:currentColor;stroke-width:2.4;fill:none}' +
+      '.afa-enroll-modal__cta-row{display:flex;flex-direction:column;gap:8px}' +
+      '.afa-enroll-modal__cta{display:flex;align-items:center;justify-content:center;width:100%;padding:13px 18px;background:var(--afs-red,#C70200);color:#fff;font-size:14.5px;font-weight:700;letter-spacing:0.2px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;font-family:inherit;transition:background 120ms ease}' +
+      '.afa-enroll-modal__cta:hover{background:#9D0200}' +
+      '.afa-enroll-modal__later{background:none;border:none;color:#6B7280;font-size:13px;font-weight:600;padding:8px;cursor:pointer;font-family:inherit;text-align:center}' +
+      '.afa-enroll-modal__later:hover{color:#0E0E0E}' +
+      '.afa-enroll-modal__foot{font-size:11.5px;color:#9CA3AF;font-weight:500;margin-top:14px;text-align:center;letter-spacing:0.2px}' +
+      '@media(max-width:520px){.afa-enroll-modal{max-width:100%;border-radius:14px}.afa-enroll-modal__title{font-size:22px}.afa-enroll-modal__body{padding:28px 22px 22px}}' +
+      '@media(prefers-reduced-motion:reduce){.afa-enroll-backdrop,.afa-enroll-modal{transition:none}}';
+    var style = document.createElement('style');
+    style.id = 'afa-enroll-styles';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function buildModalHTML() {
+    return '<div class="afa-enroll-backdrop" id="afa-enroll-backdrop"></div>' +
+      '<div class="afa-enroll-modal" id="afa-enroll-modal" role="dialog" aria-modal="true" aria-labelledby="afa-enroll-title">' +
+        '<button class="afa-enroll-modal__close" id="afa-enroll-close" aria-label="Close">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18"/><path d="M6 18 18 6"/></svg>' +
+        '</button>' +
+        '<div class="afa-enroll-modal__body">' +
+          '<div class="afa-enroll-modal__eyebrow">Free · For community FI treasury teams</div>' +
+          '<h2 class="afa-enroll-modal__title" id="afa-enroll-title">Enroll in the Academy.</h2>' +
+          '<p class="afa-enroll-modal__sub">Free, structured education for the people running Positive Pay programs at community FIs.</p>' +
+          '<ul class="afa-enroll-modal__list">' +
+            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Earn the <b>Modern Positive Pay Practitioner</b> certification (LinkedIn-shareable)</li>' +
+            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Get the Track 1 welcome kit emailed to you, plus monthly insights tailored to your PP status</li>' +
+            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Templates, scripts, and worksheets, one per lesson</li>' +
+            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Peer benchmarks at your asset tier</li>' +
+          '</ul>' +
+          '<div class="afa-enroll-modal__cta-row">' +
+            '<a class="afa-enroll-modal__cta" href="' + ENROLL_URL + '" id="afa-enroll-cta">Enroll free →</a>' +
+            '<button class="afa-enroll-modal__later" id="afa-enroll-later" type="button">Maybe later</button>' +
+          '</div>' +
+          '<div class="afa-enroll-modal__foot">No spam. Unsubscribe anytime.</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  var shown = false;
+  function showModal() {
+    if (shown) return;
+    if (alreadyEnrolled() || recentlyDismissed()) return;
+    shown = true;
+
+    injectStyles();
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML = buildModalHTML();
+    var backdrop = wrap.querySelector('#afa-enroll-backdrop');
+    var modal    = wrap.querySelector('#afa-enroll-modal');
+    document.body.appendChild(backdrop);
+    document.body.appendChild(modal);
+
+    // Trigger show transition next frame
+    requestAnimationFrame(function () {
+      backdrop.classList.add('show');
+      modal.classList.add('show');
+    });
+
+    // Focus the CTA for keyboard users (after the transition completes)
+    setTimeout(function () {
+      var cta = document.getElementById('afa-enroll-cta');
+      if (cta) cta.focus();
+    }, 350);
+
+    trackEvent('enroll_prompt_shown');
+
+    function dismiss(reason) {
+      markDismissed();
+      trackEvent('enroll_prompt_' + reason);
+      backdrop.classList.remove('show');
+      modal.classList.remove('show');
+      setTimeout(function () {
+        if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+        if (modal.parentNode)    modal.parentNode.removeChild(modal);
+      }, 320);
+      document.removeEventListener('keydown', onKey);
+    }
+
+    function onKey(e) {
+      if (e.key === 'Escape') dismiss('dismissed_esc');
+    }
+
+    document.getElementById('afa-enroll-close').addEventListener('click', function () { dismiss('dismissed_x'); });
+    document.getElementById('afa-enroll-later').addEventListener('click', function () { dismiss('dismissed_later'); });
+    backdrop.addEventListener('click', function () { dismiss('dismissed_backdrop'); });
+    document.getElementById('afa-enroll-cta').addEventListener('click', function () {
+      // Mark dismissed when CTA is clicked too — if they land on /#enroll but
+      // don't actually fill out the form, we don't want to pop the modal again
+      // next time they navigate.
+      markDismissed();
+      trackEvent('enroll_prompt_clicked');
+    });
+    document.addEventListener('keydown', onKey);
+  }
+
+  function bootEnrollPrompt() {
+    if (isSkippedPath())      return;
+    if (alreadyEnrolled())    return;
+    if (recentlyDismissed())  return;
+
+    // Time-on-page trigger
+    var t = setTimeout(showModal, ENROLL_PROMPT_TIMER_MS);
+
+    // Scroll-depth trigger (whichever fires first wins)
+    function onScroll() {
+      var doc = document.documentElement;
+      var scrolled = (window.scrollY + window.innerHeight) / Math.max(doc.scrollHeight, 1);
+      if (scrolled >= ENROLL_PROMPT_SCROLL) {
+        clearTimeout(t);
+        window.removeEventListener('scroll', onScroll);
+        showModal();
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootEnrollPrompt);
+  } else {
+    bootEnrollPrompt();
+  }
+})();
