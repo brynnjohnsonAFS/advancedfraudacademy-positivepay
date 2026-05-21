@@ -877,7 +877,7 @@
       '<div class="afa-strip__inner">' +
         '<a class="afa-strip__cta" href="' + STRIP_ENROLL_URL + '" id="afa-strip-cta">' +
           '<span class="afa-strip__dot" aria-hidden="true"></span>' +
-          '<span><b>Completely free.</b> Enroll in under 60 seconds</span>' +
+          '<span><b>Completely free.</b> Enroll in under 30 seconds</span>' +
           '<span class="afa-strip__arrow" aria-hidden="true">→</span>' +
         '</a>' +
         '<button class="afa-strip__close" id="afa-strip-close" type="button" aria-label="Dismiss enrollment promo">' +
