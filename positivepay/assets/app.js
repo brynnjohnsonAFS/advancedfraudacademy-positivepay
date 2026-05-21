@@ -762,6 +762,14 @@
       // next time they navigate.
       markDismissed();
       trackEvent('enroll_prompt_clicked');
+      // Remove the modal immediately (no animation). Critical for the case
+      // where the user is already on the homepage — the hash change scrolls
+      // the page behind the modal, so we need to clear it out of the way for
+      // the scroll-to-#enroll to be visible. Letting the <a> tag's default
+      // navigation continue so cross-page navigation also works.
+      if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+      if (modal.parentNode)    modal.parentNode.removeChild(modal);
+      document.removeEventListener('keydown', onKey);
     });
     document.addEventListener('keydown', onKey);
   }
