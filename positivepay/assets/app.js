@@ -695,7 +695,7 @@
           '<p class="afa-enroll-modal__sub">Free, structured education for the people running Positive Pay programs at community FIs.</p>' +
           '<ul class="afa-enroll-modal__list">' +
             '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Earn the <b>Modern Positive Pay Practitioner</b> certification (LinkedIn-shareable)</li>' +
-            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Get the Track 1 welcome kit emailed to you, plus monthly insights tailored to your PP status</li>' +
+            '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Get the Track 1 welcome kit emailed to you, plus monthly insights for community FI treasury teams</li>' +
             '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Templates, scripts, and worksheets, one per lesson</li>' +
             '<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"/></svg>Peer benchmarks at your asset tier</li>' +
           '</ul>' +
