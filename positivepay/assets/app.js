@@ -801,3 +801,122 @@
     bootEnrollPrompt();
   }
 })();
+
+/* ============================================================
+   Top promo strip
+   ------------------------------------------------------------
+   Thin AFS-red bar that sits above the sticky nav and scrolls
+   away with the page. Direct-response convention: lead with the
+   offer (free), pair with a specific time commitment, end with
+   an action verb. Skips for already-enrolled visitors and
+   stays dismissed for the current tab session.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var STRIP_ENROLLED_KEY  = 'afa_user_email';
+  var STRIP_DISMISS_KEY   = 'afa_promo_strip_dismissed';
+  var STRIP_ENROLL_URL    = '/positivepay/#enroll';
+
+  function stripIsDismissedThisSession() {
+    try { return sessionStorage.getItem(STRIP_DISMISS_KEY) === '1'; } catch (e) { return false; }
+  }
+  function markStripDismissed() {
+    try { sessionStorage.setItem(STRIP_DISMISS_KEY, '1'); } catch (e) {}
+  }
+  function stripUserEnrolled() {
+    try { return !!localStorage.getItem(STRIP_ENROLLED_KEY); } catch (e) { return false; }
+  }
+  function stripPathSkipped() {
+    var p = window.location.pathname;
+    // Skip on pages where promo is redundant or insensitive (already-converted flows)
+    if (/\/positivepay\/thank-you\/?$/.test(p)) return true;
+    if (/\/positivepay\/certificate\/?$/.test(p)) return true;
+    return false;
+  }
+
+  function injectStripStyles() {
+    if (document.getElementById('afa-strip-styles')) return;
+    var css =
+      '.afa-strip{position:relative;background:linear-gradient(90deg,#C70200 0%,#A80100 100%);color:#fff;font-family:inherit;overflow:hidden;z-index:51;border-bottom:1px solid rgba(0,0,0,0.12)}' +
+      '.afa-strip__inner{max-width:1184px;margin:0 auto;padding:0 28px;height:40px;display:flex;align-items:center;justify-content:center;gap:14px;position:relative}' +
+      '.afa-strip__cta{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:13.5px;font-weight:600;letter-spacing:0.1px;line-height:1;cursor:pointer}' +
+      '.afa-strip__cta b{font-weight:800}' +
+      '.afa-strip__dot{width:8px;height:8px;border-radius:50%;background:var(--academy-green,#ADE25D);box-shadow:0 0 0 0 rgba(173,226,93,0.55);animation:afa-strip-pulse 2.4s ease-in-out infinite;flex-shrink:0}' +
+      '@keyframes afa-strip-pulse{' +
+        '0%{box-shadow:0 0 0 0 rgba(173,226,93,0.55)}' +
+        '70%{box-shadow:0 0 0 10px rgba(173,226,93,0)}' +
+        '100%{box-shadow:0 0 0 0 rgba(173,226,93,0)}' +
+      '}' +
+      '.afa-strip__arrow{display:inline-flex;align-items:center;animation:afa-strip-arrow 1.8s ease-in-out infinite;font-weight:700}' +
+      '@keyframes afa-strip-arrow{' +
+        '0%,100%{transform:translateX(0)}' +
+        '50%{transform:translateX(4px)}' +
+      '}' +
+      '.afa-strip__cta:hover .afa-strip__arrow{animation-duration:0.9s}' +
+      '.afa-strip__sheen{position:absolute;top:0;left:-30%;width:30%;height:100%;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);animation:afa-strip-sheen 7s ease-in-out infinite;pointer-events:none}' +
+      '@keyframes afa-strip-sheen{' +
+        '0%{left:-30%}' +
+        '60%{left:130%}' +
+        '100%{left:130%}' +
+      '}' +
+      '.afa-strip__close{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:24px;height:24px;border:none;background:transparent;color:rgba(255,255,255,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;font-family:inherit;transition:color 120ms ease,background 120ms ease}' +
+      '.afa-strip__close:hover{color:#fff;background:rgba(0,0,0,0.15)}' +
+      '.afa-strip__close svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.4;fill:none}' +
+      '@media(max-width:600px){.afa-strip__inner{padding:0 60px 0 16px;justify-content:flex-start}.afa-strip__cta{font-size:12.5px}.afa-strip__close{right:8px}}' +
+      '@media(prefers-reduced-motion:reduce){.afa-strip__dot,.afa-strip__arrow,.afa-strip__sheen{animation:none}}';
+    var style = document.createElement('style');
+    style.id = 'afa-strip-styles';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function buildStripHTML() {
+    return '<div class="afa-strip" role="region" aria-label="Free enrollment offer">' +
+      '<div class="afa-strip__sheen" aria-hidden="true"></div>' +
+      '<div class="afa-strip__inner">' +
+        '<a class="afa-strip__cta" href="' + STRIP_ENROLL_URL + '" id="afa-strip-cta">' +
+          '<span class="afa-strip__dot" aria-hidden="true"></span>' +
+          '<span><b>Completely free.</b> Enroll in under 60 seconds</span>' +
+          '<span class="afa-strip__arrow" aria-hidden="true">→</span>' +
+        '</a>' +
+        '<button class="afa-strip__close" id="afa-strip-close" type="button" aria-label="Dismiss enrollment promo">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18"/><path d="M6 18 18 6"/></svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function injectStrip() {
+    if (document.querySelector('.afa-strip')) return; // already injected
+    var nav = document.querySelector('header.nav');
+    if (!nav || !nav.parentNode) return;
+
+    injectStripStyles();
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML = buildStripHTML();
+    var strip = wrap.firstChild;
+    nav.parentNode.insertBefore(strip, nav);
+
+    document.getElementById('afa-strip-close').addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      markStripDismissed();
+      if (strip.parentNode) strip.parentNode.removeChild(strip);
+    });
+  }
+
+  function bootStrip() {
+    if (stripPathSkipped())             return;
+    if (stripUserEnrolled())            return;
+    if (stripIsDismissedThisSession())  return;
+    injectStrip();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootStrip);
+  } else {
+    bootStrip();
+  }
+})();
