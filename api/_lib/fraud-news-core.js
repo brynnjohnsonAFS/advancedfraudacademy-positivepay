@@ -651,7 +651,20 @@ function buildCourtListenerCard(item) {
 // ── High-level: fetch + filter + tag + dedupe + sort ─────────────────────────
 // Returns a list of matched, tagged, deduped stories sorted newest first.
 // No item cap — callers slice as needed.
-async function aggregateStories() {
+//
+// Options:
+//   enrichSummaries: bool (default true) — if true, run the LLM summary
+//     generator on non-CourtListener items so each carries a 1–2 sentence
+//     summary leading with fraud method + FI impact. Callers that don't
+//     render the summary (e.g. the CSV digest) can pass false to skip the
+//     LLM round-trip.
+//   summaryLimit: number (default 40) — how many top items (after sort) to
+//     enrich. The UI ticker only renders 40, so summarizing more is waste.
+async function aggregateStories(opts) {
+  opts = opts || {};
+  var enrichSummaries = opts.enrichSummaries !== false;
+  var summaryLimit = opts.summaryLimit != null ? opts.summaryLimit : 40;
+
   var settled = await Promise.allSettled(FEEDS.map(fetchFeed));
   var all = [];
   settled.forEach(function (r) {
@@ -719,7 +732,89 @@ async function aggregateStories() {
     return tb - ta;
   });
 
+  if (enrichSummaries) {
+    await enrichWithSummaries(matched.slice(0, summaryLimit));
+  }
+
   return matched;
+}
+
+// ── LLM-generated 1–2 sentence summaries ─────────────────────────────────────
+// CourtListener items already render a structured card (covered by the
+// CourtListener Summary Cards ticket), so we skip them here. Everything else
+// gets a summary that leads with fraud method + FI impact, per the
+// "One-Line Story Summaries" ticket.
+//
+// For Google News items the RSS excerpt is just a repeat of the headline
+// (it's stripped in fetchFeed), so we fetch the underlying article body
+// first to give the LLM real source content to work from.
+//
+// Mutates items in place: sets item.summary on success. On failure, leaves
+// whatever summary was already there (or empty string) — never throws.
+async function enrichWithSummaries(items) {
+  var summaryGenerator;
+  var articleFetcher;
+  try {
+    summaryGenerator = require('./summary-generator');
+    articleFetcher = require('./article-fetcher');
+  } catch (e) {
+    console.warn('[fraud-news-core] summary modules unavailable:', e.message);
+    return;
+  }
+
+  // Skip if no API key — generateSummary would return '' anyway, but checking
+  // up-front lets us avoid the article fetches too.
+  if (!process.env.ANTHROPIC_API_KEY) return;
+
+  // Step 1: for Google News items (no RSS excerpt) fetch the article body in
+  // parallel. Other sources already have a usable excerpt in item.summary.
+  var googleItems = items.filter(function (it) {
+    return it.source && it.source !== 'CourtListener' && !it.card && !(it.summary && it.summary.length > 40);
+  });
+  if (googleItems.length) {
+    // Cap fetch concurrency — these are external HTTP hits to a wide variety
+    // of publisher sites, some slow.
+    await runWithConcurrency(googleItems, 4, async function (it) {
+      try {
+        var body = await articleFetcher.fetchArticleText(it.url);
+        if (body) it._fetchedBody = body;
+      } catch (e) { /* swallow — fall back to title-only summary */ }
+    });
+  }
+
+  // Step 2: generate summaries for every non-CourtListener item with a card-less render path.
+  var batch = items
+    .filter(function (it) { return !it.card && it.source !== 'CourtListener'; })
+    .map(function (it) {
+      // Prefer fetched article body, fall back to RSS excerpt, fall back to nothing.
+      var sourceContent = it._fetchedBody || it.summary || '';
+      return { item: it, sourceContent: sourceContent };
+    });
+
+  if (!batch.length) return;
+
+  await summaryGenerator.generateSummariesBatch(batch, 5);
+
+  batch.forEach(function (e) {
+    if (e.summary) e.item.summary = e.summary;
+    // Drop the working field so it doesn't ship to the client.
+    delete e.item._fetchedBody;
+  });
+}
+
+// Small bounded-concurrency runner for an array of items. Resolves when all
+// work is done. Per-item errors don't abort the batch.
+async function runWithConcurrency(items, concurrency, fn) {
+  var idx = 0;
+  async function worker() {
+    while (idx < items.length) {
+      var my = idx++;
+      try { await fn(items[my]); } catch (e) { /* item-level swallow */ }
+    }
+  }
+  var workers = [];
+  for (var i = 0; i < concurrency; i++) workers.push(worker());
+  await Promise.all(workers);
 }
 
 module.exports = {

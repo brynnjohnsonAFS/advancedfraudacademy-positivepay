@@ -163,6 +163,10 @@
   .news-card .card-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--afs-red); text-decoration: none; letter-spacing: 0.3px; text-transform: uppercase }
   .news-card .card-link:hover { text-decoration: underline }
   .news-card .card-link::after { content: '→'; font-weight: 600 }
+  .news-card .card-related { display: flex; flex-wrap: wrap; gap: 6px 10px }
+  .news-card .card-related a { font-size: 12px; font-weight: 600; color: var(--fg-2); text-decoration: none; padding: 2px 8px; border-radius: 6px; background: #fff; border: 1px solid var(--afs-gray-1) }
+  .news-card .card-related a:hover { color: var(--ink); border-color: var(--ink) }
+  .news-card .card-related-more { font-size: 12px; color: var(--fg-3); align-self: center }
 
   .news-empty { padding: 64px 0; text-align: center; color: var(--fg-3); font-size: 15px }
   .news-loading { padding: 48px 0; text-align: center; color: var(--fg-3); font-size: 14px }
@@ -449,6 +453,19 @@
         var typoHtml = (it.card.typology || []).map(function (t) {
           return '<span>' + escapeHTML(t) + '</span>';
         }).join('');
+        var relatedHtml = '';
+        if (it.relatedFilings && it.relatedFilings.length) {
+          var shown = it.relatedFilings.slice(0, 5);
+          var extra = it.relatedFilings.length - shown.length;
+          relatedHtml =
+            '<dt>Related filings</dt><dd class="card-related">' +
+              shown.map(function (rf) {
+                return '<a href="' + escapeHTML(rf.url) + '" target="_blank" rel="noopener">' +
+                  escapeHTML(rf.docType) + '</a>';
+              }).join('') +
+              (extra > 0 ? '<span class="card-related-more">+' + extra + ' more</span>' : '') +
+            '</dd>';
+        }
         body =
           '<section class="news-card" aria-label="Filing summary">' +
             '<dl>' +
@@ -456,6 +473,7 @@
               (typoHtml ? '<dt>Typology</dt><dd class="card-typology">' + typoHtml + '</dd>' : '') +
               (it.card.scale ? '<dt>Scale</dt><dd>' + escapeHTML(it.card.scale) + '</dd>' : '') +
               (it.card.fiTakeaway ? '<dt>FI takeaway</dt><dd>' + escapeHTML(it.card.fiTakeaway) + '</dd>' : '') +
+              relatedHtml +
             '</dl>' +
             '<a class="card-link" href="' + escapeHTML(it.url) + '" target="_blank" rel="noopener">Open full filing</a>' +
           '</section>';

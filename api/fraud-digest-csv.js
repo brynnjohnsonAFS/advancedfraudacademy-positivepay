@@ -65,7 +65,9 @@ module.exports = async function handler(req, res) {
 
   try {
     // ── Aggregate ──────────────────────────────────────────────────────────
-    var stories = await core.aggregateStories();
+    // CSV/JSON digest doesn't render LLM-generated summaries — skip enrichment
+    // so we don't pay for Claude calls on a download path.
+    var stories = await core.aggregateStories({ enrichSummaries: false });
 
     // ── Time window filter ─────────────────────────────────────────────────
     var cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
