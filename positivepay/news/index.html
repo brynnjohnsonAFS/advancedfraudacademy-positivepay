@@ -150,6 +150,20 @@
   .news-cats { display: flex; flex-wrap: wrap; gap: 6px }
   .news-cat { display: inline-block; padding: 3px 9px; border-radius: 6px; background: var(--afs-gray-2); font-size: 11px; font-weight: 700; color: var(--fg-2); letter-spacing: 0.3px }
 
+  /* ── CourtListener summary card ── */
+  /* Replaces the raw filing-header excerpt with a structured, FI-focused
+     summary. Only restates facts pulled from the filing — no interpretation. */
+  .news-card { margin: 4px 0 10px; padding: 14px 16px; background: var(--afs-gray-2); border-left: 3px solid var(--ink); border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.55; color: var(--fg-2) }
+  .news-card dl { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 4px 14px }
+  @media (max-width: 720px) { .news-card dl { grid-template-columns: 1fr; gap: 2px 0 } .news-card dt { margin-top: 6px } }
+  .news-card dt { margin: 0; font-size: 10.5px; font-weight: 800; color: var(--fg-3); letter-spacing: 0.7px; text-transform: uppercase; padding-top: 2px }
+  .news-card dd { margin: 0; color: var(--ink) }
+  .news-card .card-typology { display: flex; flex-wrap: wrap; gap: 6px }
+  .news-card .card-typology span { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #fff; border: 1px solid var(--afs-gray-1); font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: 0.2px }
+  .news-card .card-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--afs-red); text-decoration: none; letter-spacing: 0.3px; text-transform: uppercase }
+  .news-card .card-link:hover { text-decoration: underline }
+  .news-card .card-link::after { content: '→'; font-weight: 600 }
+
   .news-empty { padding: 64px 0; text-align: center; color: var(--fg-3); font-size: 15px }
   .news-loading { padding: 48px 0; text-align: center; color: var(--fg-3); font-size: 14px }
   .news-loading::after { content: ''; display: inline-block; width: 14px; height: 14px; margin-left: 10px; border-radius: 50%; border: 2px solid var(--afs-gray-1); border-top-color: var(--afs-red); animation: news-spin 0.8s linear infinite; vertical-align: middle }
@@ -250,7 +264,7 @@
     </div>
     <div class="news-map-tip" id="news-map-tip" role="status" aria-live="polite" aria-hidden="true"></div>
     <div class="news-disclaimer">
-      <b>About this feed:</b> Stories are aggregated from public press releases and security journalism. We don't edit headlines or summaries — they come straight from the source. Inclusion isn't endorsement. The feed refreshes roughly every 30 minutes.
+      <b>About this feed:</b> Stories are aggregated from public press releases and security journalism. We don't edit headlines or summaries — they come straight from the source. <b>Court filings</b> show a structured summary card built from the filing's case caption, court, document type, and cited statutes; the full filing is one click away on each card. Inclusion isn't endorsement. The feed refreshes roughly every 30 minutes.
     </div>
 
     <div class="news-digest">
@@ -428,6 +442,28 @@
       var badge = it.grouping === 'research-data'
         ? '<span class="news-research-badge" title="Research &amp; Data source">Research</span>'
         : '';
+      var body;
+      if (it.card) {
+        // Structured CourtListener summary card. Only renders fields actually
+        // present so empty sections don't leave bare labels on the page.
+        var typoHtml = (it.card.typology || []).map(function (t) {
+          return '<span>' + escapeHTML(t) + '</span>';
+        }).join('');
+        body =
+          '<section class="news-card" aria-label="Filing summary">' +
+            '<dl>' +
+              '<dt>What happened</dt><dd>' + escapeHTML(it.card.whatHappened) + '</dd>' +
+              (typoHtml ? '<dt>Typology</dt><dd class="card-typology">' + typoHtml + '</dd>' : '') +
+              (it.card.scale ? '<dt>Scale</dt><dd>' + escapeHTML(it.card.scale) + '</dd>' : '') +
+              (it.card.fiTakeaway ? '<dt>FI takeaway</dt><dd>' + escapeHTML(it.card.fiTakeaway) + '</dd>' : '') +
+            '</dl>' +
+            '<a class="card-link" href="' + escapeHTML(it.url) + '" target="_blank" rel="noopener">Open full filing</a>' +
+          '</section>';
+      } else if (it.summary) {
+        body = '<p class="news-summary">' + escapeHTML(it.summary) + '</p>';
+      } else {
+        body = '';
+      }
       html +=
         '<article class="news-item">' +
           '<div class="news-when">' + escapeHTML(timeAgo(it.publishedAt)) +
@@ -436,7 +472,7 @@
           '<div>' +
             '<a class="news-title" href="' + escapeHTML(it.url) + '" target="_blank" rel="noopener">' +
               escapeHTML(it.title) + '</a>' +
-            (it.summary ? '<p class="news-summary">' + escapeHTML(it.summary) + '</p>' : '') +
+            body +
             '<div class="news-cats">' + cats + '</div>' +
           '</div>' +
         '</article>';

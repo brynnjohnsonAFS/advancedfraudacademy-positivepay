@@ -392,6 +392,189 @@ function makeId(url) {
   return 'n' + Math.abs(h).toString(36);
 }
 
+// ── CourtListener filing → FI-focused summary card ───────────────────────────
+// Replaces the raw filing header excerpt (case number / docket / page-ID
+// noise) with a structured card built entirely from facts extractable from
+// the feed excerpt. No prose interpretation — only restatement of what's in
+// the filing header (case caption, court, document type, cited statutes,
+// geography) plus a canned per-typology takeaway for FI fraud teams.
+//
+// Dollar amounts and affected-party counts are NOT extracted because they
+// rarely appear in the CourtListener excerpt (they live inside the PDF).
+// The card surfaces "See full filing →" instead of fabricating numbers.
+
+// Common federal statutes that appear in fraud filings, mapped to plain-
+// English charge labels and a FI typology bucket.
+var STATUTE_MAP = {
+  '1341':  { charge: 'Mail fraud',              typology: 'Mail fraud' },
+  '1343':  { charge: 'Wire fraud',              typology: 'Wire fraud' },
+  '1344':  { charge: 'Bank fraud',              typology: 'Bank fraud' },
+  '1347':  { charge: 'Health care fraud',       typology: 'Health care fraud' },
+  '1349':  { charge: 'Conspiracy to commit fraud', typology: 'Fraud conspiracy' },
+  '371':   { charge: 'Conspiracy',              typology: 'Conspiracy' },
+  '513':   { charge: 'Counterfeit securities',  typology: 'Counterfeit check' },
+  '514':   { charge: 'Fictitious obligations',  typology: 'Counterfeit check' },
+  '1708':  { charge: 'Mail theft',              typology: 'Mail theft' },
+  '1956':  { charge: 'Money laundering',        typology: 'Money laundering' },
+  '1957':  { charge: 'Monetary-transactions laundering', typology: 'Money laundering' },
+  '1028':  { charge: 'Identity fraud',          typology: 'Identity fraud' },
+  '1028A': { charge: 'Aggravated identity theft', typology: 'Identity fraud' }
+};
+
+// FI-fraud-team takeaways keyed to typology. Templated, not generated — keeps
+// the page safe from misstating what's actually in the filing.
+var FI_TAKEAWAYS = {
+  'Check washing': 'Watch for altered payees, ink/handwriting inconsistencies, and mobile-RDC deposits from newly added payees. Enroll commercial accounts in payee-match Positive Pay if not already covered.',
+  'Counterfeit check': 'Validate routing/account combinations on large or round-dollar deposits from new payees. Repeated serial numbers across deposits are a tell.',
+  'Altered check': 'Compare cleared items against the issuer\'s Positive Pay file for amount or payee drift. Hold review on out-of-pattern items.',
+  'Mail theft': 'Coordinate alerts with USPIS on ZIPs implicated by the filing. Notify customers in affected areas to consider electronic payment alternatives and to monitor outgoing checks.',
+  'Bank fraud': 'Pull account-opening and KYC records at any branches named in the filing. Look for shared signers, addresses, or device fingerprints across new accounts.',
+  'Wire fraud': 'Reinforce callback verification on payment-instruction changes. Watch for lookalike domains and urgency framing on wires above your review threshold.',
+  'BEC': 'Verify any ACH or wire instruction change via a callback to a known contact (not a number in the email). Flag invoice-pattern anomalies on commercial accounts.',
+  'Mail fraud': 'Mail fraud charges often pair with check washing or BEC schemes — review for associated payment-fraud indicators on accounts that transact with the named parties.',
+  'Money laundering': 'Layering through new business accounts (especially LLCs registered in the last 90 days) and structured cash deposits are common. Review SAR thresholds.',
+  'Identity fraud': 'Synthetic-identity accounts often build thin credit profiles fast. Tighten review on accounts opened in the last 6 months at named branches.',
+  'Health care fraud': 'Lower priority for check-fraud teams unless the scheme involves check or wire payments to provider accounts.',
+  'Fraud conspiracy': 'Multi-defendant fraud cases often expand. Cross-reference defendant names against your customer base and watch for related accounts.',
+  'Conspiracy': 'Generic conspiracy charge — read the underlying fraud charge for the actionable signal.',
+  'Court filing': 'Federal or state filing matched check-fraud terminology. Skim the full document for any FI, branch, or geography that maps to your customer base.'
+};
+
+// Detect document type from the raw excerpt. Returns short label.
+function detectDocType(s) {
+  var t = String(s || '');
+  if (/SUPERSEDING INDICTMENT/i.test(t)) return 'Superseding indictment';
+  if (/\bINDICTMENT\b/i.test(t))        return 'Indictment';
+  if (/Criminal Complaint/i.test(t))     return 'Criminal complaint';
+  if (/Search Warrant/i.test(t))         return 'Search warrant application';
+  if (/MOTION(?:S)?\s+IN\s+LIMINE/i.test(t)) return 'Motion in limine';
+  if (/\bMOTION\b/i.test(t))             return 'Motion';
+  if (/Complaint for a Civil Case|CIVIL COMPLAINT|civil action/i.test(t)) return 'Civil complaint';
+  if (/BANKRUPTCY|Chapter\s+\d+/i.test(t)) return 'Bankruptcy filing';
+  if (/ORDER|MEMORANDUM/i.test(t))       return 'Order';
+  return 'Filing';
+}
+
+// Two-word and three-word state names that the simple non-greedy regex would
+// truncate ("Southern District of New" → should be "...New York"). Listed
+// longest-first so the alternation matches the longest valid name.
+var COMPOUND_STATES = [
+  'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+  'North Carolina', 'North Dakota',
+  'South Carolina', 'South Dakota',
+  'West Virginia', 'Rhode Island',
+  'District of Columbia',
+  'Northern Mariana Islands', 'Puerto Rico'
+];
+
+// Detect the court from the excerpt. Returns a clean district label, or null.
+function detectCourt(s) {
+  var t = String(s || '').replace(/\s+/g, ' ');
+  // First try the compound (multi-word) state names; otherwise fall back to a
+  // single-word state. Compound list goes first because regex alternation is
+  // left-to-right and we want "New York" not "New".
+  var compoundRe = new RegExp(
+    '(NORTHERN|SOUTHERN|EASTERN|WESTERN|MIDDLE|CENTRAL)?\\s*DISTRICT\\s+OF\\s+(' +
+    COMPOUND_STATES.map(function (s) { return s.toUpperCase().replace(/\s+/g, '\\s+'); }).join('|') +
+    ')\\b',
+    'i'
+  );
+  var m = t.match(compoundRe);
+  if (!m) {
+    // Single-word state fallback
+    m = t.match(/(NORTHERN|SOUTHERN|EASTERN|WESTERN|MIDDLE|CENTRAL)?\s*DISTRICT\s+OF\s+([A-Z][a-zA-Z]{2,})\b/);
+  }
+  if (m) {
+    var compass = m[1] ? (m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase() + ' ') : '';
+    var state = m[2].trim()
+      .replace(/\s+/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    return compass + 'District of ' + state;
+  }
+  if (/BANKRUPTCY COURT/i.test(t)) return 'U.S. Bankruptcy Court';
+  return null;
+}
+
+// Pull statute citations from the excerpt. Returns array of unique section
+// numbers in the order encountered.
+function detectStatutes(s) {
+  var t = String(s || '');
+  var out = [];
+  var re = /18\s*U\.?S\.?C\.?\s*§+\s*(\d{2,4}[A-Z]?)/gi;
+  var m;
+  while ((m = re.exec(t)) !== null) {
+    var k = m[1].toUpperCase();
+    if (out.indexOf(k) === -1) out.push(k);
+  }
+  return out;
+}
+
+// Build the FI-focused card for one CourtListener item. Returns null if the
+// item doesn't look like a CL filing.
+function buildCourtListenerCard(item) {
+  if (!item || item.source !== 'CourtListener') return null;
+  var raw = item.summary || '';
+  var docType = detectDocType(raw);
+  var court = detectCourt(raw);
+  var statuteKeys = detectStatutes(raw);
+
+  // Charges + typologies from statutes
+  var charges = [];
+  var typologies = [];
+  statuteKeys.forEach(function (k) {
+    var info = STATUTE_MAP[k];
+    if (info) {
+      if (charges.indexOf(info.charge) === -1) charges.push(info.charge);
+      if (typologies.indexOf(info.typology) === -1) typologies.push(info.typology);
+    }
+  });
+
+  // If no statutes detected, layer in typology from item.categories
+  // (already keyword-tagged in tagItem), excluding the generic 'Court filing'.
+  if (!typologies.length && Array.isArray(item.categories)) {
+    item.categories.forEach(function (c) {
+      if (c !== 'Court filing' && typologies.indexOf(c) === -1) typologies.push(c);
+    });
+  }
+
+  // ── What happened ── case caption + court + document type + (charges if any)
+  var whatHappened = item.title;
+  if (court) whatHappened += ' in the ' + court;
+  whatHappened = docType + ': ' + whatHappened;
+  if (charges.length) {
+    whatHappened += '. Charges include ' + charges.slice(0, 3).join(', ').toLowerCase() + '.';
+  } else {
+    whatHappened += '.';
+  }
+
+  // ── Scale ── only restate what's in the excerpt; never invent a number.
+  // Most CL excerpts don't carry $ amounts, so we typically defer to the
+  // filing itself.
+  var scale = null;
+  var dollarMatch = raw.match(/\$\s?[\d]{1,3}(?:,\d{3})+(?:\.\d{2})?(?:\s*(?:million|billion|thousand))?/i) ||
+                    raw.match(/\$\s?[\d]{4,}(?:\.\d{2})?/);
+  if (dollarMatch) scale = 'Loss figure in excerpt: ' + dollarMatch[0].trim() + '.';
+  if (item.state && item.state !== 'Multi-state / Unknown') {
+    scale = (scale ? scale + ' ' : '') + 'Venue: ' + item.state + '.';
+  }
+  if (!scale) scale = 'Scale not stated in the filing excerpt — see full document.';
+
+  // ── FI takeaway ── canned by typology. Pick the most specific match.
+  var takeaway = null;
+  for (var i = 0; i < typologies.length; i++) {
+    if (FI_TAKEAWAYS[typologies[i]]) { takeaway = FI_TAKEAWAYS[typologies[i]]; break; }
+  }
+  if (!takeaway) takeaway = FI_TAKEAWAYS['Court filing'];
+
+  return {
+    whatHappened: whatHappened,
+    typology: typologies.length ? typologies : ['Court filing'],
+    scale: scale,
+    fiTakeaway: takeaway
+  };
+}
+
 // ── High-level: fetch + filter + tag + dedupe + sort ─────────────────────────
 // Returns a list of matched, tagged, deduped stories sorted newest first.
 // No item cap — callers slice as needed.
@@ -433,6 +616,18 @@ async function aggregateStories() {
           }
         } catch (e) { /* tagging failure shouldn't drop the item */ }
       }
+      // Build the FI-focused card for CourtListener items, then drop the
+      // raw filing-header excerpt — the page renders the card in its place,
+      // resolving the "wonky load" of dense legalese in the news feed.
+      if (all[i].source === 'CourtListener') {
+        try {
+          var card = buildCourtListenerCard(all[i]);
+          if (card) {
+            all[i].card = card;
+            all[i].summary = '';
+          }
+        } catch (e) { /* card failure falls back to default render */ }
+      }
       matched.push(all[i]);
     }
   }
@@ -452,6 +647,7 @@ module.exports = {
   FEEDS: FEEDS,
   KEYWORDS: KEYWORDS,
   AUDIENCE_PATTERN: AUDIENCE_PATTERN,
+  buildCourtListenerCard: buildCourtListenerCard,
   decodeEntities: decodeEntities,
   parseRss: parseRss,
   parseAtom: parseAtom,
