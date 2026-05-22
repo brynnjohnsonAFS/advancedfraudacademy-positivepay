@@ -322,12 +322,28 @@ async function aggregateStories() {
     if (r.status === 'fulfilled') all = all.concat(r.value);
   });
 
+  // Lazy-require so we don't pull the geo dictionaries unless aggregateStories runs
+  var geoTagger;
+  try { geoTagger = require('./geo-tagger'); } catch (e) { geoTagger = null; }
+
   var matched = [];
   for (var i = 0; i < all.length; i++) {
     var cats = tagItem(all[i]);
     if (cats.length) {
       all[i].categories = cats;
       all[i].id = makeId(all[i].url);
+      if (geoTagger && typeof geoTagger.tagGeo === 'function') {
+        try {
+          var geo = geoTagger.tagGeo(all[i]);
+          if (geo) {
+            all[i].state      = geo.state;
+            all[i].stateCode  = geo.stateCode;
+            all[i].cities     = geo.cities;
+            all[i].region     = geo.region;
+            all[i].geoConfidence = geo.confidence;
+          }
+        } catch (e) { /* tagging failure shouldn't drop the item */ }
+      }
       matched.push(all[i]);
     }
   }
