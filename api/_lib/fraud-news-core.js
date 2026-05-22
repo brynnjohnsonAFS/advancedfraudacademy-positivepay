@@ -14,6 +14,21 @@
 //   audienceFilter: true → only keep items whose title/summary mentions a
 //                          bank, credit union, FI, or related audience term
 //   maxAgeDays:     number → drop items older than N days
+//   grouping:       'breaking' (default) | 'research-data' — items tagged
+//                   'research-data' are hidden from the default news list
+//                   until the user opts in. Keeps survey/trend data from
+//                   crowding out breaking-case items.
+//   trustQuery:     true → the source URL is a pre-filtered search; skip the
+//                   in-app keyword filter and force-tag with defaultCategory.
+//                   Use for CourtListener saved searches where item titles
+//                   are bare case captions (e.g. "United States v. Thao").
+//   defaultCategory: string → category applied when trustQuery is true.
+//
+// Manual sources NOT in this list (no clean RSS — needs editorial check):
+//   • FinCEN advisories (fincen.gov/news_room)
+//   • Nacha payments fraud resources (nacha.org)
+//   • ABA Deposit Account Fraud Survey (aba.com)
+//   • GSU Evidence-Based Cybersecurity Research Group (ebcs.gsu.edu)
 var FEEDS = [
   {
     name: 'FBI',
@@ -24,6 +39,11 @@ var FEEDS = [
     name: 'DOJ',
     type: 'rss',
     url: 'https://www.justice.gov/feeds/justice-news.xml'
+  },
+  {
+    name: 'USPIS',
+    type: 'rss',
+    url: 'https://www.uspis.gov/feed'
   },
   {
     name: 'Krebs on Security',
@@ -44,6 +64,35 @@ var FEEDS = [
     name: 'BleepingComputer',
     type: 'rss',
     url: 'https://www.bleepingcomputer.com/feed/'
+  },
+
+  // ── CourtListener saved searches ─────────────────────────────────────────
+  // Federal/state filings — indictments and complaints, often available
+  // before any press release. Item titles are bare case captions, so the
+  // search query is the relevance filter (trustQuery skips KEYWORDS check).
+  // maxAgeDays guards against alert volume noted in ticket open questions.
+  {
+    name: 'CourtListener',
+    type: 'atom',
+    trustQuery: true, defaultCategory: 'Court filing', maxAgeDays: 30,
+    url: 'https://www.courtlistener.com/feed/search/?q=%22check+fraud%22&type=r'
+  },
+  {
+    name: 'CourtListener',
+    type: 'atom',
+    trustQuery: true, defaultCategory: 'Court filing', maxAgeDays: 30,
+    url: 'https://www.courtlistener.com/feed/search/?q=%22check+washing%22+OR+%22mail+theft%22&type=r'
+  },
+
+  // ── Research & Data ──────────────────────────────────────────────────────
+  // Aggregate/trend data — surfaces alongside breaking items only when the
+  // user opts in via the "Research & Data" toggle. Keyword filter still
+  // narrows the broad Fed press feed to payments/check fraud topics.
+  {
+    name: 'Federal Reserve',
+    type: 'rss',
+    grouping: 'research-data', maxAgeDays: 120,
+    url: 'https://www.federalreserve.gov/feeds/press_all.xml'
   },
 
   // ── Google News searches ──────────────────────────────────────────────────
@@ -74,6 +123,22 @@ var FEEDS = [
     type: 'rss',
     googleNews: true, audienceFilter: true, maxAgeDays: 30,
     url: 'https://news.google.com/rss/search?q=%22check+washing%22+(bank+OR+%22credit+union%22+OR+mail+OR+treasury)&hl=en-US&gl=US&ceid=US:en'
+  },
+
+  // Tuned regional alerts — small-dollar arrests that won't pass audienceFilter
+  // because they rarely mention an FI by name. KEYWORDS gate them via
+  // "mail theft" / "check fraud" terms instead.
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22mail+theft%22+(arrest+OR+indicted+OR+charged+OR+sentenced)&hl=en-US&gl=US&ceid=US:en'
+  },
+  {
+    name: 'Google News',
+    type: 'rss',
+    googleNews: true, maxAgeDays: 30,
+    url: 'https://news.google.com/rss/search?q=%22check+fraud+ring%22+OR+%22check+washing+ring%22&hl=en-US&gl=US&ceid=US:en'
   }
 ];
 
@@ -232,7 +297,10 @@ async function fetchFeed(feed) {
         url: it.url,
         source: sourceName,
         publishedAt: it.pubDate ? new Date(it.pubDate).toISOString() : null,
-        summary: summary ? summary.slice(0, 400) : ''
+        summary: summary ? summary.slice(0, 400) : '',
+        grouping: feed.grouping || 'breaking',
+        trustQuery: !!feed.trustQuery,
+        defaultCategory: feed.defaultCategory || null
       };
     }).filter(function (it) {
       if (!it.title || !it.url) return false;
@@ -329,9 +397,18 @@ async function aggregateStories() {
   var matched = [];
   for (var i = 0; i < all.length; i++) {
     var cats = tagItem(all[i]);
+    // trustQuery feeds (e.g. CourtListener saved searches) bypass the keyword
+    // filter — the search URL itself is the relevance gate. Force-tag with
+    // the feed's defaultCategory so they still pick up a category chip.
+    if (!cats.length && all[i].trustQuery && all[i].defaultCategory) {
+      cats = [all[i].defaultCategory];
+    }
     if (cats.length) {
       all[i].categories = cats;
       all[i].id = makeId(all[i].url);
+      // Strip the per-item plumbing fields before they reach the client.
+      delete all[i].trustQuery;
+      delete all[i].defaultCategory;
       if (geoTagger && typeof geoTagger.tagGeo === 'function') {
         try {
           var geo = geoTagger.tagGeo(all[i]);
