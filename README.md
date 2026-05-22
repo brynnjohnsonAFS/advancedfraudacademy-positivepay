@@ -116,9 +116,12 @@ This is dev-friendly and very fast (multiple shipped changes per hour), but **ev
 | **Pardot** (Salesforce marketing automation) | Tracking code on every page. Business Unit ID `784193` (piAId), Account `199064` (piCId). Forms POST to `https://go.advancedfraudsolutions.com/l/783193/...` | piAId + piCId are public client-side IDs. No secret to protect. |
 | **Make webhook** | `api/track.js` forwards all tracked events as JSON to a Make webhook → Google Sheets pipeline | The webhook URL is **currently hardcoded in `api/track.js`**. Should be moved to a Vercel env var. |
 | **News aggregator sources** | `api/_lib/fraud-news-core.js` defines 10 public RSS/Atom feeds (FBI, DOJ, Krebs, SecurityWeek, ABA Banking Journal, BleepingComputer + 4 Google News searches) | None — all sources are public. |
+| **News summary generator** | `api/_lib/summary-generator.js` calls the Anthropic Messages API to produce 1–2 sentence summaries (fraud method + FI impact) under each non-CourtListener headline on `/positivepay/news/`. Direct `fetch` calls, no SDK. | Requires `ANTHROPIC_API_KEY` env var in Vercel. If absent, summary generation no-ops and items render with the raw RSS excerpt (or no summary for Google News items). |
 | **Google Sheets** (audit log destination) | Receives data via the Make webhook | No direct integration from this codebase. Lives in Make. |
 
-**Vercel environment variables:** none configured today. The Make webhook URL is the one secret that should be moved to a Vercel env var (`MAKE_WEBHOOK_URL`) — see Tier 1 hardening below.
+**Vercel environment variables:**
+- `ANTHROPIC_API_KEY` — required for the news-page summary generator. Without it, non-CourtListener items render with the raw RSS excerpt and Google News items render headline-only.
+- `MAKE_WEBHOOK_URL` — *not yet configured.* The Make webhook URL is still hardcoded in `api/track.js` and should be moved here — see Tier 1 hardening below.
 
 ---
 
