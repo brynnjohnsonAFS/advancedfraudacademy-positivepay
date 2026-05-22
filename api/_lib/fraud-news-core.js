@@ -225,8 +225,10 @@ function parseRss(xml) {
     items.push({
       title: decodeEntities(firstMatch(b, /<title[^>]*>([\s\S]*?)<\/title>/i)),
       url: decodeEntities(firstMatch(b, /<link[^>]*>([\s\S]*?)<\/link>/i)),
-      pubDate: firstMatch(b, /<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i) ||
-               firstMatch(b, /<dc:date[^>]*>([\s\S]*?)<\/dc:date>/i),
+      pubDate: decodeEntities(
+        firstMatch(b, /<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i) ||
+        firstMatch(b, /<dc:date[^>]*>([\s\S]*?)<\/dc:date>/i)
+      ),
       summary: decodeEntities(
         firstMatch(b, /<description[^>]*>([\s\S]*?)<\/description>/i) ||
         firstMatch(b, /<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i)
@@ -247,8 +249,10 @@ function parseAtom(xml) {
     items.push({
       title: decodeEntities(firstMatch(b, /<title[^>]*>([\s\S]*?)<\/title>/i)),
       url: linkHref,
-      pubDate: firstMatch(b, /<published[^>]*>([\s\S]*?)<\/published>/i) ||
-               firstMatch(b, /<updated[^>]*>([\s\S]*?)<\/updated>/i),
+      pubDate: decodeEntities(
+        firstMatch(b, /<published[^>]*>([\s\S]*?)<\/published>/i) ||
+        firstMatch(b, /<updated[^>]*>([\s\S]*?)<\/updated>/i)
+      ),
       summary: decodeEntities(
         firstMatch(b, /<summary[^>]*>([\s\S]*?)<\/summary>/i) ||
         firstMatch(b, /<content[^>]*>([\s\S]*?)<\/content>/i)
@@ -256,6 +260,14 @@ function parseAtom(xml) {
     });
   }
   return items;
+}
+
+// Parse a date string into ISO. Returns null for missing or unparseable input
+// — avoids throwing inside the per-feed map when a publisher emits weird dates.
+function toIsoOrNull(s) {
+  if (!s) return null;
+  var d = new Date(s);
+  return isNaN(d.getTime()) ? null : d.toISOString();
 }
 
 // ── Feed fetch + normalize ───────────────────────────────────────────────────
@@ -296,7 +308,7 @@ async function fetchFeed(feed) {
         title: title,
         url: it.url,
         source: sourceName,
-        publishedAt: it.pubDate ? new Date(it.pubDate).toISOString() : null,
+        publishedAt: toIsoOrNull(it.pubDate),
         summary: summary ? summary.slice(0, 400) : '',
         grouping: feed.grouping || 'breaking',
         trustQuery: !!feed.trustQuery,

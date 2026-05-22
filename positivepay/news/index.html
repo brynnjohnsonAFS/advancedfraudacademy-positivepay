@@ -129,6 +129,16 @@
   .news-filter:hover { border-color: var(--ink) }
   .news-filter[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink) }
 
+  /* Grouping toggle (Research & Data inclusion) */
+  .news-grouping { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 13px; color: var(--fg-3) }
+  .news-grouping-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1.5px dashed var(--afs-gray-1); background: #fff; color: var(--fg-2); font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer; font-family: inherit; transition: all 120ms ease; text-transform: uppercase }
+  .news-grouping-toggle:hover { border-color: var(--ink); color: var(--ink) }
+  .news-grouping-toggle[aria-pressed="true"] { background: var(--academy-green, #ADE25D); border-color: var(--ink); border-style: solid; color: var(--ink) }
+  .news-grouping-toggle .news-grouping-count { font-weight: 600; opacity: 0.7 }
+
+  /* Research & Data badge on item source line */
+  .news-research-badge { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 4px; background: var(--academy-green, #ADE25D); color: var(--ink); font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; vertical-align: 1px }
+
   .news-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--afs-gray-1) }
   .news-item { display: grid; grid-template-columns: 130px 1fr; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--afs-gray-1); align-items: start }
   @media (max-width: 720px) { .news-item { grid-template-columns: 1fr; gap: 8px } }
@@ -186,7 +196,7 @@
   <div class="wrap" style="max-width:880px">
     <span class="eyebrow">Fraud news</span>
     <h1>Recent fraud news,<br/>filtered for community FIs.</h1>
-    <p class="lede">We didn't write these — we just pulled the recent fraud stories that touch community FIs into one place. Sources: FBI and DOJ press releases, security journalism (Krebs on Security, SecurityWeek, BleepingComputer), banking trade press (ABA Banking Journal), and Google News. Filtered for stories that mention banks, credit unions, FIs, or treasury teams.</p>
+    <p class="lede">We didn't write these — we just pulled the recent fraud stories that touch community FIs into one place. Sources: FBI, DOJ, and USPIS press releases, federal and state court filings (CourtListener), security journalism (Krebs on Security, SecurityWeek, BleepingComputer), banking trade press (ABA Banking Journal), and Google News. Toggle <b>Research &amp; Data</b> to include payments and check-fraud research (Federal Reserve). Filtered for stories that touch banks, credit unions, FIs, or treasury teams.</p>
     <div class="news-meta">
       <span class="dot" aria-hidden="true"></span>
       <span id="news-status">Loading latest stories…</span>
@@ -228,6 +238,13 @@
     </div>
 
     <div class="news-filters" id="news-filters" role="toolbar" aria-label="Filter by category"></div>
+    <div class="news-grouping">
+      <button type="button" id="news-grouping-toggle" class="news-grouping-toggle" aria-pressed="false">
+        + Research &amp; Data
+        <span class="news-grouping-count" id="news-grouping-count" hidden></span>
+      </button>
+      <span>Survey and trend data from sources like the Federal Reserve. Off by default so breaking cases stay on top.</span>
+    </div>
     <div id="news-list" class="news-list" aria-live="polite">
       <div class="news-loading">Fetching the latest fraud news</div>
     </div>
@@ -313,10 +330,13 @@
   var stateClearBtn = document.getElementById('news-state-clear');
   var viewListBtn = document.getElementById('news-view-list');
   var viewMapBtn = document.getElementById('news-view-map');
+  var groupingToggleBtn = document.getElementById('news-grouping-toggle');
+  var groupingCountEl = document.getElementById('news-grouping-count');
 
   var ALL = [];
   var activeFilter = 'All';
   var activeState = null;          // 2-letter state code or null
+  var showResearch = false;        // include 'research-data' items in the list
   var stateNameByCode = {};        // populated when items arrive
 
   // Tile-grid positions for US states + DC + AK + HI.
@@ -373,6 +393,9 @@
 
   function renderList() {
     var items = ALL.slice();
+    if (!showResearch) {
+      items = items.filter(function (it) { return it.grouping !== 'research-data'; });
+    }
     if (activeFilter !== 'All') {
       items = items.filter(function (it) { return (it.categories || []).indexOf(activeFilter) !== -1; });
     }
@@ -402,10 +425,13 @@
       var cats = (it.categories || []).map(function (c) {
         return '<span class="news-cat">' + escapeHTML(c) + '</span>';
       }).join('');
+      var badge = it.grouping === 'research-data'
+        ? '<span class="news-research-badge" title="Research &amp; Data source">Research</span>'
+        : '';
       html +=
         '<article class="news-item">' +
           '<div class="news-when">' + escapeHTML(timeAgo(it.publishedAt)) +
-            '<span class="news-source">' + escapeHTML(it.source) + '</span>' +
+            '<span class="news-source">' + escapeHTML(it.source) + badge + '</span>' +
           '</div>' +
           '<div>' +
             '<a class="news-title" href="' + escapeHTML(it.url) + '" target="_blank" rel="noopener">' +
@@ -417,6 +443,24 @@
     });
     listEl.innerHTML = html;
   }
+
+  function updateGroupingToggle() {
+    var researchCount = 0;
+    ALL.forEach(function (it) { if (it.grouping === 'research-data') researchCount++; });
+    if (researchCount > 0) {
+      groupingCountEl.textContent = '(' + researchCount + ')';
+      groupingCountEl.hidden = false;
+    } else {
+      groupingCountEl.hidden = true;
+    }
+    groupingToggleBtn.setAttribute('aria-pressed', showResearch ? 'true' : 'false');
+  }
+
+  groupingToggleBtn.addEventListener('click', function () {
+    showResearch = !showResearch;
+    updateGroupingToggle();
+    renderList();
+  });
 
   function collectCategories(items) {
     var seen = {};
@@ -571,6 +615,7 @@
         if (it.stateCode && it.state) stateNameByCode[it.stateCode] = it.state;
       });
       renderFilters(collectCategories(ALL));
+      updateGroupingToggle();
       renderMap();
       renderList();
     })
