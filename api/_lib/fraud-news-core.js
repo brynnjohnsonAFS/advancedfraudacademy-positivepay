@@ -455,6 +455,79 @@ function detectDocType(s) {
   return 'Filing';
 }
 
+// Priority order for picking which filing represents a case when several
+// filings on the same docket are in the feed. Higher wins. An indictment or
+// complaint is what an FI reader cares about; motions and orders are noise
+// for our audience and should collapse behind the headline filing.
+var DOC_TYPE_PRIORITY = {
+  'Superseding indictment': 100,
+  'Indictment':              90,
+  'Criminal complaint':      80,
+  'Civil complaint':         70,
+  'Search warrant application': 60,
+  'Motion in limine':        40,
+  'Motion':                  30,
+  'Order':                   20,
+  'Bankruptcy filing':       10,
+  'Filing':                   0
+};
+
+// Pull the docket id out of any CourtListener URL. RECAP search results all
+// route through /docket/{id}/[entry/]slug — so the first /docket/{digits}
+// segment is a reliable per-case key. Returns null if not a docket URL.
+function extractDocketId(url) {
+  var m = String(url || '').match(/\/docket\/(\d+)/);
+  return m ? m[1] : null;
+}
+
+// Collapse CourtListener items so a single case appears only once. Multiple
+// filings on one docket (complaint, indictment, motions) come through the
+// feed as separate items; we pick the most reader-relevant one as the headline
+// and stash the rest on .relatedFilings so the card can link to them.
+//
+// Non-CourtListener items and CL items without an extractable docket id pass
+// through untouched.
+function collapseByDocket(items) {
+  var groups = {};
+  var passthrough = [];
+
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var docketId = it.source === 'CourtListener' ? extractDocketId(it.url) : null;
+    if (!docketId) { passthrough.push(it); continue; }
+    (groups[docketId] = groups[docketId] || []).push(it);
+  }
+
+  var winners = [];
+  Object.keys(groups).forEach(function (docketId) {
+    var arr = groups[docketId];
+    arr.sort(function (a, b) {
+      var pa = DOC_TYPE_PRIORITY[a.docType] || 0;
+      var pb = DOC_TYPE_PRIORITY[b.docType] || 0;
+      if (pa !== pb) return pb - pa;
+      var ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+      var tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+      return tb - ta;
+    });
+    var winner = arr[0];
+    if (arr.length > 1) {
+      winner.relatedFilings = arr.slice(1).map(function (x) {
+        return { url: x.url, docType: x.docType || 'Filing' };
+      });
+    }
+    // The docketId served its purpose for grouping; drop it from the wire payload.
+    delete winner.docketId;
+    delete winner.docType;
+    winners.push(winner);
+  });
+
+  // Passthrough items may still carry the helper fields if they were CL items
+  // without a docket id — strip those too so the wire payload stays clean.
+  passthrough.forEach(function (it) { delete it.docketId; delete it.docType; });
+
+  return passthrough.concat(winners);
+}
+
 // Two-word and three-word state names that the simple non-greedy regex would
 // truncate ("Southern District of New" → should be "...New York"). Listed
 // longest-first so the alternation matches the longest valid name.
@@ -620,6 +693,11 @@ async function aggregateStories() {
       // raw filing-header excerpt — the page renders the card in its place,
       // resolving the "wonky load" of dense legalese in the news feed.
       if (all[i].source === 'CourtListener') {
+        // Capture docType + docketId from the raw excerpt before the card
+        // overwrites .summary — collapseByDocket needs both to pick a winner
+        // when one case has multiple filings in the feed.
+        all[i].docType = detectDocType(all[i].summary);
+        all[i].docketId = extractDocketId(all[i].url);
         try {
           var card = buildCourtListenerCard(all[i]);
           if (card) {
@@ -633,6 +711,7 @@ async function aggregateStories() {
   }
 
   matched = dedupe(matched);
+  matched = collapseByDocket(matched);
 
   matched.sort(function (a, b) {
     var ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
@@ -654,6 +733,8 @@ module.exports = {
   fetchFeed: fetchFeed,
   tagItem: tagItem,
   dedupe: dedupe,
+  extractDocketId: extractDocketId,
+  collapseByDocket: collapseByDocket,
   makeId: makeId,
   aggregateStories: aggregateStories
 };
