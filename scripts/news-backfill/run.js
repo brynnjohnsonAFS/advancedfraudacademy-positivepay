@@ -172,13 +172,15 @@ function metaContent(html, attr, value) {
   return m ? decodeEntities(m[1]) : '';
 }
 
+// Strip publication-suffix junk that gets appended to every title on these
+// sites. Order: longest/most specific first so the regex doesn't half-match.
+var TITLE_SUFFIXES = /\s*[–|\-—]\s*(United States Postal Inspection Service|U\.S\. Postal Inspection Service|USPIS|Department of Justice|OPA|FBI|Federal Bureau of Investigation)[^|–\-—]*$/i;
+
 function extractTitleFromMeta(html) {
-  return metaContent(html, 'property', 'og:title')
-      || metaContent(html, 'name',     'twitter:title')
-      || decodeEntities((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1])
-         // DOJ/USPIS title tags often include " | OPA | Department of Justice" — strip
-         .replace(/\s*[|]\s*(OPA|Department of Justice|U\.S\. Postal Inspection Service|USPIS|FBI|Federal Bureau of Investigation)[^|]*$/i, '')
-         .trim();
+  var t = metaContent(html, 'property', 'og:title')
+       || metaContent(html, 'name',     'twitter:title')
+       || decodeEntities((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]);
+  return (t || '').replace(TITLE_SUFFIXES, '').trim();
 }
 
 function extractDateFromMeta(html) {
@@ -188,7 +190,10 @@ function extractDateFromMeta(html) {
          || metaContent(html, 'name',     'DC.date')
          || metaContent(html, 'name',     'pubdate')
          || metaContent(html, 'itemprop', 'datePublished');
-  if (iso) return new Date(iso).toISOString();
+  if (iso) {
+    var d0 = new Date(iso);
+    if (!isNaN(d0)) return d0.toISOString();
+  }
 
   // Fallback: <time datetime="...">
   var t = html.match(/<time[^>]+datetime=["']([^"']+)/i);
@@ -197,7 +202,18 @@ function extractDateFromMeta(html) {
     if (!isNaN(d)) return d.toISOString();
   }
 
-  // Fallback: visible "Wednesday, March 5, 2025" style
+  // USPIS-specific signal: "Last updated MM.DD.YYYY". Allow an inline tag
+  // (USPIS wraps the date in <time datetime="...">) between the label and
+  // the date itself. Comes before the visible-date fallback because the
+  // visible regex would otherwise pick up any month name in body text.
+  var lu = html.match(/Last updated\s*(?:<[^>]+>\s*)?(\d{2})\.(\d{2})\.(\d{4})/i);
+  if (lu) {
+    var d3 = new Date(lu[3] + '-' + lu[1] + '-' + lu[2] + 'T00:00:00Z');
+    if (!isNaN(d3)) return d3.toISOString();
+  }
+
+  // Fallback: visible "Wednesday, March 5, 2025" / "March 5, 2025" style.
+  // Looks anywhere in the page — keep last because it's the noisiest signal.
   var visible = html.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b/);
   if (visible) {
     var d2 = new Date(visible[0]);
@@ -207,16 +223,43 @@ function extractDateFromMeta(html) {
 }
 
 function extractBodyFromArticle(html) {
-  // Prefer og:description, fall back to first paragraph of <article>/<main>.
-  var desc = metaContent(html, 'property', 'og:description')
-          || metaContent(html, 'name',     'description');
-  if (desc) return desc.slice(0, 1200);
+  // Strip script/style blocks up front so they never leak into body text.
+  var clean = html.replace(/<script[\s\S]*?<\/script>/gi, ' ')
+                  .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+                  .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ');
 
-  // Pull text inside <article> or fall back to <main>, strip tags
-  var block = (html.match(/<article[\s\S]*?<\/article>/i)
-            || html.match(/<main[\s\S]*?<\/main>/i)
-            || [''])[0];
-  return decodeEntities(block).slice(0, 1200);
+  // Prefer the meta description (highest signal — already a written summary).
+  var desc = metaContent(clean, 'property', 'og:description')
+          || metaContent(clean, 'name',     'description');
+  // Only use desc if it's substantive — many of these sites emit a generic
+  // site-wide description.
+  if (desc && desc.length > 60) return desc.slice(0, 1200);
+
+  // Find the start of meaningful content. Wayback snapshots sometimes omit
+  // closing tags (truncated archives), so we slice from a known opening tag
+  // to the next "end of content" marker (footer, sidebar) rather than relying
+  // on a matched close.
+  var start = -1;
+  var startRe = /<article\b|<main\b|<div[^>]+class=["'][^"']*(?:article-content|node__content|field--name-body|region-content)["']/i;
+  var m = clean.match(startRe);
+  if (m) start = m.index;
+  if (start < 0) start = (clean.search(/<body\b/i) >>> 0) || 0;
+
+  // Crop at the first end marker we see after start.
+  var slice = clean.slice(start);
+  var endRe = /<footer\b|<aside\b|id=["']block-footer|class=["'][^"']*site-footer/i;
+  var end = slice.search(endRe);
+  if (end > 0) slice = slice.slice(0, end);
+
+  // decodeEntities also strips tags and collapses whitespace.
+  var text = decodeEntities(slice);
+
+  // Drop common nav/footer junk that survives the unwrap.
+  text = text.replace(/Download wanted poster|Reward up to \$\d[\d,]*|Submit a Tip|Skip to main content|Breadcrumb|Home\s+News\s+/gi, ' ')
+             .replace(/\s+/g, ' ')
+             .trim();
+
+  return text.slice(0, 1200);
 }
 
 // ── Stage 1: harvest ────────────────────────────────────────────────────────
@@ -242,9 +285,14 @@ async function phaseHarvest(opts) {
     rows.forEach(function (r) {
       var ts = r[1], url = r[2];
       if (!s.releaseRe.test(url)) return;
-      // Strip stray trailing URL-encoded chars and fragments. Some CDX rows
-      // capture pages linked with weird query/anchor noise (%3E, %22, #...).
-      var clean = url.split('#')[0].replace(/%[0-9A-F]{2,}.*$/i, '');
+      // Canonicalize: strip fragments, query strings (always tracking on these
+      // static pages), trailing URL-encoded noise (%3E, %22, %C2%A0), and
+      // stray "&subject=", "&body=" mailto-share artifacts that some CDX rows
+      // capture as part of the URL path even without a "?" prefix.
+      var clean = url.split('#')[0]
+                     .split('?')[0]
+                     .split('&')[0]
+                     .replace(/%[0-9A-F]{2,}.*$/i, '');
       if (!SLUG_PREFILTER.test(clean)) return;
       // Keep the earliest Wayback timestamp per URL — closest to true publish date
       if (!byUrl[clean] || ts < byUrl[clean].waybackTimestamp) {
@@ -351,14 +399,25 @@ async function phaseFilter() {
 
   log('loaded ' + all.length + ' parsed items');
 
+  // Window dates: Wayback CDX captures snapshot date, not publish date. A
+  // page from 2015 can still appear in our snapshot window because DOJ
+  // keeps press releases live indefinitely. Drop anything with a real
+  // publish date before window start — those aren't backfill, they're
+  // historical clutter.
+  var windowStartMs = Date.parse('2024-11-22T00:00:00Z');
+
+  var dropNoTitle = 0, dropNoDate = 0, dropOutOfWindow = 0, dropNoKeyword = 0;
   var kept = [];
   all.forEach(function (it) {
-    // Skip items without a usable title or date
-    if (!it.title || !it.publishedAt) return;
+    if (!it.title)       { dropNoTitle++;       return; }
+    if (!it.publishedAt) { dropNoDate++;        return; }
+    if (Date.parse(it.publishedAt) < windowStartMs) { dropOutOfWindow++; return; }
+
     // Build the shape tagItem expects
     var probe = { title: it.title, summary: it.body || '' };
     var cats = core.tagItem(probe);
-    if (!cats.length) return;
+    if (!cats.length) { dropNoKeyword++; return; }
+
     it.categories = cats;
     it.id = core.makeId(it.url);
     // Trim body to a short summary for display, matching live items
@@ -367,7 +426,9 @@ async function phaseFilter() {
     kept.push(it);
   });
 
-  log('kept ' + kept.length + ' after KEYWORDS filter');
+  log('dropped: ' + dropNoTitle + ' no-title, ' + dropNoDate + ' no-date, ' +
+      dropOutOfWindow + ' before-window, ' + dropNoKeyword + ' no-keyword');
+  log('kept ' + kept.length + ' after filtering');
   writeJSON(FILTERED, kept);
 }
 
