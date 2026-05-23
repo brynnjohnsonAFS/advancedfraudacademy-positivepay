@@ -18,14 +18,24 @@ aggregator already pulls CL filings ongoing.
 
 ```
 node scripts/news-backfill/run.js harvest    # Stage 1 — CDX → candidates
-node scripts/news-backfill/run.js fetch      # Stage 2 — Wayback snapshots → parsed
+node scripts/news-backfill/run.js fetch      # Stage 2 — Wayback snapshots → data/news-archive/
 node scripts/news-backfill/run.js filter     # Stage 3 — apply KEYWORDS, tag
 node scripts/news-backfill/run.js finalize   # Stage 4 — write api/_lib/news-backfill.json
 ```
 
-Each phase is resumable: re-running picks up where it left off via
-state files in `scripts/news-backfill/state/`. To start clean, delete
-that directory.
+Each phase is resumable: re-running `fetch` skips URLs already present
+in `data/news-archive/<source>.jsonl`. To start clean, delete those
+files (or the candidates.json / filtered.json in `state/`, depending
+on which phase you want to redo).
+
+## Outputs
+
+| Path                                  | Purpose | Tracked? |
+|---------------------------------------|---------|----------|
+| `data/news-archive/<source>.jsonl`    | Raw parsed records — reusable across applications. See `data/news-archive/SCHEMA.md`. | Yes |
+| `api/_lib/news-backfill.json`         | Trimmed, dedup'd, geo-tagged final view consumed by `aggregateStories()` | Yes |
+| `scripts/news-backfill/state/candidates.json` | URL list after CDX + slug pre-filter | No (`.gitignore`'d, regenerable) |
+| `scripts/news-backfill/state/filtered.json`   | Records that passed KEYWORDS + window filter | No |
 
 Optional flags:
 - `--source <name>` — restrict to one source (uspis, doj_opa, doj_usao). Default: all.
