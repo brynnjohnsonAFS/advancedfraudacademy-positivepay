@@ -30,9 +30,12 @@ var WINDOW_TO   = '20260522';
 
 var STATE_DIR   = path.join(__dirname, 'state');
 var CANDIDATES  = path.join(STATE_DIR, 'candidates.json');
-var PARSED_DIR  = path.join(STATE_DIR, 'parsed');
 var FILTERED    = path.join(STATE_DIR, 'filtered.json');
-var OUT_FILE    = path.join(__dirname, '..', '..', 'api', '_lib', 'news-backfill.json');
+// Parsed data lives outside the gitignored state dir — it's a first-class
+// committed artifact reusable by other apps. See data/news-archive/SCHEMA.md.
+var REPO_ROOT   = path.join(__dirname, '..', '..');
+var PARSED_DIR  = path.join(REPO_ROOT, 'data', 'news-archive');
+var OUT_FILE    = path.join(REPO_ROOT, 'api', '_lib', 'news-backfill.json');
 
 // Each source declares: how to slice the cached CDX dump, a URL regex that
 // matches a single press release (excluding index/listing pages), and the
