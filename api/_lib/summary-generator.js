@@ -57,13 +57,18 @@ function cacheSet(url, summary) {
 // full input cost on the first call within the 5-min cache TTL.
 var SYSTEM_PROMPT =
   'You write one-to-two sentence summaries of fraud news stories for an audience of community-bank and credit-union fraud teams. ' +
-  'The reader needs to triage the story fast, so:\n\n' +
-  '1. LEAD with how the fraud was carried out — the method, scheme, or attack path (e.g., "Check washing through stolen mail," "BEC via spoofed vendor invoice," "ACH credit-push triggered by phished credentials").\n' +
-  '2. INCLUDE how it affected the financial institution — losses, exposure, accounts hit, the control that failed, or the FI named.\n' +
-  '3. KEEP it to one or two sentences, total under 280 characters.\n' +
-  '4. NO court procedure, no charge lists, no defendant biographies, no "according to a press release," no generic "this highlights the importance of..." filler.\n' +
-  '5. If the source content does not actually describe a fraud method or FI impact, write a single sentence summarizing what it does say — do not invent details.\n\n' +
-  'Output ONLY the summary sentence(s). No preamble, no bullet points, no quotes around the output.';
+  'The reader needs to triage the story fast, so always produce a summary based on whatever facts the source contains.\n\n' +
+  'WHEN THE SOURCE HAS FRAUD METHOD + FI IMPACT (most news articles):\n' +
+  '  • LEAD with how the fraud was carried out — method, scheme, or attack path (e.g., "Check washing through stolen mail," "BEC via spoofed vendor invoice," "ACH credit-push triggered by phished credentials").\n' +
+  '  • INCLUDE how it affected the financial institution — losses, exposure, accounts hit, the control that failed, or the FI named.\n\n' +
+  'WHEN THE SOURCE IS A SPARSE COURT FILING OR PRESS-RELEASE STUB (often CourtListener, sometimes DOJ headers):\n' +
+  '  • Summarize what IS in the source: charge type, statute cited, document type (indictment / complaint / motion), court / district, and the defendant if named.\n' +
+  '  • Example output: "Superseding indictment for bank fraud and conspiracy (18 USC §§ 1344, 1349) filed against the defendant in the District of Nebraska."\n' +
+  '  • Do not invent fraud details that are not in the source. Do not refuse — a short factual restatement of the filing is always better than no summary.\n\n' +
+  'UNIVERSAL RULES:\n' +
+  '  • KEEP it to one or two sentences, total under 280 characters.\n' +
+  '  • NO meta-commentary ("I cannot...", "Based on the source..."), NO charge-list dumps, NO defendant biographies, NO "according to a press release," NO "this highlights the importance of..." filler.\n' +
+  '  • Output ONLY the summary sentence(s). No preamble, no bullet points, no quotes around the output. Never begin with "I", "Based on", or "The source".';
 
 // Build user prompt from item context. Source-content can be the RSS excerpt
 // or the fetched article body.
@@ -144,6 +149,15 @@ async function generateSummary(item, sourceContent) {
 
     // Defensive: strip any wrapping quotes the model occasionally adds.
     text = text.replace(/^["'“‘]+|["'”’]+$/g, '');
+
+    // Reject refusal-style outputs — they're worse than no summary at all,
+    // and we don't want them poisoning the cache for 6h. Return '' so the
+    // caller falls back to whatever it had before (the raw RSS excerpt or
+    // headline-only).
+    if (/^(i\s|i'|based on|the source|the provided|i cannot|i'm unable|unfortunately,)/i.test(text)) {
+      console.warn('[summary-generator] rejected refusal:', text.slice(0, 80));
+      return '';
+    }
 
     if (text) cacheSet(item.url, text);
     return text;
