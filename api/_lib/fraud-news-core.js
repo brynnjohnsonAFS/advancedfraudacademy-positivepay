@@ -702,22 +702,16 @@ async function aggregateStories(opts) {
           }
         } catch (e) { /* tagging failure shouldn't drop the item */ }
       }
-      // Build the FI-focused card for CourtListener items, then drop the
-      // raw filing-header excerpt — the page renders the card in its place,
-      // resolving the "wonky load" of dense legalese in the news feed.
+      // CourtListener items: capture docType + docketId from the raw excerpt
+      // so collapseByDocket can pick a winner when one case has multiple
+      // filings in the feed. We deliberately leave .summary intact (the dense
+      // legal excerpt) — enrichWithSummaries will hand it to the LLM, same
+      // path as every other source. The old templated "card" rendering was
+      // structurally big but information-thin (mostly "see full document"
+      // filler), so we no longer build it.
       if (all[i].source === 'CourtListener') {
-        // Capture docType + docketId from the raw excerpt before the card
-        // overwrites .summary — collapseByDocket needs both to pick a winner
-        // when one case has multiple filings in the feed.
         all[i].docType = detectDocType(all[i].summary);
         all[i].docketId = extractDocketId(all[i].url);
-        try {
-          var card = buildCourtListenerCard(all[i]);
-          if (card) {
-            all[i].card = card;
-            all[i].summary = '';
-          }
-        } catch (e) { /* card failure falls back to default render */ }
       }
       matched.push(all[i]);
     }
@@ -759,14 +753,16 @@ async function aggregateStories(opts) {
 }
 
 // ── LLM-generated 1–2 sentence summaries ─────────────────────────────────────
-// CourtListener items already render a structured card (covered by the
-// CourtListener Summary Cards ticket), so we skip them here. Everything else
-// gets a summary that leads with fraud method + FI impact, per the
-// "One-Line Story Summaries" ticket.
+// Every item — CourtListener included — gets a summary that leads with the
+// fraud method and includes FI impact, per the "One-Line Story Summaries"
+// ticket. The old templated CourtListener "cards" were big but said little,
+// so they were removed; CL items now flow through the same LLM path. The
+// CourtListener excerpt (case caption + court + statutes + document type)
+// is dense enough source material for the model to produce a useful summary.
 //
-// For Google News items the RSS excerpt is just a repeat of the headline
-// (it's stripped in fetchFeed), so we fetch the underlying article body
-// first to give the LLM real source content to work from.
+// For items whose RSS excerpt is empty or near-empty (Google News, mostly),
+// we fetch the underlying article body first so the LLM has real text to
+// work from.
 //
 // Mutates items in place: sets item.summary on success. On failure, leaves
 // whatever summary was already there (or empty string) — never throws.
@@ -787,15 +783,18 @@ async function enrichWithSummaries(items) {
   // variants that can show up after a Vercel UI typo.
   if (!process.env.ANTHROPIC_API_KEY && !process.env.Anthropic && !process.env.ANTHROPIC) return;
 
-  // Step 1: for Google News items (no RSS excerpt) fetch the article body in
-  // parallel. Other sources already have a usable excerpt in item.summary.
-  var googleItems = items.filter(function (it) {
-    return it.source && it.source !== 'CourtListener' && !it.card && !(it.summary && it.summary.length > 40);
+  // Step 1: for items with no usable RSS excerpt (mostly Google News, which
+  // strips its description in fetchFeed), fetch the article body in parallel.
+  // CourtListener items already carry a meaty excerpt, so they skip this.
+  var needsArticleFetch = items.filter(function (it) {
+    if (!it.source) return false;
+    if (it.source === 'CourtListener') return false;
+    return !(it.summary && it.summary.length > 40);
   });
-  if (googleItems.length) {
+  if (needsArticleFetch.length) {
     // Cap fetch concurrency — these are external HTTP hits to a wide variety
     // of publisher sites, some slow.
-    await runWithConcurrency(googleItems, 4, async function (it) {
+    await runWithConcurrency(needsArticleFetch, 4, async function (it) {
       try {
         var body = await articleFetcher.fetchArticleText(it.url);
         if (body) it._fetchedBody = body;
@@ -803,18 +802,19 @@ async function enrichWithSummaries(items) {
     });
   }
 
-  // Step 2: generate summaries for every non-CourtListener item with a card-less render path.
-  var batch = items
-    .filter(function (it) { return !it.card && it.source !== 'CourtListener'; })
-    .map(function (it) {
-      // Prefer fetched article body, fall back to RSS excerpt, fall back to nothing.
-      var sourceContent = it._fetchedBody || it.summary || '';
-      return { item: it, sourceContent: sourceContent };
-    });
+  // Step 2: generate summaries for every item. CourtListener included now
+  // that the templated cards are gone.
+  var batch = items.map(function (it) {
+    // Prefer fetched article body, fall back to RSS excerpt, fall back to nothing.
+    var sourceContent = it._fetchedBody || it.summary || '';
+    return { item: it, sourceContent: sourceContent };
+  });
 
   if (!batch.length) return;
 
-  await summaryGenerator.generateSummariesBatch(batch, 5);
+  // Concurrency 8 keeps wall-clock under Vercel's function timeout even when
+  // the batch grows (CourtListener items added ~17 to what used to be ~30).
+  await summaryGenerator.generateSummariesBatch(batch, 8);
 
   batch.forEach(function (e) {
     if (e.summary) e.item.summary = e.summary;
