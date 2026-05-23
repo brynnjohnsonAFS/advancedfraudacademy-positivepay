@@ -88,9 +88,11 @@ async function generateSummary(item, sourceContent) {
   var cached = cacheGet(item.url);
   if (cached !== null) return cached;
 
-  var apiKey = process.env.ANTHROPIC_API_KEY;
+  // Accept either ANTHROPIC_API_KEY (conventional) or the bare "Anthropic"
+  // name some Vercel projects end up with after a UI typo. Whichever is set,
+  // we use. If neither, no-op silently.
+  var apiKey = process.env.ANTHROPIC_API_KEY || process.env.Anthropic || process.env.ANTHROPIC;
   if (!apiKey) {
-    // No key configured — don't spam logs, just no-op.
     return '';
   }
 

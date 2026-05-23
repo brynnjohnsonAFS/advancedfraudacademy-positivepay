@@ -782,8 +782,10 @@ async function enrichWithSummaries(items) {
   }
 
   // Skip if no API key — generateSummary would return '' anyway, but checking
-  // up-front lets us avoid the article fetches too.
-  if (!process.env.ANTHROPIC_API_KEY) return;
+  // up-front lets us avoid the article fetches too. Accept either the
+  // conventional ANTHROPIC_API_KEY or the bare "Anthropic" / "ANTHROPIC"
+  // variants that can show up after a Vercel UI typo.
+  if (!process.env.ANTHROPIC_API_KEY && !process.env.Anthropic && !process.env.ANTHROPIC) return;
 
   // Step 1: for Google News items (no RSS excerpt) fetch the article body in
   // parallel. Other sources already have a usable excerpt in item.summary.

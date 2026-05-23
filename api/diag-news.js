@@ -28,11 +28,17 @@ module.exports = async function handler(req, res) {
     llmTest: null
   };
 
-  // Env var visibility (length only, never the value)
-  var key = process.env.ANTHROPIC_API_KEY;
-  out.env.ANTHROPIC_API_KEY_present = !!key;
-  out.env.ANTHROPIC_API_KEY_length = key ? key.length : 0;
-  out.env.ANTHROPIC_API_KEY_prefix = key ? key.slice(0, 10) + '…' : null;
+  // Env var visibility (length only, never the value).
+  // Matches the fallback chain used in summary-generator.js + fraud-news-core.js.
+  var key = process.env.ANTHROPIC_API_KEY || process.env.Anthropic || process.env.ANTHROPIC;
+  var keySource = process.env.ANTHROPIC_API_KEY ? 'ANTHROPIC_API_KEY'
+                : process.env.Anthropic        ? 'Anthropic'
+                : process.env.ANTHROPIC        ? 'ANTHROPIC'
+                : null;
+  out.env.key_present = !!key;
+  out.env.key_source = keySource;
+  out.env.key_length = key ? key.length : 0;
+  out.env.key_prefix = key ? key.slice(0, 10) + '…' : null;
 
   // Show any other env vars whose name CONTAINS 'anthropic' (case-insensitive)
   // so we catch typos like `Anthropic`, `ANTHROPIC`, `ANTHROPIC_KEY`, etc.
