@@ -1,0 +1,845 @@
+{
+  "generatedAt": "2026-05-23T00:01:18.616Z",
+  "window": {
+    "from": "2024-11-22",
+    "to": "2026-05-22"
+  },
+  "count": 46,
+  "items": [
+    {
+      "id": "nspgpzb",
+      "title": "Defendant Extradited from Nigeria to Face Wire Fraud and Money Laundering Conspiracy Charges",
+      "url": "https://www.justice.gov/usao-ednc/pr/defendant-extradited-nigeria-face-wire-fraud-and-money-laundering-conspiracy-charges",
+      "source": "DOJ",
+      "publishedAt": "2026-05-19T12:25:27.000Z",
+      "summary": "Justice.gov U.S. Attorneys Eastern District of North Carolina Press Releases Defendant Extradited From Nigeria To Face Wire Fraud and Money Laundering Conspiracy Charges Press Release Defendant Extradited from Nigeria to Face Wire Fraud and Money Laundering Conspiracy Charges Tuesday, May 19, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Eastern District of Nor",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "North Carolina",
+      "stateCode": "NC",
+      "cities": [],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nkcxd6c",
+      "title": "Brockton Man Pleads Guilty to Role in Stolen Treasury Check Fraud",
+      "url": "https://www.justice.gov/usao-ma/pr/brockton-man-pleads-guilty-role-stolen-treasury-check-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-05-18T14:24:04.000Z",
+      "summary": "BOSTON – A Brockton man pleaded guilty to charges that he deposited stolen and altered U.S. Treasury checks into shell company bank accounts that he controlled and then withdrew the stolen money to conceal its origin.",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "nt03r51",
+      "title": "Candidate for New York City Public Advocate Charged With Wire Fraud",
+      "url": "https://www.justice.gov/usao-edny/pr/candidate-new-york-city-public-advocate-charged-wire-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-05-14T19:45:22.000Z",
+      "summary": "Earlier today in federal court in Brooklyn, a criminal complaint was unsealed charging Angela Aquino, a 2025 candidate for New York City Public Advocate, with wire fraud in connection with her scheme to defraud New York City’s campaign finance system to obtain public matching funds. Aquino was arrested today and is scheduled to be arraigned this afternoon by United States",
+      "categories": [
+        "Wire fraud",
+        "Fraud scheme"
+      ],
+      "backfill": true,
+      "state": "New York",
+      "stateCode": "NY",
+      "cities": [
+        "New York City",
+        "Brooklyn"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nl6msjz",
+      "title": "Cranston Man Posing as Financial Adviser Pleads Guilty to Wire Fraud",
+      "url": "https://www.justice.gov/usao-ri/pr/cranston-man-posing-financial-adviser-pleads-guilty-wire-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-05-13T20:29:23.000Z",
+      "summary": "PROVIDENCE – A Cranston man pleaded guilty today in U.S. District Court in Rhode Island for falsely represented himself as a financial advisor worth a “million dollars in clients.”",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Rhode Island",
+      "stateCode": "RI",
+      "cities": [
+        "Cranston"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nw9tbnf",
+      "title": "Former New York State Judge and Brooklyn Real Estate Investor Charged with Wire Fraud Conspiracy",
+      "url": "https://www.justice.gov/usao-edny/pr/former-new-york-state-judge-and-brooklyn-real-estate-investor-charged-wire-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-05-13T15:28:49.000Z",
+      "summary": "Earlier today, at the federal courthouse in Brooklyn, a complaint was unsealed charging Sam Sprei, also known as “Yechiel Sprei,” “Shimon Sprei,” and “Eli Shapiro,” and Edward Harold King, a former Kings County Supreme Court Justice, with wire fraud conspiracy. Both defendants were arrested this morning and are scheduled to make their initial appearance this afternoon before",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "New York",
+      "stateCode": "NY",
+      "cities": [
+        "Brooklyn"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "na7jt9c",
+      "title": "Tampa Woman Charged in Fraud Scheme to Obtain Social Security and Pension Benefits by Disposing of Aunt’s Body to Conceal her Death",
+      "url": "https://www.justice.gov/usao-mdfl/pr/tampa-woman-charged-fraud-scheme-obtain-social-security-and-pension-benefits-disposing",
+      "source": "DOJ",
+      "publishedAt": "2026-05-08T18:44:38.000Z",
+      "summary": "Tampa, Florida – Rebecca Stewart Vaughn (64, Tampa) has been charged by federal indictment with four counts of wire fraud and one count of theft of government money. If convicted, Vaughn faces a maximum penalty of 20 years in federal prison on each wire fraud count and up to 10 years for the theft of government money. The indictment also notifies Vaughn that the United States",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Florida",
+      "stateCode": "FL",
+      "cities": [
+        "Tampa"
+      ],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n2znoq",
+      "title": "Fraud Promoter Pleads Guilty to Federal Bank Fraud Charges Involving Manipulation of Stolen Checks",
+      "url": "https://www.justice.gov/usao-ndga/pr/fraud-promoter-pleads-guilty-federal-bank-fraud-charges-involving-manipulation-stolen",
+      "source": "DOJ",
+      "publishedAt": "2026-05-07T19:26:22.000Z",
+      "summary": "Shamarri Tache Brooks has pleaded guilty to federal bank fraud and aggravated identity theft charges in connection with a scheme arising from the widespread theft of checks from the mail.",
+      "categories": [
+        "Bank fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "neeq9sz",
+      "title": "Virginia Man Charged with $6.6 Million Wire Fraud Scheme",
+      "url": "https://www.justice.gov/usao-ma/pr/virginia-man-charged-66-million-wire-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-05-06T21:40:30.000Z",
+      "summary": "BOSTON – A dual national of the United States and the Philippines has been charged in federal court in Boston with allegedly stealing more than $6.6 million from his employer over the course of a decade.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [
+        "Boston"
+      ],
+      "region": null,
+      "geoConfidence": "low"
+    },
+    {
+      "id": "n253g0x",
+      "title": "Former Account Manager at Beverly Hills Business Management Firm Charged with Embezzling More Than $2 Million from Celebrity Client",
+      "url": "https://www.justice.gov/usao-cdca/pr/former-account-manager-beverly-hills-business-management-firm-charged-embezzling-more",
+      "source": "DOJ",
+      "publishedAt": "2026-05-06T19:21:37.000Z",
+      "summary": "A former account manager at a high-end Beverly Hills business management and tax firm was charged today in an eight-count federal indictment with embezzling more than $2 million from one of the firm’s celebrity clients.",
+      "categories": [
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "California",
+      "stateCode": "CA",
+      "cities": [
+        "Beverly Hills"
+      ],
+      "region": "West",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n9zhxts",
+      "title": "Detroiter Pleads Guilty in $16M Federal Student Aid Fraud Scheme",
+      "url": "https://www.justice.gov/usao-edmi/pr/detroiter-pleads-guilty-16m-federal-student-aid-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-05-06T19:00:25.000Z",
+      "summary": "Justice.gov U.S. Attorneys Eastern District of Michigan Press Releases Detroiter Pleads Guilty In $16M Federal Student Aid Fraud Scheme Press Release Detroiter Pleads Guilty in $16M Federal Student Aid Fraud Scheme Wednesday, May 6, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Eastern District of Michigan DETROIT - Brandon Robinson, 42, of Detroit, pleaded gui",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Michigan",
+      "stateCode": "MI",
+      "cities": [
+        "Detroit"
+      ],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nthsfeh",
+      "title": "Shelby County Man Charged in Multi-Million Dollar COVID-19 Loan Fraud Scheme",
+      "url": "https://www.justice.gov/usao-ndal/pr/shelby-county-man-charged-multi-million-dollar-covid-19-loan-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-05-06T13:45:28.000Z",
+      "summary": "Justice.gov U.S. Attorneys Northern District of Alabama Press Releases Shelby County Man Charged In Multi-Million Dollar COVID-19 Loan Fraud Scheme Press Release Shelby County Man Charged in Multi-Million Dollar COVID-19 Loan Fraud Scheme Wednesday, May 6, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Northern District of Alabama BIRMINGHAM, Ala. – A Shelby Cou",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Alabama",
+      "stateCode": "AL",
+      "cities": [],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n4d7ir2",
+      "title": "Florida Certified Public Accountant and Attorney Indicted for Embezzling More than $890,000",
+      "url": "https://www.justice.gov/usao-mdfl/pr/florida-certified-public-accountant-and-attorney-indicted-embezzling-more-890000",
+      "source": "DOJ",
+      "publishedAt": "2026-05-05T18:43:21.000Z",
+      "summary": "Tampa, Florida – Melissia Gauthreaux has been charged by federal indictment with six counts of wire fraud. If convicted, Gauthreaux faces a maximum penalty of 20 years in federal prison on each count. The indictment also notifies Gauthreaux that the United States is seeking an order of forfeiture in the amount of $894,274.26, the proceeds of the charged criminal conduct. U.S.",
+      "categories": [
+        "Wire fraud",
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "Florida",
+      "stateCode": "FL",
+      "cities": [
+        "Tampa"
+      ],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nga4i8",
+      "title": "Treasurer of Labor Union Sentenced for Embezzlement",
+      "url": "https://www.justice.gov/usao-ma/pr/treasurer-labor-union-sentenced-embezzlement",
+      "source": "DOJ",
+      "publishedAt": "2026-05-05T17:19:08.000Z",
+      "summary": "BOSTON – A Leominster man was sentenced on May 1, 2026 in federal court in Worcester for embezzling from a labor union.",
+      "categories": [
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "Massachusetts",
+      "stateCode": "MA",
+      "cities": [
+        "Worcester"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "npuioo4",
+      "title": "Woman Convicted in Multi-State Check Fraud Conspiracy",
+      "url": "https://www.justice.gov/usao-edmi/pr/woman-convicted-multi-state-check-fraud-conspiracy",
+      "source": "DOJ",
+      "publishedAt": "2026-05-05T13:45:55.000Z",
+      "summary": "Justice.gov U.S. Attorneys Eastern District of Michigan Press Releases Woman Convicted In Multi-State Check Fraud Conspiracy Press Release Woman Convicted in Multi-State Check Fraud Conspiracy Monday, May 4, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Eastern District of Michigan DETROIT – A North Carolina woman who engaged in a multi-state check fraud scheme",
+      "categories": [
+        "Check fraud",
+        "Bank fraud"
+      ],
+      "backfill": true,
+      "state": "Michigan",
+      "stateCode": "MI",
+      "cities": [],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nm2iqqf",
+      "title": "Former IRS Revenue Agent Charged with Embezzling more than $12 Million and Money Laundering as the Then-CFO and Controller of New Jersey-Based Company",
+      "url": "https://www.justice.gov/usao-nj/pr/former-irs-revenue-agent-charged-embezzling-more-12-million-and-money-laundering-then",
+      "source": "DOJ",
+      "publishedAt": "2026-05-02T01:01:05.000Z",
+      "summary": "A Bergen County man and former Revenue Agent for the Internal Revenue Service was arrested yesterday for embezzling more than $12 million and money laundering as the then-Chief Financial Officer and Controller of a fuel company based in New Jersey.",
+      "categories": [
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "New Jersey",
+      "stateCode": "NJ",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "medium"
+    },
+    {
+      "id": "nv9hz7t",
+      "title": "Eleven Sentenced for Refund Fraud Scheme Causing Millions of Dollars in Losses to Online Retailers",
+      "url": "https://www.justice.gov/usao-ndok/pr/eleven-sentenced-refund-fraud-scheme-causing-millions-dollars-losses-online-retailers",
+      "source": "DOJ",
+      "publishedAt": "2026-04-29T15:08:17.000Z",
+      "summary": "Eleven co-conspirators have been sentenced for conspiring with others to commit wire fraud. This refund fraud scheme targeted numerous online retailers and resulted in millions of dollars in losses to companies such as Amazon, Walmart, Target, Wayfair, Dell Technologies, Kate Spade, Dick’s Sporting Goods, HP Inc., and Adidas, among others.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "nye4pui",
+      "title": "Tacoma grocery store owner indicted for food stamp fraud scheme",
+      "url": "https://www.justice.gov/usao-wdwa/pr/tacoma-grocery-store-owner-indicted-food-stamp-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-04-22T21:41:06.000Z",
+      "summary": "Tacoma – The 64-year-old owner of a small Tacoma market was arraigned today in U.S. District Court in Tacoma for multiple counts of wire fraud and SNAP benefit fraud, announced First Assistant U.S. Attorney Charles Neil Floyd.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Washington",
+      "stateCode": "WA",
+      "cities": [
+        "Tacoma"
+      ],
+      "region": "West",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nrb2v7a",
+      "title": "Purse Thief Who Targeted Kristi Noem Sentenced to 36 Months for Wire Fraud and First-Degree Theft",
+      "url": "https://www.justice.gov/usao-dc/pr/purse-thief-who-targeted-kristi-noem-sentenced-36-months-wire-fraud-and-first-degree",
+      "source": "DOJ",
+      "publishedAt": "2026-04-22T15:55:17.000Z",
+      "summary": "Mario Bustamante Leiva, 50, a Chilean national illegally residing in the United States, was sentenced today in U.S. District Court to 36 months in prison in connection to a string of thefts that included stealing the Gucci handbag belonging to former Homeland Security Secretary Kristi L. Noem as she dined with her family at a District restaurant.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "ntpsh78",
+      "title": "Federal Grand Jury Charges Southern Poverty Law Center for Wire Fraud, False Statements, and Conspiracy to Commit Money Laundering",
+      "url": "https://www.justice.gov/usao-mdal/pr/federal-grand-jury-charges-southern-poverty-law-center-wire-fraud-false-statements-and",
+      "source": "DOJ",
+      "publishedAt": "2026-04-21T22:27:26.000Z",
+      "summary": "Justice.gov U.S. Attorneys Middle District of Alabama Press Releases Federal Grand Jury Charges Southern Poverty Law Center For Wire Fraud, False Statements, and Conspiracy To Commit Money Laundering Press Release Federal Grand Jury Charges Southern Poverty Law Center for Wire Fraud, False Statements, and Conspiracy to Commit Money Laundering Tuesday, April 21, 2026 Share Facebook X LinkedIn Email",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Alabama",
+      "stateCode": "AL",
+      "cities": [],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nuzstef",
+      "title": "United Kingdom Citizen Sentenced to 10 Years in Prison for $97 Million Wine Fraud Scheme",
+      "url": "https://www.justice.gov/usao-edny/pr/united-kingdom-citizen-sentenced-10-years-prison-97-million-wine-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-04-20T17:11:34.000Z",
+      "summary": "Earlier today, in federal court in Brooklyn, James Wellesley, also known as “Andrew Fuller” and “Andrew Templar,” was sentenced by United States District Judge Pamela K. Chen to 10 years in prison for wire fraud conspiracy in connection with a scheme to defraud over 140 victims around the world of over $97 million. As part of the sentence, Judge Chen ordered Wellesley to pay",
+      "categories": [
+        "Wire fraud",
+        "Fraud scheme"
+      ],
+      "backfill": true,
+      "state": "New York",
+      "stateCode": "NY",
+      "cities": [
+        "Brooklyn"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n2q93a3",
+      "title": "Tidewater inmate sentenced to three years in prison for a series of fraud schemes",
+      "url": "https://www.justice.gov/usao-edva/pr/tidewater-inmate-sentenced-three-years-prison-series-fraud-schemes",
+      "source": "DOJ",
+      "publishedAt": "2026-04-16T18:51:12.000Z",
+      "summary": "Raymond Antoine Wyche, 34, was sentenced to three years in prison for conspiracy to commit fraud in connection with major disaster benefits, making false statements, and bank fraud.",
+      "categories": [
+        "Bank fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "n6lt37i",
+      "title": "SantaCon Organizer Charged In Wire Fraud Scheme Targeting Attendees And Host Venues",
+      "url": "https://www.justice.gov/usao-sdny/pr/santacon-organizer-charged-wire-fraud-scheme-targeting-attendees-and-host-venues",
+      "source": "DOJ",
+      "publishedAt": "2026-04-15T15:33:46.000Z",
+      "summary": "United States Attorney for the Southern District of New York, Jay Clayton, Assistant Director in Charge of the New York Field Office of the Federal Bureau of Investigation (“FBI”), James C. Barnacle, Jr., and Special Agent in Charge of the Newark Field Office of Internal Revenue Service Criminal Investigation (“IRS-CI”), Jennifer L. Piovesan, announced today the unsealing of an",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "New York",
+      "stateCode": "NY",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nlz8tvb",
+      "title": "Chelsea Man Sentenced for His Role in a Mail Theft and Check Fraud Scheme",
+      "url": "https://www.justice.gov/usao-ma/pr/chelsea-man-sentenced-his-role-mail-theft-and-check-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-04-10T20:01:27.000Z",
+      "summary": "BOSTON – A Chelsea man was sentenced today in federal court in Boston for fraudulently depositing checks stolen from the mail.",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Massachusetts",
+      "stateCode": "MA",
+      "cities": [
+        "Boston"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nz0hoca",
+      "title": "Prime Capital Ventures CEO Sentenced to 97 Months for Multimillion Dollar Wire Fraud Conspiracy",
+      "url": "https://www.justice.gov/usao-ndny/pr/prime-capital-ventures-ceo-sentenced-97-months-multimillion-dollar-wire-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-04-03T22:45:28.000Z",
+      "summary": "Justice.gov U.S. Attorneys Northern District of New York Press Releases Prime Capital Ventures CEO Sentenced To 97 Months For Multimillion Dollar Wire Fraud Conspiracy Press Release Prime Capital Ventures CEO Sentenced to 97 Months for Multimillion Dollar Wire Fraud Conspiracy Friday, April 3, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Northern District of N",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "New York",
+      "stateCode": "NY",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nq84gmh",
+      "title": "Kansas City Man Sentenced for Fraudulent U.S. Treasury Check Scheme",
+      "url": "https://www.justice.gov/usao-wdmo/pr/kansas-city-man-sentenced-fraudulent-us-treasury-check-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-04-03T19:43:39.000Z",
+      "summary": "A Kansas City, Mo., man was sentenced in federal court yesterday for his role in a scheme to alter and forge stolen United States Treasury checks.",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Kansas",
+      "stateCode": "KS",
+      "cities": [
+        "Kansas City"
+      ],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n2yi3hm",
+      "title": "Chicago Felon Convicted of Identity Theft and Money Laundering in U.S. Treasury Check Scheme",
+      "url": "https://www.justice.gov/usao-ndia/pr/chicago-felon-convicted-identity-theft-and-money-laundering-us-treasury-check-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-03-26T14:46:02.000Z",
+      "summary": "Justice.gov U.S. Attorneys Northern District of Iowa Press Releases Chicago Felon Convicted of Identity Theft and Money Laundering In U.S. Treasury Check Scheme Press Release Chicago Felon Convicted of Identity Theft and Money Laundering in U.S. Treasury Check Scheme Wednesday, March 25, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Northern District of Iowa Si",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Iowa",
+      "stateCode": "IA",
+      "cities": [],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n45cw1s",
+      "title": "Missouri Woman Admits Serving as Money Mule for $2 Million Lottery Scam",
+      "url": "https://www.justice.gov/usao-edmo/pr/missouri-woman-admits-serving-money-mule-2-million-lottery-scam",
+      "source": "DOJ",
+      "publishedAt": "2026-03-25T16:39:48.000Z",
+      "summary": "Sharon Dolisi admitted depositing cashier’s checks and personal checks from 28 victims totaling more than $2 million.",
+      "categories": [
+        "Money mules"
+      ],
+      "backfill": true,
+      "state": "Missouri",
+      "stateCode": "MO",
+      "cities": [],
+      "region": "Midwest",
+      "geoConfidence": "medium"
+    },
+    {
+      "id": "nj53y94",
+      "title": "Chinese National Pleads Guilty to Elder Fraud Scheme",
+      "url": "https://www.justice.gov/usao-sdca/pr/chinese-national-pleads-guilty-elder-fraud-scheme-0",
+      "source": "DOJ",
+      "publishedAt": "2026-03-24T21:57:58.000Z",
+      "summary": "SAN DIEGO – Danxiu Wang, a Chinese national residing in California, pleaded guilty in federal court today, admitting she participated in an international fraud and money laundering scheme that tricked more than 40 elderly victims out of more than $1.2 million. According to court documents and statements made in court, this case arises from an investigation into a call center",
+      "categories": [
+        "Elder fraud"
+      ],
+      "backfill": true,
+      "state": "California",
+      "stateCode": "CA",
+      "cities": [],
+      "region": "West",
+      "geoConfidence": "medium"
+    },
+    {
+      "id": "nxogwg2",
+      "title": "Former Fairview Township Tax Collector Sentenced To 20 Months’ Imprisonment For Embezzling $400,000 In Property Taxes",
+      "url": "https://www.justice.gov/usao-mdpa/pr/former-fairview-township-tax-collector-sentenced-20-months-imprisonment-embezzling",
+      "source": "DOJ",
+      "publishedAt": "2026-03-19T17:10:30.000Z",
+      "summary": "Justice.gov U.S. Attorneys Middle District of Pennsylvania Press Releases Former Fairview Township Tax Collector Sentenced To 20 Months’ Imprisonment For Embezzling $400,000 In Property Taxes Press Release Former Fairview Township Tax Collector Sentenced To 20 Months’ Imprisonment For Embezzling $400,000 In Property Taxes Thursday, March 19, 2026 Share Facebook X LinkedIn Email For Immediate Relea",
+      "categories": [
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "Pennsylvania",
+      "stateCode": "PA",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "ncevlgy",
+      "title": "Public Service Alert: Victim Identification in Gift Card Fraud Scheme",
+      "url": "https://www.justice.gov/usao-nh/pr/public-service-alert-victim-identification-gift-card-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-03-16T18:23:48.000Z",
+      "summary": "Justice.gov U.S. Attorneys District of New Hampshire Press Releases Public Service Alert: Victim Identification In Gift Card Fraud Scheme Press Release Public Service Alert: Victim Identification in Gift Card Fraud Scheme Monday, March 16, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, District of New Hampshire District of New Hampshire usanh.media@usdoj.gov Pub",
+      "categories": [
+        "Elder fraud"
+      ],
+      "backfill": true,
+      "state": "New Hampshire",
+      "stateCode": "NH",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nfvma2x",
+      "title": "Two Additional Men Sentenced for Role in Mail and Bank Fraud Conspiracy",
+      "url": "https://www.justice.gov/usao-mdal/pr/two-additional-men-sentenced-role-mail-and-bank-fraud-conspiracy",
+      "source": "DOJ",
+      "publishedAt": "2026-03-12T20:34:43.000Z",
+      "summary": "Justice.gov U.S. Attorneys Middle District of Alabama Press Releases Two Additional Men Sentenced For Role In Mail and Bank Fraud Conspiracy Press Release Two Additional Men Sentenced for Role in Mail and Bank Fraud Conspiracy Thursday, March 12, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Middle District of Alabama MONTGOMERY, Ala. – Today, Acting United Sta",
+      "categories": [
+        "Bank fraud",
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Alabama",
+      "stateCode": "AL",
+      "cities": [],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nshkfgu",
+      "title": "Jury Finds Castle Rock Man Guilty Of Fraud, Money Laundering Charges For $2.4 Million COVID-Era Hand Sanitizer Scheme",
+      "url": "https://www.justice.gov/usao-co/pr/jury-finds-castle-rock-man-guilty-fraud-money-laundering-charges-24-million-covid-era",
+      "source": "DOJ",
+      "publishedAt": "2026-03-12T20:10:09.000Z",
+      "summary": "DENVER – The United States Attorney for the District of Colorado announces that a federal jury convicted Rico Tomas Garcia, 51, of Castle Rock, of nine counts of wire fraud and six counts of money laundering for devising a scheme in which he falsely promised to procure bulk quantities of hand sanitizer during the early months of the COVID-19 Pandemic.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Colorado",
+      "stateCode": "CO",
+      "cities": [],
+      "region": "West",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nkbgfqg",
+      "title": "Georgia man going to prison for his role in fraud conspiracy",
+      "url": "https://www.justice.gov/usao-wdny/pr/georgia-man-going-prison-his-role-fraud-conspiracy",
+      "source": "DOJ",
+      "publishedAt": "2026-03-09T17:16:33.000Z",
+      "summary": "U.S. Attorney Michael DiGiacomo announced today that Lorenzo Jones, 38, of Atlanta, Georgia, who was convicted of conspiracy to commit bank fraud and aggravated ID theft, was sentenced to serve 34 months in prison by U.S. District Judge Lawrence J. Vilardo.",
+      "categories": [
+        "Bank fraud"
+      ],
+      "backfill": true,
+      "state": "Georgia",
+      "stateCode": "GA",
+      "cities": [
+        "Atlanta"
+      ],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nzcvu2p",
+      "title": "Romanian National to be Sentenced for Participation in Fraud Scheme",
+      "url": "https://www.justice.gov/usao-nm/pr/romanian-national-be-sentenced-participation-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2026-03-06T22:17:08.000Z",
+      "summary": "A Romanian national who participated in a large-scale fraud scheme, which used fake business websites to steal more than $1.8 million from consumers across the country, will be sentenced on March 11, 2026, at 10:00 AM in Las Cruces for the crime of conspiracy to commit wire fraud.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "New Mexico",
+      "stateCode": "NM",
+      "cities": [
+        "Las Cruces"
+      ],
+      "region": "West",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nez98vz",
+      "title": "Former Carlyle Police Chief accused of embezzling more than $100,000",
+      "url": "https://www.justice.gov/usao-sdil/pr/former-carlyle-police-chief-accused-embezzling-more-100000",
+      "source": "DOJ",
+      "publishedAt": "2026-03-04T15:16:22.000Z",
+      "summary": "Justice.gov U.S. Attorneys Southern District of Illinois Press Releases Former Carlyle Police Chief Accused of Embezzling More Than $100,000 Press Release Former Carlyle Police Chief accused of embezzling more than $100,000 Wednesday, March 4, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Southern District of Illinois Lauren Barry Duncan, Public Affairs Officer",
+      "categories": [
+        "Wire fraud",
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "Illinois",
+      "stateCode": "IL",
+      "cities": [],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n53knpa",
+      "title": "Bradford County Man Sentenced To One Year Of Probation For Wire Fraud",
+      "url": "https://www.justice.gov/usao-mdpa/pr/bradford-county-man-sentenced-one-year-probation-wire-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-02-27T16:41:05.000Z",
+      "summary": "Justice.gov U.S. Attorneys Middle District of Pennsylvania Press Releases Bradford County Man Sentenced To One Year Of Probation For Wire Fraud Press Release Bradford County Man Sentenced To One Year Of Probation For Wire Fraud Friday, February 27, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Middle District of Pennsylvania WILLIAMSPORT - The United States Att",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Pennsylvania",
+      "stateCode": "PA",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "napb1jw",
+      "title": "Hunterdon County Man Charged with Wire Fraud and Money Laundering in Connection with Multimillion Dollar Liquor License Fraud Scheme",
+      "url": "https://www.justice.gov/usao-nj/pr/hunterdon-county-man-charged-wire-fraud-and-money-laundering-connection-multimillion",
+      "source": "DOJ",
+      "publishedAt": "2026-02-18T21:44:09.000Z",
+      "summary": "A Hunterdon County, New Jersey man made his initial appearance on January 23, 2026 following his arrest on charges of wire fraud and money laundering in connection with a scheme involving liquor licenses.",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "New Jersey",
+      "stateCode": "NJ",
+      "cities": [],
+      "region": "Northeast",
+      "geoConfidence": "medium"
+    },
+    {
+      "id": "nxwm6eh",
+      "title": "Mint Hill Sentenced For Investment Fraud, Embezzlement From Church, And COVID-19 Relief Fraud",
+      "url": "https://www.justice.gov/usao-wdnc/pr/mint-hill-sentenced-investment-fraud-embezzlement-church-and-covid-19-relief-fraud",
+      "source": "DOJ",
+      "publishedAt": "2026-02-17T23:19:04.000Z",
+      "summary": "Justice.gov U.S. Attorneys Western District of North Carolina Press Releases Mint Hill Sentenced For Investment Fraud, Embezzlement From Church, And COVID-19 Relief Fraud Press Release Mint Hill Sentenced For Investment Fraud, Embezzlement From Church, And COVID-19 Relief Fraud Tuesday, February 17, 2026 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Western District",
+      "categories": [
+        "Embezzlement"
+      ],
+      "backfill": true,
+      "state": "North Carolina",
+      "stateCode": "NC",
+      "cities": [],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n54z2p6",
+      "title": "Tennessee Man Sentenced to Five Years for Wire Fraud, Money Laundering, and Making a False Claim to the IRS",
+      "url": "https://www.justice.gov/usao-mdfl/pr/tennessee-man-sentenced-five-years-wire-fraud-money-laundering-and-making-false-claim",
+      "source": "DOJ",
+      "publishedAt": "2026-02-02T22:05:51.000Z",
+      "summary": "Ocala, Florida – Clarence Christofer Ward, a/k/a Khaled Yaqud Mansur-El, has been sentenced by U.S. District Judge Thomas P. Barber to five years in federal prison for 1 count of wire fraud, 10 counts of money laundering, and 1 count of making a false claim to the IRS. As part of the sentence, the court ordered Ward to forfeit $4,197,981.28 in proceeds derived from his wire",
+      "categories": [
+        "Wire fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "low"
+    },
+    {
+      "id": "nsnfxml",
+      "title": "Houston, TX: Mail Theft",
+      "url": "https://www.uspis.gov/news/press-release/houston-tx-mail-theft-2",
+      "source": "USPIS",
+      "publishedAt": "2025-12-31T00:00:00.000Z",
+      "summary": "Houston, TX: Mail Theft Last updated 12.31.2025 Texas The U.S. Postal Inspection Service is offering a reward of up to $100,000 for information leading to the arrest and conviction of the suspect(s) who stole mail from the Hawthorne Terrace Apartments, 3203 Hayes Rd., Houston, TX 77082, multiple times between November and December 2025. TAKE NO ACTION TO APPREHEND THESE PERSONS YOURSELF If you hav",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Texas",
+      "stateCode": "TX",
+      "cities": [
+        "Houston",
+        "Mail Theft Houston"
+      ],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nnpn4yl",
+      "title": "Philadelphia Man Sentenced to Nine Years in Prison for Vehicle Fraud Scheme",
+      "url": "https://www.justice.gov/usao-edpa/pr/philadelphia-man-sentenced-nine-years-prison-vehicle-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2025-11-12T16:16:50.000Z",
+      "summary": "Justice.gov U.S. Attorneys Eastern District of Pennsylvania Press Releases Philadelphia Man Sentenced To Nine Years In Prison For Vehicle Fraud Scheme Press Release Philadelphia Man Sentenced to Nine Years in Prison for Vehicle Fraud Scheme Tuesday, November 4, 2025 Share Facebook X LinkedIn Email For Immediate Release U.S. Attorney's Office, Eastern District of Pennsylvania Defendant and Co-Schem",
+      "categories": [
+        "Wire fraud",
+        "Fraud scheme"
+      ],
+      "backfill": true,
+      "state": "Pennsylvania",
+      "stateCode": "PA",
+      "cities": [
+        "Philadelphia"
+      ],
+      "region": "Northeast",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "naahfer",
+      "title": "Final man sentenced in million-dollar stolen mail credit card fraud scheme",
+      "url": "https://www.justice.gov/usao-sdtx/pr/final-man-sentenced-million-dollar-stolen-mail-credit-card-fraud-scheme",
+      "source": "DOJ",
+      "publishedAt": "2025-11-10T23:16:56.000Z",
+      "summary": "The final person in a large-scale mail theft and credit card fraud scheme has been ordered to prison",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Multi-state / Unknown",
+      "stateCode": null,
+      "cities": [],
+      "region": null,
+      "geoConfidence": "none"
+    },
+    {
+      "id": "nu9djj6",
+      "title": "Houston, TX: MAIL THEFT",
+      "url": "https://www.uspis.gov/news/press-release/houston-tx-mail-theft",
+      "source": "USPIS",
+      "publishedAt": "2025-08-20T00:00:00.000Z",
+      "summary": "Houston, TX: MAIL THEFT Last updated 08.20.2025 Texas The U.S. Postal Inspection Service is offering a reward of up to $100,000 for information leading to the arrest and conviction of the mail theft suspects, pictured above, for mail theft in Houston, Harris County, Texas. The suspects, a white/Hispanic male and white female, are sought for mail theft at the 2828 Royal Oaks Apartments in Houston, ",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Texas",
+      "stateCode": "TX",
+      "cities": [
+        "Houston",
+        "MAIL THEFT Houston"
+      ],
+      "region": "South",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n9uyja8",
+      "title": "Chicago, IL: MAIL THEFT",
+      "url": "https://www.uspis.gov/news/press-release/chicago-il-mail-theft-2",
+      "source": "USPIS",
+      "publishedAt": "2025-02-12T00:00:00.000Z",
+      "summary": "Chicago, IL: MAIL THEFT Last updated 02.12.2025 Illinois The suspect is described as Black male in his late 20s or early 30s, with a medium complexion and medium build, approximately 5'8\" to 5'11\" tall, and shoulder length dreadlocks. The U.S. Postal Inspection Service is offering a reward of up to $100,000 for information leading to the arrest and conviction of the suspect, who is responsible for",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Illinois",
+      "stateCode": "IL",
+      "cities": [
+        "Chicago",
+        "MAIL THEFT Chicago"
+      ],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "n9uyja7",
+      "title": "Chicago, IL.: MAIL THEFT",
+      "url": "https://www.uspis.gov/news/press-release/chicago-il-mail-theft-3",
+      "source": "USPIS",
+      "publishedAt": "2025-02-05T00:00:00.000Z",
+      "summary": "Chicago, IL.: MAIL THEFT Last updated 02.05.2025 Illinois The suspect is described as a Black male in his 20s, with a medium complexion, slight build, and approximately 5'5\" to 5'8\" tall. The U.S. Postal Inspection Service is offering a reward of up to $100,000 for information leading to the arrest and conviction of the suspect, who is responsible for multiple mail theft incidents at residential b",
+      "categories": [
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Illinois",
+      "stateCode": "IL",
+      "cities": [
+        "Chicago",
+        "MAIL THEFT Chicago"
+      ],
+      "region": "Midwest",
+      "geoConfidence": "high"
+    },
+    {
+      "id": "nl6eius",
+      "title": "Calumet City Man Sentenced to 12+ Years in Prison for Carbondale Mail Theft and Bank Fraud Scheme",
+      "url": "https://www.uspis.gov/news/press-release/calumet-city-man-sentenced-to-12-years-in-prison-for-carbondale-mail-theft-and-bank-fraud-scheme",
+      "source": "USPIS",
+      "publishedAt": "2024-12-11T00:00:00.000Z",
+      "summary": "Calumet City Man Sentenced to 12+ Years in Prison for Carbon... Last updated 12.11.2024 Illinois Illinois man sentenced to 154 months in prison for or engaging in a bank fraud scheme using stolen mail from USPS Collection Boxes. Read Press Release {\"code\":\"internal_server_error\",\"message\":\"There has been a critical error on this website.Learn more about troubleshooting WordPress.\",\"data\":{\"status\"",
+      "categories": [
+        "Bank fraud",
+        "Check fraud"
+      ],
+      "backfill": true,
+      "state": "Illinois",
+      "stateCode": "IL",
+      "cities": [],
+      "region": "Midwest",
+      "geoConfidence": "medium"
+    }
+  ]
+}

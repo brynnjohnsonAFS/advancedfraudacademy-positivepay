@@ -1,0 +1,4 @@
+# Per-run state — regenerated from cached CDX dumps in /tmp by run.js.
+# The script (and the final api/_lib/news-backfill.json output) are the
+# committed artifacts; everything in state/ is intermediate and large.
+state/

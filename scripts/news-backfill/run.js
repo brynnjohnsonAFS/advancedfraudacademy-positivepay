@@ -300,6 +300,12 @@ async function phaseHarvest(opts) {
       }
     });
     var items = Object.values(byUrl);
+    // Sort DESC by Wayback timestamp so the most-recent snapshots fetch first.
+    // Heuristic: pages captured more recently are likelier to be newly
+    // published. If the fetcher is interrupted, we keep the best items.
+    items.sort(function (a, b) {
+      return b.waybackTimestamp.localeCompare(a.waybackTimestamp);
+    });
     if (opts.limit) items = items.slice(0, opts.limit);
     log(name + ': ' + items.length + ' candidates after slug pre-filter');
     out = out.concat(items);
@@ -353,25 +359,43 @@ async function phaseFetch(opts) {
       await throttle();
 
       var wb = 'https://web.archive.org/web/' + c.waybackTimestamp + 'id_/' + c.url;
-      try {
-        var res = await httpGet(wb);
-        if (res.status !== 200 || res.body.length < 500) {
-          fail++; err('  ' + name + ' [' + (i + 1) + '/' + items.length + '] ' + res.status + ' ' + c.url);
-          continue;
+      var attempt = 0;
+      var done = false;
+      while (!done && attempt < 3) {
+        attempt++;
+        try {
+          var res = await httpGet(wb);
+          if (res.status === 429 || res.status === 503) {
+            // Wayback throttle. Back off geometrically: 30s, 60s, 120s.
+            var wait = 30000 * attempt;
+            err('  ' + name + ' rate-limited ' + res.status + ' — sleeping ' + (wait/1000) + 's');
+            await sleep(wait);
+            continue;
+          }
+          if (res.status !== 200 || res.body.length < 500) {
+            fail++; err('  ' + name + ' [' + (i + 1) + '/' + items.length + '] ' + res.status + ' ' + c.url);
+            done = true; break;
+          }
+          var rec = {
+            url: c.url,
+            source: c.sourceLabel,
+            waybackTimestamp: c.waybackTimestamp,
+            title: s.extractTitle(res.body),
+            publishedAt: s.extractDate(res.body) || tsToISO(c.waybackTimestamp),
+            body: s.extractBody(res.body)
+          };
+          stream.write(JSON.stringify(rec) + '\n');
+          ok++;
+          if (ok % 100 === 0) log(name + ': ' + ok + ' fetched, ' + fail + ' failed (i=' + (i + 1) + '/' + items.length + ')');
+          done = true;
+        } catch (e) {
+          if (attempt < 3) {
+            await sleep(5000);  // transient network error — short retry
+          } else {
+            fail++; err('  ' + name + ' [' + (i + 1) + '/' + items.length + '] ' + e.message + ' ' + c.url);
+            done = true;
+          }
         }
-        var rec = {
-          url: c.url,
-          source: c.sourceLabel,
-          waybackTimestamp: c.waybackTimestamp,
-          title: s.extractTitle(res.body),
-          publishedAt: s.extractDate(res.body) || tsToISO(c.waybackTimestamp),
-          body: s.extractBody(res.body)
-        };
-        stream.write(JSON.stringify(rec) + '\n');
-        ok++;
-        if (ok % 25 === 0) log(name + ': ' + ok + ' fetched, ' + fail + ' failed');
-      } catch (e) {
-        fail++; err('  ' + name + ' [' + (i + 1) + '/' + items.length + '] ' + e.message + ' ' + c.url);
       }
     }
     stream.end();
@@ -452,12 +476,14 @@ async function phaseFinalize() {
     return tb - ta;
   });
 
-  // Mark as backfill so the live aggregator can identify these if needed
-  items.forEach(function (it) { it.backfill = true; });
+  // Geo-tag at write time so the runtime aggregator doesn't pay the cost.
+  // Backfill items get baked-in state/region just like live items.
+  var geoTagger;
+  try { geoTagger = require('../../api/_lib/geo-tagger'); } catch (e) { geoTagger = null; }
 
-  // Trim to the final shape the live page expects
+  // Build final shape matching live items
   var finalItems = items.map(function (it) {
-    return {
+    var out = {
       id:          it.id,
       title:       it.title,
       url:         it.url,
@@ -467,6 +493,19 @@ async function phaseFinalize() {
       categories:  it.categories || [],
       backfill:    true
     };
+    if (geoTagger && typeof geoTagger.tagGeo === 'function') {
+      try {
+        var geo = geoTagger.tagGeo(it);
+        if (geo) {
+          out.state         = geo.state;
+          out.stateCode     = geo.stateCode;
+          out.cities        = geo.cities;
+          out.region        = geo.region;
+          out.geoConfidence = geo.confidence;
+        }
+      } catch (e) { /* tagging failure shouldn't drop the item */ }
+    }
+    return out;
   });
 
   ensureDir(path.dirname(OUT_FILE));
@@ -477,6 +516,13 @@ async function phaseFinalize() {
     items:       finalItems
   });
   log('wrote ' + finalItems.length + ' items to ' + path.relative(process.cwd(), OUT_FILE));
+
+  // Brief breakdown for the operator
+  var bySource = {};
+  finalItems.forEach(function (it) { bySource[it.source] = (bySource[it.source] || 0) + 1; });
+  Object.keys(bySource).sort().forEach(function (s) {
+    log('  ' + s + ': ' + bySource[s]);
+  });
 }
 
 // ── CLI entry ───────────────────────────────────────────────────────────────
