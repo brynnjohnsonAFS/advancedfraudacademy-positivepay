@@ -650,7 +650,11 @@
     renderList();
   });
 
-  fetch('/api/fraud-news')
+  // Request a deep slice — the news page surfaces the 18-month historical
+  // backfill in addition to live items. The homepage ticker uses the
+  // default (40) for its marquee. 1000 covers the expected backfill volume
+  // with headroom; the API clamps to 2000.
+  fetch('/api/fraud-news?limit=1000')
     .then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
