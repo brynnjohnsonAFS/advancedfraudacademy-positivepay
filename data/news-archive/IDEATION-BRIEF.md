@@ -1,21 +1,31 @@
 # AFA News Archive — Cowork Ideation Brief
 
-A structured, queryable record of every federal fraud prosecution and
-postal-inspection case published in the last 18 months. Originally built
-to populate the AFA news page, but the raw data is broader than what the
-news page surfaces — it's a real asset for marketing, sales, customer
-education, and analytics.
+A structured, queryable record of federal fraud prosecutions and
+postal-inspection cases — **18,700 records spanning up to 17 years**.
+Originally built to populate the AFA news page, but the raw data is
+far broader than what the news page surfaces; only about 5% of the
+mined data shows up there today. The other 95% is sitting in
+`data/news-archive/` waiting to be used for marketing, sales,
+customer education, and analytics.
 
 ---
 
 ## TL;DR
 
 We pulled every U.S. Attorney's Office press release, every DOJ Office
-of Public Affairs press release, and every USPIS news item from the
-last 18 months — roughly **18,700 records** — and turned each one into
-a clean JSON object with title, publication date, source URL, and full
-article body text. The data sits in `data/news-archive/` and is
-reusable by any other application or analysis we want to build.
+of Public Affairs press release, and every USPIS news item the Internet
+Archive could surface for us — **roughly 18,700 records, with the
+oldest from 2009** — and turned each one into a clean JSON object with
+title, publication date, source URL, and full article body text. The
+data sits in `data/news-archive/` and is reusable by any other
+application or analysis we want to build.
+
+> **Raw archive vs. news page view, in one line:**
+> The news page (`api/_lib/news-backfill.json`, 963 items) is a
+> filtered 18-month slice of the raw archive. The raw archive
+> (`data/news-archive/*.jsonl`, 18,701 items) goes back to 2009.
+> When cowork is ideating, the raw archive is the asset, not the
+> news page.
 
 ---
 
@@ -23,11 +33,19 @@ reusable by any other application or analysis we want to build.
 
 Three files under `data/news-archive/`:
 
-| File              | What's in it | Approximate count |
-|-------------------|--------------|-------------------|
-| `doj_usao.jsonl`  | Press releases from the 94 U.S. Attorney's Offices (the district-level federal prosecutors — SDNY, NDIL, EDLA, etc.) | ~16,760 |
-| `doj_opa.jsonl`   | Press releases from DOJ HQ (Office of Public Affairs — national-scale cases) | ~1,943 |
-| `uspis.jsonl`     | USPIS press releases + standing "scam article" pages on check washing, money mules, mail theft | ~10 |
+| File              | What's in it | Count    | Date range            |
+|-------------------|--------------|---------:|------------------------|
+| `doj_usao.jsonl`  | Press releases from the 94 U.S. Attorney's Offices (the district-level federal prosecutors — SDNY, NDIL, EDLA, etc.) | 16,750 | 2014-11 → 2026-05 (**11.5 years**) |
+| `doj_opa.jsonl`   | Press releases from DOJ HQ (Office of Public Affairs — national-scale cases) | 1,943 | 2009-01 → 2026-05 (**17.4 years**) |
+| `uspis.jsonl`     | USPIS press releases + standing "scam article" pages on check washing, money mules, mail theft | 8 | 2022-06 → 2025-12 (3.6 years) |
+
+The depth happened by accident — useful accident. We asked the Internet
+Archive for everything captured in our 18-month window (Nov 2024 →
+May 2026), but Wayback re-crawls federal sites periodically, so a
+2014 USAO press release that was re-crawled in 2025 still came back.
+After parsing, each record's `publishedAt` field reflects the real
+publish date from the page itself — not the Wayback crawl date — so
+the historical depth is legitimate and accurate.
 
 Each file is **JSONL** — one JSON object per line. Easy to stream-process
 in any language, easy to load into a dataframe, easy to grep.
@@ -95,9 +113,12 @@ Briefly, so you can explain it to others — and so you can judge its
 reliability:
 
 1. **Discovery.** We queried the Internet Archive's CDX API for every
-   URL captured under `justice.gov/opa/pr/*`, `justice.gov/usao-*/pr/*`,
-   and `uspis.gov/news/*` between 2024-11-22 and 2026-05-22. That gave
-   us ~318,000 candidate URLs.
+   URL it captured under `justice.gov/opa/pr/*`,
+   `justice.gov/usao-*/pr/*`, and `uspis.gov/news/*` during a
+   2024-11-22 → 2026-05-22 *capture* window. That's the date Wayback
+   crawled the page, not the date the page was published — which is
+   why the actual *publish* dates of the records reach back to 2009.
+   This gave us ~318,000 candidate URLs.
 2. **Slug filter.** We dropped any URL whose path didn't hint at fraud
    ("check fraud", "wire fraud", "embezzl", "money launder", "bank
    fraud", etc.). That narrowed it to ~18,700 candidates.
@@ -235,8 +256,13 @@ now than discover them mid-project:
   per record. For full text, the `url` is canonical; refetch as needed.
 - **~5% of pages have empty bodies.** Some Wayback snapshots are
   incomplete. Title + date are still usable on those records.
-- **Window-bounded.** 2024-11-22 through pipeline run date. Going
-  earlier requires re-running with a wider window.
+- **Coverage is denser in recent years, sparser further back.**
+  The raw archive reaches 2009 for DOJ HQ and 2014 for USAOs because
+  Wayback re-crawled older pages during our 18-month window. But it's
+  not exhaustive — pages re-crawled in the window are present; pages
+  not re-crawled are missed. Recent years are nearly complete; older
+  years are partial samples. Quote with care for trend analysis
+  before 2024.
 - **USPIS is thin.** Only ~10 USPIS records matched the slug filter
   in the window. Their archive may also be shallower than DOJ's.
 - **Not de-duplicated across sources.** Same case can appear as a
@@ -293,8 +319,9 @@ see one finished example of what an application looks like:
 
 - **Filter to check-fraud only:** `api/_lib/news-backfill.json`
   contains the subset that passed the tight `KEYWORDS` regex from
-  `api/_lib/fraud-news-core.js`, with geo-tags and deduplication
-  applied. ~750 items.
+  `api/_lib/fraud-news-core.js`, narrowed to the 18-month launch
+  window, with geo-tags and deduplication applied. **963 items**
+  out of the raw archive's 18,701.
 - **Merge with live feed:** `api/_lib/fraud-news-core.js` reads
   `news-backfill.json` at request time, concatenates with current
   RSS pulls, dedupes, and serves both via `/api/fraud-news`.
