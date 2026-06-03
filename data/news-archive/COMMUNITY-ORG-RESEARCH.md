@@ -153,9 +153,10 @@ dollar figure.
 
 ### Method mix — the key finding
 
-Community-organization fraud is **overwhelmingly internal
-embezzlement, cashed out as wire transfer.** External-attack
-vectors (BEC, check schemes, ACH) barely appear.
+Community-organization fraud is **led by internal embezzlement, with
+wire transfer as the most common cash-out method.** External-attack
+vectors (BEC, check schemes, ACH) appear in fewer than 4% of cases
+combined.
 
 | Method | Cases | % of subset |
 |---|---:|---:|
