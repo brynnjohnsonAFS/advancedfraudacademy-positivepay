@@ -255,16 +255,14 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .foot-note { padding: 32px var(--gutter) 60px; max-width: 1100px; margin: 0 auto; font-size: 12px; color: var(--muted); border-top: 1px solid var(--hairline-soft); }
 
 /* HEADER */
-.site-header { padding: 20px var(--gutter); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--hairline-soft); max-width: 1100px; margin: 0 auto; }
-.site-header .logo { font-weight: 700; font-size: 18px; color: var(--ink-deep); letter-spacing: -0.01em; }
-.site-header .logo span { color: var(--primary); }
-.site-header .nav-cta { font-size: 14px; font-weight: 700; color: var(--ink-deep); text-decoration: none; }
-.site-header .nav-cta:hover { color: var(--primary); }
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--hairline-soft); }
+.site-header .brand { display: flex; align-items: center; height: 72px; max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
+.site-header .brand img { height: 36px; width: auto; display: block; }
 </style>
 </head>
 <body>
 <header class="site-header">
-  <div class="logo">Advanced Fraud <span>Solutions</span></div>
+  <a href="/positivepay/" class="brand"><img src="/positivepay/assets/afs-logo-full-lockup-transparent.png" alt="Advanced Fraud Solutions"></a>
 </header>
 
 <main>

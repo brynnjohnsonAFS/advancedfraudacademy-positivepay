@@ -91,9 +91,9 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .btn-secondary { background: var(--canvas); color: var(--ink-deep); border: 1px solid var(--hairline); }
 .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
 
-.site-header { padding: 20px var(--gutter); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--hairline-soft); max-width: 1100px; margin: 0 auto; }
-.site-header .logo { font-weight: 700; font-size: 18px; color: var(--ink-deep); letter-spacing: -0.01em; }
-.site-header .logo span { color: var(--primary); }
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--hairline-soft); }
+.site-header .brand { display: flex; align-items: center; height: 72px; max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
+.site-header .brand img { height: 36px; width: auto; display: block; }
 
 .hero { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(24px, 4vw, 48px); }
 .hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
@@ -151,7 +151,7 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 <body>
 
 <header class="site-header">
-  <div class="logo">Advanced Fraud <span>Solutions</span></div>
+  <a href="/positivepay/" class="brand"><img src="/positivepay/assets/afs-logo-full-lockup-transparent.png" alt="Advanced Fraud Solutions"></a>
 </header>
 
 <main>
