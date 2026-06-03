@@ -939,17 +939,56 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
   document.getElementById('hf-loss-avoided').value = parseDollar(lossText);
   document.getElementById('hf-fee-income').value = parseDollar(feeText);
   document.getElementById('hf-retention-count').value = parseInt(retText) || 0;
-  // Stuff all input state + UTM params + variant into JSON blob for audit
+  // Build a human-readable, mode-aware summary for the rep-facing payload field.
+  // The discrete fields above (mode, tier, loss, fee, retention) carry the machine-usable values for automations.
   const params = new URLSearchParams(window.location.search);
-  const payload = {
-    mode: currentMode,
-    asset_tier_idx: i.asset,
-    jha: i.jha,
-    inputs: { accounts: i.accounts, enroll: i.enroll, retailA: i.retailA, fraudA: i.fraudA, checks: i.checks, checkVal: i.checkVal, ach: i.ach, achVal: i.achVal, checksC: i.checksC, checkValC: i.checkValC, achC: i.achC, y2Clients: i.y2Clients, retailC: i.retailC },
-    utm: { source: params.get('utm_source'), medium: params.get('utm_medium'), campaign: params.get('utm_campaign'), content: params.get('utm_content') },
-    submitted_at: new Date().toISOString()
-  };
-  document.getElementById('hf-calc-payload').value = JSON.stringify(payload);
+  const usd = n => '$' + Math.round(n).toLocaleString('en-US');
+  const num = n => Number(n).toLocaleString('en-US');
+  const modeLabels = { a: 'For my business clients', b: "For my FI's own checks", c: 'Start internal, grow into business clients' };
+  const tierLabels = ['Under $1B', '$1B-$5B', '$5B-$10B', '$10B-$20B', '$20B+'];
+  let inputLines;
+  if (currentMode === 'a') {
+    inputLines = [
+      'Business accounts: ' + num(i.accounts),
+      'Enrollment rate: ' + Math.round(i.enroll * 100) + '%',
+      'Retail price: ' + usd(i.retailA) + '/mo per client',
+      'Annual fraud loss absorbed today: ' + usd(i.fraudA)
+    ];
+  } else if (currentMode === 'b') {
+    inputLines = [
+      "Cashier's + official checks/yr: " + num(i.checks),
+      'Avg value per check: ' + usd(i.checkVal),
+      'Vendor ACH + payroll runs/yr: ' + num(i.ach),
+      'Avg ACH value: ' + usd(i.achVal)
+    ];
+  } else {
+    inputLines = [
+      "Cashier's + official checks/yr: " + num(i.checksC),
+      'Avg value per check: ' + usd(i.checkValC),
+      'Vendor ACH runs/yr: ' + num(i.achC),
+      'Business clients enrolled by end of Yr2: ' + num(i.y2Clients),
+      'Retail price: ' + usd(i.retailC) + '/mo per client'
+    ];
+  }
+  const utmStr = ['utm_source','utm_medium','utm_campaign','utm_content'].map(k => params.get(k)).filter(Boolean).join(' / ') || '(none)';
+  const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+  const summary = [
+    'SUBMITTED ' + stamp,
+    'Mode: ' + (modeLabels[currentMode] || currentMode),
+    'Asset tier: ' + (tierLabels[i.asset] || ('idx ' + i.asset)),
+    'Channel partner: ' + (i.jha ? 'Yes' : 'No'),
+    '',
+    'WHAT THEY ENTERED',
+    ...inputLines.map(l => '- ' + l),
+    '',
+    'RESULT',
+    '- Year 1 loss avoided: ' + usd(parseDollar(lossText)),
+    '- Year 1 fee income: ' + usd(parseDollar(feeText)),
+    '- Clients retained: ' + num(parseInt(retText) || 0),
+    '',
+    'Source: calculator   UTM: ' + utmStr
+  ].join('\n');
+  document.getElementById('hf-calc-payload').value = summary;
   // Let the native submit run (POST to Pardot)
 });
 
