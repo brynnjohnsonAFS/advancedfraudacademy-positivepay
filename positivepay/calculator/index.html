@@ -295,6 +295,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <span class="trigger-band">An $8B community CU bought after a <b>$10K payroll loss</b>. A $10B CU after a <b>reconciliation audit</b>. A $2B community CU after <b>checks were stolen</b>.</span>
         <h1 class="two-tone"><span class="strong">A Modern Positive Pay number</span> <span class="soft">your CFO will believe.</span></h1>
         <p class="lead">Walk into your next exec meeting with the math. Loss avoided, fee income, and retention modeled together. Built on community FI benchmarks. Forwardable to your CFO in two clicks. 60 seconds, no signup to see your result.</p>
+        <div class="hero-cta"><a href="#calculator" class="btn btn-primary">Try the calculator <span aria-hidden="true">↓</span></a></div>
       </div>
       <div class="hero-art-wrap">
         <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" class="hero-art" aria-hidden="true">
@@ -359,10 +360,11 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
     </div>
   </section>
 
-  <section class="mode-picker">
+  <section class="mode-picker" id="calculator">
     <div class="eyebrow">Step 1</div>
     <h2 class="two-tone"><span class="strong">How would your FI</span> <span class="soft">use Modern Positive Pay?</span></h2>
-    <p class="lead">Most community FIs start with their own checks before they sell it to business clients. Pick the mode that fits where you are today.</p>
+    <p class="lead">Most community FIs start with their own checks before they sell it to business clients. Select one to see your numbers — you can switch anytime.</p>
+    <div class="mode-pick-hint">Select one to begin</div>
     <div class="mode-cards" role="radiogroup" aria-label="Calculator mode">
       <button class="mode-card active" data-mode="b" role="radio" aria-checked="true">
         <span class="mode-recommend">Recommended</span>
@@ -518,18 +520,30 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <details class="methodology">
           <summary>Show the math</summary>
           <div class="methodology-content">
-            <p><b>Modern Positive Pay catches 85% of attempted fraud face value.</b> Every $1 of caught face value avoids $4.50 in true cost (NACHA + AFP soft-cost multiplier, including investigation, recovery, reissue, and customer outreach).</p>
-            <div class="formula" id="formula-block">Loss avoided = face_at_risk × 0.85 catch rate × $4.50 soft cost
+            <p><b>Modern Positive Pay catches 85% of attempted fraud face value.</b> Every $1 of caught face value avoids $5.75 in true cost (LexisNexis True Cost of Fraud, 2025 — including investigation, recovery, reissue, and customer outreach).</p>
+            <div class="formula" id="formula-block">Loss avoided = face_at_risk × 0.85 catch rate × $5.75 soft cost
 Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
             + ACH/yr × avg value × 1.0% ACH fraud attempt rate
 
 Fee income = enrolled clients × (your retail price − cost basis) × 12 − setup
 Cost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.</div>
-            <cite>Sources: Federal Reserve Q2 2024 commercial payment data, NACHA + AFP fraud cost research, FI fee schedule survey (21 FIs, May 2026).</cite>
+            <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026).</cite>
           </div>
         </details>
       </div>
     </div>
+  </section>
+
+  <section class="guide-cta-section">
+    <a href="#lock" class="guide-cta">
+      <img class="guide-cta-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="">
+      <span class="guide-cta-body">
+        <span class="guide-cta-eyebrow">Free guide · keep exploring</span>
+        <span class="guide-cta-title">Get the Peer Benchmark Guide</span>
+        <span class="guide-cta-desc">See how your numbers stack up against AFS-protected FIs at your asset tier — plus a board-ready one-pager for your CFO. No sales call.</span>
+      </span>
+      <span class="guide-cta-arrow" aria-hidden="true">↓</span>
+    </a>
   </section>
 
   </main>
@@ -538,7 +552,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     <div class="stat-band-inner">
       <div class="eyebrow">The model under your number</div>
       <h2 class="two-tone"><span class="strong">Three constants do most of the work.</span> <span class="soft">The rest is your FI.</span></h2>
-      <p class="lead">Modern Positive Pay's value depends on a few defensible numbers. Drawn from NACHA + AFP fraud research and Federal Reserve commercial payment data. Treasury teams who check the math always start here.</p>
+      <p class="lead">Modern Positive Pay's value depends on a few defensible numbers. Drawn from the LexisNexis True Cost of Fraud study and Federal Reserve commercial payment data. Treasury teams who check the math always start here.</p>
       <div class="stat-band-grid">
         <div class="stat-band-item">
           <div class="stat-band-num">85%</div>
@@ -546,9 +560,9 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
           <div class="stat-band-sub">Industry-tested. AFS customer programs match or beat this.</div>
         </div>
         <div class="stat-band-item">
-          <div class="stat-band-num">$4.50</div>
+          <div class="stat-band-num">$5.75</div>
           <div class="stat-band-label">True cost per $1 of face value if fraud succeeds</div>
-          <div class="stat-band-sub">Includes investigation, recovery, reissue, client outreach.</div>
+          <div class="stat-band-sub">Includes investigation, recovery, reissue, client outreach. LexisNexis 2025.</div>
         </div>
         <div class="stat-band-item">
           <div class="stat-band-num">19</div>
@@ -726,7 +740,7 @@ const CORP_CHECKS_BY_ASSET = [2800, 5600, 9100, 12600, 17500]; // annual access 
 const WHOLESALE_DIRECT = 40;   // direct list per business client per month
 const WHOLESALE_JHA = 25;      // Jack Henry / Symitar channel wholesale
 const CATCH_RATE = 0.85;
-const SOFT_COST = 4.5;
+const SOFT_COST = 5.75;
 const CHECK_ATTEMPT = 0.005;   // 0.5%
 const ACH_ATTEMPT = 0.01;      // 1.0%
 
