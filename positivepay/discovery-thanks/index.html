@@ -112,6 +112,7 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .grader-cta { background: var(--ink-deep); color: var(--canvas); border-radius: var(--r-lg); padding: clamp(32px, 5vw, 56px); }
 .grader-cta .eyebrow { color: var(--muted); }
 .grader-cta h2 { color: var(--canvas); margin-bottom: 16px; max-width: 24ch; }
+.grader-cta h2 .strong { color: var(--canvas); }
 .grader-cta h2 .soft { color: var(--muted); }
 .grader-cta p { color: var(--muted); max-width: 56ch; margin-bottom: 28px; font-size: 16px; }
 .grader-cta .btn-composite { display: inline-flex; align-items: center; background: var(--canvas); border-radius: var(--r-lg); padding: 16px 80px 16px 36px; color: var(--ink-deep); font-weight: 700; font-size: 18px; letter-spacing: 0.02em; text-decoration: none; position: relative; transition: padding 0.2s ease; }
@@ -119,12 +120,6 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .grader-cta .btn-composite .arrow-orb { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: right 0.2s ease, background 0.2s ease; }
 .grader-cta .btn-composite:hover .arrow-orb { right: 4px; background: var(--primary-hover); }
 .grader-cta .btn-composite .arrow-orb svg { width: 20px; height: 20px; fill: var(--canvas); }
-
-.share-block { background: var(--surface-soft); border-radius: var(--r-lg); padding: clamp(28px, 4vw, 40px); }
-.share-block h3 { margin-bottom: 8px; }
-.share-block .lead { margin-bottom: 24px; max-width: 56ch; font-size: 16px; }
-.share-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.share-actions .btn { padding: 16px 28px; font-size: 16px; }
 
 .expect-eyebrow { display: block; }
 .expect h2 { margin-bottom: 16px; max-width: 28ch; }
@@ -241,17 +236,6 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
     </div>
   </section>
 
-  <section>
-    <div class="share-block">
-      <h3 class="two-tone"><span class="strong">Want a colleague on the call?</span></h3>
-      <p class="lead">These sessions work best with the person who owns treasury fraud and the person who owns the fee income line. Loop in a colleague, or share the session with your network.</p>
-      <div class="share-actions">
-        <a href="#" class="btn btn-primary" id="email-cfo-btn">Invite a colleague</a>
-        <a href="#" class="btn btn-secondary" id="linkedin-share-btn" target="_blank" rel="noopener">Share to LinkedIn</a>
-      </div>
-    </div>
-  </section>
-
   <section class="expect">
     <span class="eyebrow expect-eyebrow">What to expect</span>
     <h2 class="two-tone"><span class="strong">Here's how the 30 minutes</span> <span class="soft">actually goes.</span></h2>
@@ -337,28 +321,6 @@ if (new URLSearchParams(window.location.search).get('qa') === '1') {
   qa.innerHTML = '<b>UTM + form params captured for Pardot:</b><br>' +
     Object.entries(params).map(([k, v]) => k + ': ' + (v || '(empty)')).join('<br>');
 }
-
-(function() {
-  const btn = document.getElementById('email-cfo-btn');
-  const subj = encodeURIComponent('Joining a Modern Positive Pay working session with AFS');
-  const body = encodeURIComponent(
-    "I booked a 30-minute working session with Advanced Fraud Solutions on Modern Positive Pay.\n\n" +
-    "No slides or demo theater — they walk our numbers (loss avoided, fee income, retention) against peer community FIs at our asset size.\n\n" +
-    "Want to be on it with me? I'll forward the time once AFS confirms it.\n\n" +
-    "Background: https://advancedfraudacademy.com/positivepay/calculator"
-  );
-  btn.href = 'mailto:?subject=' + subj + '&body=' + body;
-})();
-
-(function() {
-  const btn = document.getElementById('linkedin-share-btn');
-  const shareUrl = 'https://advancedfraudacademy.com/positivepay/discovery?utm_source=linkedin&utm_medium=share&utm_campaign=peer-share';
-  const text = encodeURIComponent(
-    "If you run treasury or fraud at a community FI, this 30-minute working session with Advanced Fraud Solutions is worth it. " +
-    "No slides — just your Modern Positive Pay numbers against peer FI benchmarks at your asset size."
-  );
-  btn.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) + '&summary=' + text;
-})();
 
 (function() {
   const link = document.getElementById('grader-cta');

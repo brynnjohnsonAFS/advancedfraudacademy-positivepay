@@ -109,17 +109,6 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .hero-art .pulse-3 { animation: pulse-square 4s ease-in-out infinite 2s; }
 @keyframes pulse-square { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
 
-.grader-cta { background: var(--ink-deep); color: var(--canvas); border-radius: var(--r-lg); padding: clamp(32px, 5vw, 56px); }
-.grader-cta .eyebrow { color: var(--muted); }
-.grader-cta h2 { color: var(--canvas); margin-bottom: 16px; max-width: 24ch; }
-.grader-cta h2 .soft { color: var(--muted); }
-.grader-cta p { color: var(--muted); max-width: 56ch; margin-bottom: 28px; font-size: 16px; }
-.grader-cta .btn-composite { display: inline-flex; align-items: center; background: var(--canvas); border-radius: var(--r-lg); padding: 16px 80px 16px 36px; color: var(--ink-deep); font-weight: 700; font-size: 18px; letter-spacing: 0.02em; text-decoration: none; position: relative; transition: padding 0.2s ease; }
-.grader-cta .btn-composite:hover { padding-right: 88px; }
-.grader-cta .btn-composite .arrow-orb { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: right 0.2s ease, background 0.2s ease; }
-.grader-cta .btn-composite:hover .arrow-orb { right: 4px; background: var(--primary-hover); }
-.grader-cta .btn-composite .arrow-orb svg { width: 20px; height: 20px; fill: var(--canvas); }
-
 .share-block { background: var(--surface-soft); border-radius: var(--r-lg); padding: clamp(28px, 4vw, 40px); }
 .share-block h3 { margin-bottom: 8px; }
 .share-block .lead { margin-bottom: 24px; max-width: 56ch; font-size: 16px; }
@@ -224,20 +213,6 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
           </g>
         </svg>
       </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="grader-cta">
-      <span class="eyebrow">While you're here</span>
-      <h2 class="two-tone"><span class="strong">Run the grader.</span> <span class="soft">Score your current Positive Pay program in 90 seconds.</span></h2>
-      <p>The calculator showed you the math. The grader scores what you already have. Eight questions on coverage, exception handling, business client adoption, and core integration. You get a letter grade and the top two gaps to address.</p>
-      <a href="#grader-tbd" class="btn-composite" id="grader-cta">
-        Take the grader
-        <span class="arrow-orb">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
     </div>
   </section>
 
@@ -365,15 +340,6 @@ if (new URLSearchParams(window.location.search).get('qa') === '1') {
     "Built by Advanced Fraud Solutions."
   );
   btn.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) + '&summary=' + text;
-})();
-
-(function() {
-  const link = document.getElementById('grader-cta');
-  const base = '#grader-tbd';
-  const carry = new URLSearchParams();
-  ['utm_source','utm_medium','utm_campaign'].forEach(k => { if (params[k]) carry.set(k, params[k]); });
-  carry.set('utm_content', 'ty-calc-to-grader');
-  link.href = base + (base.includes('?') ? '&' : '?') + carry.toString();
 })();
 </script>
 </body>
