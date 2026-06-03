@@ -367,10 +367,6 @@ if (new URLSearchParams(window.location.search).get('qa') === '1') {
   btn.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl) + '&summary=' + text;
 })();
 
-if (window.lintrk) {
-  window.lintrk('track', { conversion_id: 'CONVERSION_ID_TBD_calculator_submit' });
-}
-
 (function() {
   const link = document.getElementById('grader-cta');
   const base = '#grader-tbd';
