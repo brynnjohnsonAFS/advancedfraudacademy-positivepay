@@ -200,13 +200,42 @@ Of the 756 cases with extractable dollar figures:
 - 19% are $1M–$10M
 - Only 6% above $10M
 
-### Role pattern
+### Role pattern (heuristic signal, not classification)
+
+A heuristic regex pass on title + body language produced:
 
 - **30% insider-perpetrator language** ("former treasurer pleads
   guilty," "former bookkeeper sentenced," "pastor charged")
 - **20% external-victim language** ("funds intended for," "stole from
   the city of")
-- The dominant story is internal-controls failure, not external attack
+- **~50% unclassified** — language did not clearly signal either role
+
+These are signals, not classifications. The 50% unclassified residual
+is a real limitation of regex-on-press-release-language and should
+not be assumed to fall on either side. To make claims about the
+internal/external split of the *full* 1,209-case set, the method-mix
+analysis is the more defensible signal (see below).
+
+### Internal vs external — what the method mix supports
+
+Looking at what fraud *method* was charged (not what role language
+the press release used), the internal-versus-external picture is
+clear:
+
+| Pattern type | Methods | Cases | % of subset |
+|---|---|---:|---:|
+| **Internal-led** | Embezzlement | **503** | **41.6%** |
+| **External-attack vectors (strict)** | Check fraud, BEC, ACH, mail theft, card fraud, payroll | **36** | **3.0%** |
+| **External-attack vectors (broad — adds identity theft, mortgage/loan fraud)** | + Identity theft, mortgage/loan fraud | 167 | 13.8% |
+
+**Embezzlement appears in roughly 14× more cases than the strict
+external-attack vectors combined**, and roughly 3× more often than
+the broader external-attack definition.
+
+Wire fraud (457 cases, 37.8%) is the *cash-out method* in 150 of the
+embezzlement cases — it's the means of moving the stolen funds, not
+a separate attack vector. The embezzlement → wire combo is the
+single most common pairing in the dataset.
 
 ### Recent (2024-2026) examples
 
@@ -243,11 +272,28 @@ A cowork-ready framing:
 
 > *Your community-org commercial customers — the churches, the school
 > districts, the city accounts — face a fundamentally different fraud
-> risk than your business customers. 80% of federal prosecutions in
-> this segment are internal embezzlement, cashed out as wires. Most
-> community FIs apply the same monitoring to a $40M city deposit
-> account as they do to a small-business checking account. That's
-> the gap.*
+> risk than your business customers. Internal embezzlement is the
+> single largest method in federal prosecutions of this segment, and
+> it shows up roughly 14× more often than every external attack
+> vector combined — check fraud, BEC, ACH, mail theft. Most community
+> FIs apply the same monitoring to a $40M city deposit account as
+> they do to a small-business checking account. That's the gap.*
+
+**On numbers in this framing — if pressed by a prospect or analyst:**
+
+- "Internal embezzlement is the single largest method" → embezzlement
+  in 503 of 1,209 cases (41.6%); next-largest stand-alone method is
+  wire fraud at 37.8%, which is the cash-out, not a separate attack.
+- "14× more often than external attack vectors combined" →
+  embezzlement at 503 cases vs. check fraud (15) + BEC (9) + ACH (0)
+  + mail theft (8) + card fraud (1) + payroll fraud (3) = 36 cases.
+  Ratio holds at ~14×. If a more generous definition of "external"
+  is wanted (adding identity theft and mortgage/loan fraud), the
+  ratio falls to ~3×.
+- All counts come from regex categorization of titles + first ~1,200
+  characters of body text on each press release; see Methodology
+  section. The numbers are reproducible — anyone can re-run the
+  scripts against the JSONL archive.
 
 ---
 
