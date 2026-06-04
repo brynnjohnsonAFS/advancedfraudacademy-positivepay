@@ -201,11 +201,23 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .lock .lock-wrap { position: relative; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: clamp(28px, 4vw, 48px); overflow: hidden; }
 .lock-guide-icon { width: clamp(84px, 12vw, 116px); height: clamp(84px, 12vw, 116px); display: block; margin-bottom: 22px; filter: drop-shadow(0 12px 22px rgba(199,2,0,0.20)); animation: guide-float 3.6s ease-in-out infinite; transform-origin: center; }
 @keyframes guide-float { 0%, 100% { transform: translateY(0) rotate(-2.5deg); } 50% { transform: translateY(-11px) rotate(2.5deg); } }
-.lock-guide-glow { position: absolute; top: -40px; left: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(199,2,0,0.10) 0%, transparent 70%); pointer-events: none; animation: guide-pulse 3.6s ease-in-out infinite; }
+.lock-guide-glow { position: absolute; top: 50%; left: 50%; width: 300px; height: 300px; margin: -150px 0 0 -150px; background: radial-gradient(circle, rgba(199,2,0,0.13) 0%, transparent 70%); pointer-events: none; animation: guide-pulse 3.6s ease-in-out infinite; z-index: 0; }
 @keyframes guide-pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
-@media (prefers-reduced-motion: reduce) { .lock-guide-icon, .lock-guide-glow, .mode-pick-hint .hint-arrow { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .lock-guide-icon, .lock-guide-glow, .mode-pick-hint .hint-arrow, .proof-card .trigger-tag::before { animation: none; } }
 .lock h2 { margin-bottom: 16px; max-width: 22ch; }
 .lock .lead { max-width: 56ch; margin-bottom: 28px; }
+/* LOCK — two-column card: copy + bullets on the left, animated guide icon on the right */
+.lock-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; margin-bottom: 32px; }
+@media (min-width: 860px) { .lock-grid { grid-template-columns: 1.5fr 1fr; gap: 48px; } }
+.lock-left h2 { margin-bottom: 14px; }
+.lock-left .lead { margin-bottom: 0; }
+.lock-benefits { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 18px; }
+.lock-benefits li { display: grid; gap: 3px; padding-left: 16px; border-left: 3px solid var(--primary); }
+.lock-benefits .lb-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-deep); }
+.lock-benefits .lb-text { font-size: 14px; color: var(--body-mid); line-height: 1.5; }
+.lock-right { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; min-height: 220px; }
+.lock-right .lock-guide-icon { width: clamp(120px, 16vw, 168px); height: clamp(120px, 16vw, 168px); margin-bottom: 0; position: relative; z-index: 1; }
+.lock-guide-badge { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; background: var(--canvas); border: 1px solid var(--hairline); border-radius: 999px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--ink-deep); box-shadow: 0 8px 22px rgba(0,0,0,0.07); }
 .form-grid { display: grid; gap: 14px; grid-template-columns: 1fr; margin-bottom: 20px; }
 @media (min-width: 600px) { .form-grid { grid-template-columns: 1fr 1fr; } }
 .form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-deep); margin-bottom: 6px; }
@@ -235,8 +247,14 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .proof .lead { max-width: 56ch; margin-bottom: 40px; }
 .proof-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
 @media (min-width: 768px) { .proof-grid { grid-template-columns: repeat(3, 1fr); } }
-.proof-card { background: var(--canvas); border-radius: var(--r-lg); padding: 28px; }
-.proof-card .trigger { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary); margin-bottom: 12px; }
+.proof-card { position: relative; overflow: hidden; background: var(--canvas); border-radius: var(--r-lg); padding: 28px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.proof-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.08); }
+.proof-card .trigger-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--body-mid); margin-bottom: 14px; }
+.proof-card .trigger-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); animation: trigger-blip 2.4s ease-in-out infinite; }
+@keyframes trigger-blip { 0%, 100% { opacity: 0.35; transform: scale(1); } 50% { opacity: 1; transform: scale(1.3); } }
+.proof-card .trigger { font-size: clamp(22px, 2.4vw, 27px); font-weight: 700; text-transform: none; letter-spacing: -0.01em; color: var(--ink-deep); line-height: 1.12; margin-bottom: 16px; padding-bottom: 14px; position: relative; }
+.proof-card .trigger::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--primary); border-radius: 2px; transition: width 0.3s ease; }
+.proof-card:hover .trigger::after { width: 76px; }
 .proof-card .story { font-size: 16px; color: var(--ink-deep); line-height: 1.5; font-weight: 500; margin-bottom: 14px; }
 .proof-card .attribution { font-size: 13px; color: var(--muted); }
 .proof-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-top: 32px; border-top: 1px solid var(--hairline); }
@@ -266,16 +284,17 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .integ-foot .integ-foot-card h3 { font-size: 16px; font-weight: 700; color: var(--ink-deep); margin-bottom: 8px; }
 .integ-foot .integ-foot-card p { font-size: 15px; color: var(--body-mid); line-height: 1.5; }
 
-/* SOFT CTA */
-.soft-cta { background: var(--ink-deep); color: var(--canvas); position: relative; overflow: hidden; }
-.soft-cta .eyebrow { color: var(--canvas); position: relative; z-index: 1; }
-.soft-cta h2 { color: var(--canvas); margin-bottom: 16px; max-width: 22ch; position: relative; z-index: 1; }
+/* SOFT CTA — contained dark card (matches product page .final-card: dot-grid + red glow) */
+.soft-cta { background: transparent; padding-top: clamp(24px, 4vw, 48px); }
+.soft-cta-card { position: relative; overflow: hidden; isolation: isolate; background: var(--ink-deep); color: var(--canvas); border-radius: 28px; padding: clamp(40px, 6vw, 80px) clamp(28px, 5vw, 72px); }
+.soft-cta-card::before { content: ""; position: absolute; inset: 0; opacity: 0.05; pointer-events: none; background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: radial-gradient(ellipse at 20% 30%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse at 20% 30%, #000 30%, transparent 75%); }
+.soft-cta-card::after { content: ""; position: absolute; right: -180px; bottom: -180px; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(199,2,0,0.30), transparent 70%); filter: blur(20px); pointer-events: none; z-index: 0; }
+.soft-cta-body { position: relative; z-index: 1; max-width: 640px; }
+.soft-cta .eyebrow { color: var(--canvas); }
+.soft-cta h2 { color: var(--canvas); margin-bottom: 16px; max-width: 22ch; }
 .soft-cta h2 .strong { color: var(--canvas); }
 .soft-cta h2 .soft { color: var(--muted); }
-.soft-cta .lead { color: var(--muted); max-width: 56ch; margin-bottom: 32px; position: relative; z-index: 1; }
-.soft-cta .btn-composite { position: relative; z-index: 1; }
-.soft-cta-art { position: absolute; right: -60px; top: 50%; transform: translateY(-50%); width: 320px; height: 240px; opacity: 0.5; pointer-events: none; }
-@media (max-width: 900px) { .soft-cta-art { display: none; } }
+.soft-cta .lead { color: var(--muted); max-width: 56ch; margin-bottom: 32px; }
 
 /* SIGNATURE COMPOSITE CTA: white-button-red-arrow */
 .btn-composite { display: inline-flex; align-items: center; background: var(--canvas); border-radius: var(--r-lg); padding: 16px 80px 16px 36px; color: var(--ink-deep); font-weight: 700; font-size: 18px; letter-spacing: 0.02em; text-decoration: none; position: relative; transition: padding 0.2s ease; }
@@ -332,7 +351,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
       <div>
         <span class="trigger-band">An $8B community CU bought after a <b>$10K payroll loss</b>. A $10B CU after a <b>reconciliation audit</b>. A $2B community CU after <b>checks were stolen</b>.</span>
         <h1 class="two-tone"><span class="strong">A Modern Positive Pay number</span> <span class="soft">your CFO will believe.</span></h1>
-        <p class="lead">Walk into your next exec meeting with the math. Loss avoided, fee income, and retention modeled together. Built on community FI benchmarks. Forwardable to your CFO in two clicks. 60 seconds, no signup to see your result.</p>
+        <p class="lead">Walk into your next exec meeting with the math. Loss avoided, fee income, and retention modeled together. Built on community FI benchmarks. Ready to forward to your CFO in two clicks. 60 seconds, no signup to see your result.</p>
         <div class="hero-cta"><a href="#calculator" class="btn btn-primary">Try the calculator <span aria-hidden="true">↓</span></a></div>
       </div>
       <div class="hero-art-wrap">
@@ -577,11 +596,36 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
 
   <section class="lock" id="lock">
     <div class="lock-wrap">
-      <span class="lock-guide-glow" aria-hidden="true"></span>
-      <img class="lock-guide-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="Peer Benchmark Guide">
-      <div class="eyebrow">See how you compare</div>
-      <h2 class="two-tone"><span class="strong">The Path to Positive Pay</span> <span class="soft">— Peer Insights.</span></h2>
-      <p class="lead">Community FIs almost never see how they stack up against peers. We'll send: your numbers above, a comparison against AFS-protected FIs at your asset tier (catch rate, NII, fraud-event frequency), and a board-ready one-pager you can forward to your CFO or CEO. No sales call. Read it on your time.</p>
+      <div class="lock-grid">
+        <div class="lock-left">
+          <div class="eyebrow">See how you compare</div>
+          <h2 class="two-tone"><span class="strong">The Path to Positive Pay</span> <span class="soft">— Peer Insights.</span></h2>
+          <p class="lead">Community FIs almost never see how they stack up against peers. The free guide changes that.</p>
+          <ul class="lock-benefits">
+            <li>
+              <span class="lb-label">What's inside</span>
+              <span class="lb-text">Your numbers from above, plus where they land against AFS-protected FIs at your asset tier.</span>
+            </li>
+            <li>
+              <span class="lb-label">What you'll access</span>
+              <span class="lb-text">Catch rate, non-interest income, and fraud-event frequency benchmarks — with a board-ready one-pager for your CFO or CEO.</span>
+            </li>
+            <li>
+              <span class="lb-label">Why this helps</span>
+              <span class="lb-text">Walk into your next exec meeting with peer math, not vendor claims. No sales call — read it on your time.</span>
+            </li>
+            <li>
+              <span class="lb-label">Where the data comes from</span>
+              <span class="lb-text">AFS internal benchmarks and learned data from 19 years protecting community FIs.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="lock-right">
+          <span class="lock-guide-glow" aria-hidden="true"></span>
+          <img class="lock-guide-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="Peer Benchmark Guide">
+          <span class="lock-guide-badge">🔓 Unlock Peer Insights in the free guide</span>
+        </div>
+      </div>
       <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
         <div class="form-grid">
           <div class="form-field"><label for="email">Work email</label><input type="email" id="email" name="email" required></div>
@@ -641,16 +685,19 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     <p class="lead">Three of the most consistent paths to AFS from the customer base. The trigger isn't a product roadmap — it's a specific event that exposed the gap.</p>
     <div class="proof-grid">
       <div class="proof-card">
+        <span class="trigger-tag">The Trigger</span>
         <div class="trigger">$10K payroll loss</div>
         <div class="story">An $8B community CU added two internal accounts to Positive Pay after a vendor file was rerouted on a payroll run.</div>
         <div class="attribution">Community CU, West Coast, Symitar core.</div>
       </div>
       <div class="proof-card">
+        <span class="trigger-tag">The Trigger</span>
         <div class="trigger">Reconciliation audit</div>
         <div class="story">A $10B community CU expanded to Payee Positive Pay after identifying a weakness in cashier's check reconciliation.</div>
         <div class="attribution">Community CU, West Coast, Symitar core.</div>
       </div>
       <div class="proof-card">
+        <span class="trigger-tag">The Trigger</span>
         <div class="trigger">Checks stolen + washed</div>
         <div class="story">A $2B community CU brought corporate Positive Pay online after issued checks were stolen from the mail and payee names changed.</div>
         <div class="attribution">Community CU, Midwest, KeyStone core.</div>
@@ -723,41 +770,26 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
         <p>5 of our 8 Positive Pay channel partners signed in the last 24 months. The platform you run today is more likely supported than not.</p>
       </div>
       <div class="integ-foot-card">
-        <h3>Custom work without a two-year headache</h3>
-        <p>Need an integration we haven't built yet? Our engineering team stands up custom connections in weeks. No queue. No "next fiscal year." Full support throughout.</p>
+        <h3>Custom work without the two-year wait</h3>
+        <p>Need an integration we haven't built yet? Our engineering team stands up custom connections in weeks, not fiscal years — with full support throughout.</p>
       </div>
     </div>
   </section>
 
   <section class="soft-cta" id="talk">
-    <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" class="soft-cta-art" aria-hidden="true">
-      <g fill="#c70200">
-        <rect x="0" y="0" width="36" height="36" rx="6" opacity="0.3"/>
-        <rect x="40" y="0" width="36" height="36" rx="6" opacity="0.6"/>
-        <rect x="80" y="0" width="36" height="36" rx="6" opacity="0.2"/>
-        <rect x="120" y="0" width="36" height="36" rx="6" opacity="0.5"/>
-        <rect x="160" y="0" width="36" height="36" rx="6" opacity="0.8"/>
-        <rect x="0" y="40" width="36" height="36" rx="6" opacity="0.5"/>
-        <rect x="40" y="40" width="36" height="36" rx="6" opacity="0.25"/>
-        <rect x="80" y="40" width="36" height="36" rx="6" opacity="0.7"/>
-        <rect x="120" y="40" width="36" height="36" rx="6" opacity="0.4"/>
-        <rect x="160" y="40" width="36" height="36" rx="6" opacity="0.2"/>
-        <rect x="0" y="80" width="36" height="36" rx="6" opacity="0.85"/>
-        <rect x="40" y="80" width="36" height="36" rx="6" opacity="0.35"/>
-        <rect x="80" y="80" width="36" height="36" rx="6" opacity="0.55"/>
-        <rect x="120" y="80" width="36" height="36" rx="6" opacity="0.15"/>
-        <rect x="160" y="80" width="36" height="36" rx="6" opacity="0.65"/>
-      </g>
-    </svg>
-    <div class="eyebrow">Done with the math?</div>
-    <h2 class="two-tone"><span class="strong">Talk to our team</span> <span class="soft">about your specific FI.</span></h2>
-    <p class="lead">30 minutes. No slide deck. No demo theater. Just your numbers and our experience with peer FIs on your core.</p>
-    <a href="/positivepay/discovery/" class="btn-composite">
-      Book a discovery call
-      <span class="arrow-orb">
-        <svg viewBox="0 0 24 24"><path d="M5 12h12m-4-4l4 4-4 4" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-    </a>
+    <div class="soft-cta-card">
+      <div class="soft-cta-body">
+        <div class="eyebrow">Done with the math?</div>
+        <h2 class="two-tone"><span class="strong">Talk to our team</span> <span class="soft">about your specific FI.</span></h2>
+        <p class="lead">Thirty minutes, your numbers, and our experience with peer FIs on your core. We'll tell you honestly whether it fits.</p>
+        <a href="/positivepay/discovery/" class="btn-composite">
+          Book a discovery call
+          <span class="arrow-orb">
+            <svg viewBox="0 0 24 24"><path d="M5 12h12m-4-4l4 4-4 4" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
   </section>
 
 </main>
