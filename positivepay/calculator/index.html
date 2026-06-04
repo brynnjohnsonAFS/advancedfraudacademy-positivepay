@@ -212,7 +212,43 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 @keyframes guide-float { 0%, 100% { transform: translateY(0) rotate(-2.5deg); } 50% { transform: translateY(-11px) rotate(2.5deg); } }
 .lock-guide-glow { position: absolute; top: 50%; left: 50%; width: 300px; height: 300px; margin: -150px 0 0 -150px; background: radial-gradient(circle, rgba(199,2,0,0.13) 0%, transparent 70%); pointer-events: none; animation: guide-pulse 3.6s ease-in-out infinite; z-index: 0; }
 @keyframes guide-pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
-@media (prefers-reduced-motion: reduce) { .lock-guide-icon, .lock-guide-glow, .mode-pick-hint .hint-arrow, .proof-card .trigger-tag::before { animation: none; } }
+
+/* ANIMATED PEER-BENCHMARK GRAPHIC — floating card that cycles through the insights inside the guide */
+.pb-anim { position: relative; z-index: 1; width: clamp(184px, 22vw, 224px); animation: guide-float 3.6s ease-in-out infinite; transform-origin: center; filter: drop-shadow(0 14px 26px rgba(199,2,0,0.18)); }
+.pb-card { position: relative; background: var(--canvas); border: 1px solid var(--hairline); border-radius: 18px; padding: 20px 20px 14px; box-shadow: 0 18px 44px rgba(0,0,0,0.08); overflow: hidden; }
+.pb-corner { position: absolute; top: 0; right: 0; width: 34px; height: 34px; background: var(--primary); border-bottom-left-radius: 14px; }
+.pb-stage { position: relative; height: 124px; }
+.pb-slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; opacity: 0; animation: pb-cycle 9s ease-in-out infinite; will-change: opacity, transform; }
+.pb-slide.pb-s1 { animation-delay: 0s; }
+.pb-slide.pb-s2 { animation-delay: -3s; }
+.pb-slide.pb-s3 { animation-delay: -6s; }
+.pb-ico { width: 52px; height: 52px; display: block; }
+.pb-label { font-size: 14.5px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink-deep); text-align: center; line-height: 1.2; max-width: 13ch; }
+.pb-dots { display: flex; justify-content: center; gap: 6px; margin-top: 4px; }
+.pb-dots span { width: 6px; height: 6px; border-radius: 999px; background: var(--hairline); animation: pb-dot 9s ease-in-out infinite; }
+.pb-dots span:nth-child(1) { animation-delay: 0s; }
+.pb-dots span:nth-child(2) { animation-delay: -3s; }
+.pb-dots span:nth-child(3) { animation-delay: -6s; }
+@keyframes pb-cycle {
+  0%   { opacity: 0; transform: translateY(11px) scale(0.95); }
+  4%   { opacity: 1; transform: translateY(0) scale(1); }
+  29%  { opacity: 1; transform: translateY(0) scale(1); }
+  33%  { opacity: 0; transform: translateY(-11px) scale(0.95); }
+  100% { opacity: 0; transform: translateY(-11px) scale(0.95); }
+}
+@keyframes pb-dot {
+  0%   { background: var(--primary); transform: scale(1.2); }
+  30%  { background: var(--primary); transform: scale(1.2); }
+  34%  { background: var(--hairline); transform: none; }
+  100% { background: var(--hairline); transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lock-guide-icon, .lock-guide-glow, .mode-pick-hint .hint-arrow, .proof-card .trigger-tag::before,
+  .pb-anim, .pb-slide, .pb-dots span { animation: none; }
+  .pb-slide.pb-s1 { opacity: 1; }
+  .pb-dots span:nth-child(1) { background: var(--primary); }
+}
 .lock h2 { margin-bottom: 16px; max-width: 22ch; }
 .lock .lead { max-width: 56ch; margin-bottom: 28px; }
 /* LOCK — two-column card: copy + bullets on the left, animated guide icon on the right */
@@ -358,6 +394,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .calc-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 30px; line-height: 1; color: var(--muted); cursor: pointer; padding: 4px 8px; transition: color 0.2s ease; }
 .calc-modal-close:hover { color: var(--ink-deep); }
 .calc-modal-icon { width: 68px; height: 68px; margin-bottom: 16px; filter: drop-shadow(0 10px 18px rgba(199,2,0,0.18)); }
+.calc-modal .pb-anim { width: clamp(180px, 60vw, 208px); margin: 0 auto 20px; }
 .calc-modal .eyebrow { margin-bottom: 10px; }
 .calc-modal h2 { font-size: clamp(23px, 3vw, 29px); line-height: 1.15; margin-bottom: 12px; }
 .calc-modal .modal-sub { color: var(--body-mid); margin-bottom: 22px; font-size: 15px; line-height: 1.55; }
@@ -638,7 +675,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
             </li>
             <li>
               <span class="lb-label">What you'll access</span>
-              <span class="lb-text">Catch rate, non-interest income, and fraud-event frequency benchmarks — with a board-ready one-pager for your CFO or CEO.</span>
+              <span class="lb-text">Non-interest income and fraud-event frequency benchmarks — with a board-ready one-pager for your CFO or CEO.</span>
             </li>
             <li>
               <span class="lb-label">Why this helps</span>
@@ -652,7 +689,44 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
         </div>
         <div class="lock-right">
           <span class="lock-guide-glow" aria-hidden="true"></span>
-          <img class="lock-guide-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="Peer Benchmark Guide">
+          <div class="pb-anim" role="img" aria-label="The guide cycles through peer insights: non-interest income, what other FIs do, and internal benchmarks">
+            <div class="pb-card" aria-hidden="true">
+              <span class="pb-corner"></span>
+              <div class="pb-stage">
+                <div class="pb-slide pb-s1">
+                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+                    <rect x="8" y="30" width="9" height="14" rx="2" fill="#222222"/>
+                    <rect x="21.5" y="22" width="9" height="22" rx="2" fill="#222222"/>
+                    <rect x="35" y="12" width="9" height="32" rx="2" fill="#C70200"/>
+                    <path d="M7 28 L24 19 L38 10" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M38 10 L31.5 9 M38 10 L37 16.5" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="pb-label">Non-Interest Income</span>
+                </div>
+                <div class="pb-slide pb-s2">
+                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+                    <circle cx="14" cy="16" r="6" fill="#222222"/>
+                    <path d="M4 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
+                    <circle cx="38" cy="16" r="6" fill="#222222"/>
+                    <path d="M28 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
+                    <circle cx="26" cy="13" r="7" fill="#C70200"/>
+                    <path d="M14 38 a12 12 0 0 1 24 0 z" fill="#C70200"/>
+                  </svg>
+                  <span class="pb-label">See What Other FIs Do</span>
+                </div>
+                <div class="pb-slide pb-s3">
+                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+                    <path d="M8 36 a18 18 0 0 1 36 0" stroke="#222222" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M8 36 a18 18 0 0 1 9.6 -15.9" stroke="#C70200" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="26" y1="36" x2="36" y2="22" stroke="#C70200" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="26" cy="36" r="3.6" fill="#222222"/>
+                  </svg>
+                  <span class="pb-label">Internal Benchmarks</span>
+                </div>
+              </div>
+              <div class="pb-dots"><span></span><span></span><span></span></div>
+            </div>
+          </div>
           <span class="lock-guide-badge">🔓 Unlock Peer Insights in the free guide</span>
         </div>
       </div>
@@ -830,7 +904,44 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
   <div class="calc-modal-backdrop" data-close></div>
   <div class="calc-modal-card">
     <button type="button" class="calc-modal-close" data-close aria-label="Close">&times;</button>
-    <img class="calc-modal-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="">
+    <div class="pb-anim" role="img" aria-label="The guide cycles through peer insights: non-interest income, what other FIs do, and internal benchmarks">
+      <div class="pb-card" aria-hidden="true">
+        <span class="pb-corner"></span>
+        <div class="pb-stage">
+          <div class="pb-slide pb-s1">
+            <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+              <rect x="8" y="30" width="9" height="14" rx="2" fill="#222222"/>
+              <rect x="21.5" y="22" width="9" height="22" rx="2" fill="#222222"/>
+              <rect x="35" y="12" width="9" height="32" rx="2" fill="#C70200"/>
+              <path d="M7 28 L24 19 L38 10" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M38 10 L31.5 9 M38 10 L37 16.5" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="pb-label">Non-Interest Income</span>
+          </div>
+          <div class="pb-slide pb-s2">
+            <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+              <circle cx="14" cy="16" r="6" fill="#222222"/>
+              <path d="M4 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
+              <circle cx="38" cy="16" r="6" fill="#222222"/>
+              <path d="M28 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
+              <circle cx="26" cy="13" r="7" fill="#C70200"/>
+              <path d="M14 38 a12 12 0 0 1 24 0 z" fill="#C70200"/>
+            </svg>
+            <span class="pb-label">See What Other FIs Do</span>
+          </div>
+          <div class="pb-slide pb-s3">
+            <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
+              <path d="M8 36 a18 18 0 0 1 36 0" stroke="#222222" stroke-width="4" stroke-linecap="round"/>
+              <path d="M8 36 a18 18 0 0 1 9.6 -15.9" stroke="#C70200" stroke-width="4" stroke-linecap="round"/>
+              <line x1="26" y1="36" x2="36" y2="22" stroke="#C70200" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="26" cy="36" r="3.6" fill="#222222"/>
+            </svg>
+            <span class="pb-label">Internal Benchmarks</span>
+          </div>
+        </div>
+        <div class="pb-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
     <div class="eyebrow">Your numbers are ready</div>
     <h2 id="calc-modal-title">Unlock the full revenue possibilities.</h2>
     <p class="modal-sub">See how your annual protection, fee income, and retention stack up against peer FIs your size — with peer benchmarks delivered to your inbox instantly.</p>
@@ -934,7 +1045,7 @@ function calc() {
     const grossNII = enrolled * margin * 12;
     feeIncome = grossNII - setup;   // Year 1, net of setup (shown in the timeline)
     feeRunRate = grossNII;          // Year 2+ run-rate — the headline fee number
-    // Annual protection = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied catch-rate or soft-cost multiplier.
+    // Annual protection = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied detection or soft-cost multiplier.
     lossAvoided = i.fraudA;
     retention = enrolled;
     tl1Num = feeIncome;
