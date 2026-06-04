@@ -560,9 +560,9 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
             <div class="return-sub" id="ret1-sub">Check + ACH fraud your FI is protected against in Year 1.</div>
           </div>
           <div class="return-card">
-            <div class="return-label">Fee income</div>
+            <div class="return-label">Run-rate fee income</div>
             <div class="return-value money muted-value" id="ret2-value">$0</div>
-            <div class="return-sub" id="ret2-sub">New non-interest income, net of cost basis and setup.</div>
+            <div class="return-sub" id="ret2-sub">Annual, Year 2 onward — once business clients are enrolled. Year 1 ramps from setup.</div>
           </div>
           <div class="return-card">
             <div class="return-label">Retention</div>
@@ -918,7 +918,7 @@ function calc() {
   document.getElementById('val-y2').textContent = i.y2Clients;
   document.getElementById('val-retail-c').textContent = '$' + i.retailC;
 
-  let lossAvoided = 0, feeIncome = 0, retention = 0;
+  let lossAvoided = 0, feeIncome = 0, feeRunRate = 0, retention = 0;
   let tl1Num = 0, tl2Num = 0, tl3Num = 0;
   let tl1What = '', tl2What = '', tl3What = '';
   let ret1Sub = '', ret2Sub = '', ret3Sub = '';
@@ -927,7 +927,8 @@ function calc() {
     const enrolled = Math.round(i.accounts * i.enroll);
     const margin = i.retailA - wholesale;
     const grossNII = enrolled * margin * 12;
-    feeIncome = grossNII - setup;
+    feeIncome = grossNII - setup;   // Year 1, net of setup (shown in the timeline)
+    feeRunRate = grossNII;          // Year 2+ run-rate — the headline fee number
     // Annual protection = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied catch-rate or soft-cost multiplier.
     lossAvoided = i.fraudA;
     retention = enrolled;
@@ -938,7 +939,7 @@ function calc() {
     tl2What = `Setup recouped. Full ${enrolled} × $${margin} margin running.`;
     tl3What = `Mature program. Retention compounds. Service line owned.`;
     ret1Sub = `Your $${(i.fraudA/1000).toFixed(0)}K annual fraud baseline — the exposure Positive Pay is built to flag.`;
-    ret2Sub = `${enrolled} clients × $${margin}/mo margin × 12, net of setup.`;
+    ret2Sub = `Year 2 onward: ${enrolled} clients × $${margin}/mo × 12 at full run rate. Year 1 absorbs setup.`;
     ret3Sub = `Treasury services churn lower than depository-only. Each one is an account you don't have to replace.`;
   }
   else if (currentMode === 'b') {
@@ -961,6 +962,7 @@ function calc() {
     const fraudProtected = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
     const margin = i.retailC - wholesale;
     const y2Income = i.y2Clients * margin * 12;
+    feeRunRate = y2Income;   // Year 2 run-rate — the headline fee number (Year 1 = $0, ramp)
     const y3Clients = Math.round(i.y2Clients * 2.5);
     const y3Income = y3Clients * margin * 12;
     lossAvoided = fraudProtected - (corpFee + setup);
@@ -973,12 +975,12 @@ function calc() {
     tl2What = `${i.y2Clients} business clients onboarded at $${margin}/mo margin.`;
     tl3What = `~${y3Clients} business clients. Internal protection continues.`;
     ret1Sub = `${fmtK(fraudProtected)} in check + ACH fraud protected, net of program cost.`;
-    ret2Sub = `Year 1 fee income is $0. By Year 2: ${fmtK(y2Income)}.`;
+    ret2Sub = `Year 2 onward, once your ${i.y2Clients} clients are live. Year 1 ramps from setup.`;
     ret3Sub = `${i.y2Clients} business clients onboarded by Year 2 end.`;
   }
 
   document.getElementById('ret1-value').textContent = fmtK(lossAvoided);
-  document.getElementById('ret2-value').textContent = currentMode === 'b' ? '$0' : fmtK(feeIncome);
+  document.getElementById('ret2-value').textContent = currentMode === 'b' ? '$0' : fmtK(feeRunRate);
   document.getElementById('ret3-value').textContent = retention > 0 ? retention.toString() : '0';
   document.getElementById('ret1-sub').textContent = ret1Sub;
   document.getElementById('ret2-sub').textContent = ret2Sub;
@@ -1097,10 +1099,10 @@ function populatePardotFields(form) {
   const ownChecks = (currentMode === 'b');
   const snapshot = ownChecks
     ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud protected in Year 1.'
-    : 'Snapshot: ' + usd(lossN) + ' annual protection + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.';
+    : 'Snapshot: ' + usd(lossN) + ' Year 1 protection + ' + usd(feeN) + ' run-rate fee income (Year 2), ' + num(retN) + ' business clients retained.';
   const resultLines = ownChecks
     ? ['- Annual protection: ' + usd(lossN)]
-    : ['- Annual protection: ' + usd(lossN), '- Fee income: ' + usd(feeN), '- Business clients retained: ' + num(retN)];
+    : ['- Annual protection: ' + usd(lossN), '- Run-rate fee income (Year 2): ' + usd(feeN), '- Business clients retained: ' + num(retN)];
   const summaryLines = [
     'POS PAY CALCULATOR SUBMISSION',
     'This prospect modeled their Modern Positive Pay ROI on the Academy calculator. The numbers below are their own inputs and the calculator projections - not quotes or commitments.',
