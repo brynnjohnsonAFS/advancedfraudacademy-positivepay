@@ -445,7 +445,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   <section class="mode-picker" id="calculator">
     <div class="eyebrow">Step 1</div>
     <h2 class="two-tone"><span class="strong">Fraud protection</span> <span class="soft">that pays for itself.</span></h2>
-    <p class="lead">Estimate your loss avoided, fee income, and client retention.</p>
+    <p class="lead">Estimate your annual protection, fee income, and client retention.</p>
     <div class="mode-pick-hint"><span class="hint-arrow" aria-hidden="true">→</span> Select a mode to begin</div>
     <div class="mode-cards" role="radiogroup" aria-label="Calculator mode">
       <button class="mode-card active" data-mode="b" role="radio" aria-checked="true">
@@ -555,9 +555,9 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 
         <div class="three-numbers">
           <div class="return-card">
-            <div class="return-label">Loss avoided</div>
+            <div class="return-label">Annual protection</div>
             <div class="return-value money" id="ret1-value">$0</div>
-            <div class="return-sub" id="ret1-sub">Internal check + ACH fraud prevented in Year 1, soft costs included.</div>
+            <div class="return-sub" id="ret1-sub">Check + ACH fraud your FI is protected against in Year 1.</div>
           </div>
           <div class="return-card">
             <div class="return-label">Fee income</div>
@@ -605,8 +605,8 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <details class="methodology">
           <summary>Show the math</summary>
           <div class="methodology-content">
-            <p><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> Every $1 of fraud face value it prevents avoids $5.75 in true cost (LexisNexis True Cost of Fraud, 2025 — including investigation, recovery, reissue, and customer outreach).</p>
-            <div class="formula" id="formula-block">Loss avoided = face_at_risk × $5.75 soft cost
+            <p><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
+            <div class="formula" id="formula-block">Annual protection = face_at_risk (fraud face value)
 Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
             + ACH/yr × avg value × 1.0% ACH fraud attempt rate
 
@@ -690,7 +690,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
         <div class="stat-band-item">
           <div class="stat-band-num">$5.75</div>
           <div class="stat-band-label">True cost per $1 of face value if fraud succeeds</div>
-          <div class="stat-band-sub">Includes investigation, recovery, reissue, client outreach. LexisNexis 2025.</div>
+          <div class="stat-band-sub">Context, not counted: we leave this downstream cost out of your figures to stay conservative. Investigation, recovery, reissue, client outreach. LexisNexis 2025.</div>
         </div>
         <div class="stat-band-item">
           <div class="stat-band-num">19</div>
@@ -828,7 +828,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     <img class="calc-modal-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="">
     <div class="eyebrow">Your numbers are ready</div>
     <h2 id="calc-modal-title">Unlock the full revenue possibilities.</h2>
-    <p class="modal-sub">See how your loss avoided, fee income, and retention stack up against peer FIs your size — with peer benchmarks delivered to your inbox instantly.</p>
+    <p class="modal-sub">See how your annual protection, fee income, and retention stack up against peer FIs your size — with peer benchmarks delivered to your inbox instantly.</p>
     <form id="lock-form-modal" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
       <div class="form-field"><label for="email-m">Work email</label><input type="email" id="email-m" name="email" required></div>
       <div class="form-field"><label for="institution-m">Your FI</label><input type="text" id="institution-m" name="Company" required></div>
@@ -854,7 +854,6 @@ const SETUP_BY_ASSET = [1500, 3000, 5500, 7500, 10500];        // sub-1B, 1-5B, 
 const CORP_CHECKS_BY_ASSET = [2800, 5600, 9100, 12600, 17500]; // annual access fee
 const WHOLESALE_DIRECT = 40;   // direct list per business client per month
 const WHOLESALE_JHA = 25;      // Jack Henry / Symitar channel wholesale
-const SOFT_COST = 5.75;
 const CHECK_ATTEMPT = 0.005;   // 0.5%
 const ACH_ATTEMPT = 0.01;      // 1.0%
 
@@ -895,7 +894,7 @@ function calcInternalLoss(checks, checkVal, ach, achVal) {
   const checkFaceAtRisk = checks * checkVal * CHECK_ATTEMPT;
   const achFaceAtRisk = ach * achVal * ACH_ATTEMPT;
   const facePrevented = checkFaceAtRisk + achFaceAtRisk;
-  return facePrevented * SOFT_COST;
+  return facePrevented;
 }
 
 function calc() {
@@ -929,7 +928,7 @@ function calc() {
     const margin = i.retailA - wholesale;
     const grossNII = enrolled * margin * 12;
     feeIncome = grossNII - setup;
-    // Loss avoided = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied catch-rate assumption.
+    // Annual protection = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied catch-rate or soft-cost multiplier.
     lossAvoided = i.fraudA;
     retention = enrolled;
     tl1Num = feeIncome;
@@ -943,37 +942,37 @@ function calc() {
     ret3Sub = `Treasury services churn lower than depository-only. Each one is an account you don't have to replace.`;
   }
   else if (currentMode === 'b') {
-    const trueCostAvoided = calcInternalLoss(i.checks, i.checkVal, i.ach, i.achVal);
+    const fraudProtected = calcInternalLoss(i.checks, i.checkVal, i.ach, i.achVal);
     const totalCost = corpFee + setup;
-    lossAvoided = trueCostAvoided - totalCost;
+    lossAvoided = fraudProtected - totalCost;
     feeIncome = 0;
     retention = 0;
     tl1Num = lossAvoided;
-    tl2Num = trueCostAvoided - corpFee; // no setup Year 2
-    tl3Num = trueCostAvoided - corpFee;
+    tl2Num = fraudProtected - corpFee; // no setup Year 2
+    tl3Num = fraudProtected - corpFee;
     tl1What = `Cashier's checks, ACH, escrow protected. Year 1 covers setup and base subscription.`;
     tl2What = `Ongoing protection at maintenance only. Setup recouped.`;
     tl3What = `Program is paid back. Real losses prevented. Story to tell business clients.`;
-    ret1Sub = `${fmtK(trueCostAvoided)} in true cost prevented, net of program cost.`;
+    ret1Sub = `${fmtK(fraudProtected)} in check + ACH fraud protected, net of program cost.`;
     ret2Sub = `No business client revenue in this mode.`;
     ret3Sub = `No business clients enrolled in Mode B.`;
   }
   else if (currentMode === 'c') {
-    const actualTCA = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
+    const fraudProtected = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
     const margin = i.retailC - wholesale;
     const y2Income = i.y2Clients * margin * 12;
     const y3Clients = Math.round(i.y2Clients * 2.5);
     const y3Income = y3Clients * margin * 12;
-    lossAvoided = actualTCA - (corpFee + setup);
+    lossAvoided = fraudProtected - (corpFee + setup);
     feeIncome = 0; // Year 1 = no clients yet
     retention = i.y2Clients;
     tl1Num = lossAvoided;
-    tl2Num = (actualTCA - corpFee) + y2Income;
-    tl3Num = (actualTCA - corpFee) + y3Income;
+    tl2Num = (fraudProtected - corpFee) + y2Income;
+    tl3Num = (fraudProtected - corpFee) + y3Income;
     tl1What = `Protect own checks. Setup paid.`;
     tl2What = `${i.y2Clients} business clients onboarded at $${margin}/mo margin.`;
     tl3What = `~${y3Clients} business clients. Internal protection continues.`;
-    ret1Sub = `${fmtK(actualTCA)} in true cost prevented, net of program cost.`;
+    ret1Sub = `${fmtK(fraudProtected)} in check + ACH fraud protected, net of program cost.`;
     ret2Sub = `Year 1 fee income is $0. By Year 2: ${fmtK(y2Income)}.`;
     ret3Sub = `${i.y2Clients} business clients onboarded by Year 2 end.`;
   }
@@ -1097,11 +1096,11 @@ function populatePardotFields(form) {
   // Mode-aware snapshot + results: "own checks" mode has no client fee income / retention
   const ownChecks = (currentMode === 'b');
   const snapshot = ownChecks
-    ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud loss avoided in Year 1.'
-    : 'Snapshot: ' + usd(lossN) + ' loss avoided + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.';
+    ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud protected in Year 1.'
+    : 'Snapshot: ' + usd(lossN) + ' annual protection + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.';
   const resultLines = ownChecks
-    ? ['- Loss avoided: ' + usd(lossN)]
-    : ['- Loss avoided: ' + usd(lossN), '- Fee income: ' + usd(feeN), '- Business clients retained: ' + num(retN)];
+    ? ['- Annual protection: ' + usd(lossN)]
+    : ['- Annual protection: ' + usd(lossN), '- Fee income: ' + usd(feeN), '- Business clients retained: ' + num(retN)];
   const summaryLines = [
     'POS PAY CALCULATOR SUBMISSION',
     'This prospect modeled their Modern Positive Pay ROI on the Academy calculator. The numbers below are their own inputs and the calculator projections - not quotes or commitments.',
