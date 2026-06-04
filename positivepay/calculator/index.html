@@ -172,7 +172,11 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .timeline-row:last-child { border-bottom: none; padding-bottom: 0; }
 .timeline-year { font-weight: 700; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em; }
 .timeline-what { color: var(--ink-deep); font-size: 15px; line-height: 1.4; }
-.timeline-num { font-weight: 700; color: var(--primary); font-size: 18px; white-space: nowrap; }
+.timeline-num { font-weight: 700; color: var(--value); font-size: 18px; white-space: nowrap; }
+/* 3-year picture: greens deepen Year 1 -> Year 3 to show profit compounding */
+#tl1-num { color: #b6e26a; }
+#tl2-num { color: #74c042; }
+#tl3-num { color: #3f9d2f; }
 
 /* PEER CALLOUT */
 .peer-callout { background: var(--surface-soft); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
@@ -211,10 +215,11 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 @media (min-width: 860px) { .lock-grid { grid-template-columns: 1.5fr 1fr; gap: 48px; } }
 .lock-left h2 { margin-bottom: 14px; }
 .lock-left .lead { margin-bottom: 0; }
-.lock-benefits { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 18px; }
-.lock-benefits li { display: grid; gap: 3px; padding-left: 16px; border-left: 3px solid var(--primary); }
-.lock-benefits .lb-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-deep); }
-.lock-benefits .lb-text { font-size: 14px; color: var(--body-mid); line-height: 1.5; }
+.lock-benefits { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 13px; }
+.lock-benefits li { position: relative; display: grid; gap: 2px; padding-left: 24px; }
+.lock-benefits li::before { content: ""; position: absolute; left: 0; top: 3px; width: 13px; height: 13px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' width='3' height='3' fill='%23C70200'/%3E%3Crect y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='7' width='3' height='3' fill='%23222'/%3E%3C/svg%3E") center/contain no-repeat; }
+.lock-benefits .lb-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-deep); }
+.lock-benefits .lb-text { font-size: 13.5px; color: var(--body-mid); line-height: 1.45; }
 .lock-right { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; min-height: 220px; }
 .lock-right .lock-guide-icon { width: clamp(120px, 16vw, 168px); height: clamp(120px, 16vw, 168px); margin-bottom: 0; position: relative; z-index: 1; }
 .lock-guide-badge { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; background: var(--canvas); border: 1px solid var(--hairline); border-radius: 999px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--ink-deep); box-shadow: 0 8px 22px rgba(0,0,0,0.07); }
@@ -658,9 +663,9 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
       <p class="lead">Modern Positive Pay's value depends on a few defensible numbers. Drawn from the LexisNexis True Cost of Fraud study and Federal Reserve commercial payment data. Treasury teams who check the math always start here.</p>
       <div class="stat-band-grid">
         <div class="stat-band-item">
-          <div class="stat-band-num">85%</div>
-          <div class="stat-band-label">Catch rate on attempted fraud face value</div>
-          <div class="stat-band-sub">Industry-tested. AFS customer programs match or beat this.</div>
+          <div class="stat-band-num">$2,652</div>
+          <div class="stat-band-label">Average commercial check value</div>
+          <div class="stat-band-sub">Every check a face-value target. Federal Reserve commercial check data, 2022.</div>
         </div>
         <div class="stat-band-item">
           <div class="stat-band-num">$5.75</div>
