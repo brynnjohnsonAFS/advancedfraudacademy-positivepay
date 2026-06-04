@@ -342,6 +342,26 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--hairline-soft); }
 .site-header .brand { display: flex; align-items: center; height: 72px; max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
 .site-header .brand img { height: 36px; width: auto; display: block; }
+
+/* COMPLETION MODAL — peer benchmark capture */
+.calc-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.calc-modal.open { display: flex; }
+.calc-modal-backdrop { position: absolute; inset: 0; background: rgba(34,34,34,0.55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); animation: modal-fade 0.25s ease; }
+.calc-modal-card { position: relative; z-index: 1; width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; background: var(--canvas); border-radius: var(--r-lg); border-top: 4px solid var(--primary); padding: clamp(28px, 5vw, 44px); box-shadow: 0 30px 80px rgba(0,0,0,0.30); animation: modal-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-pop { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+.calc-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 30px; line-height: 1; color: var(--muted); cursor: pointer; padding: 4px 8px; transition: color 0.2s ease; }
+.calc-modal-close:hover { color: var(--ink-deep); }
+.calc-modal-icon { width: 68px; height: 68px; margin-bottom: 16px; filter: drop-shadow(0 10px 18px rgba(199,2,0,0.18)); }
+.calc-modal .eyebrow { margin-bottom: 10px; }
+.calc-modal h2 { font-size: clamp(23px, 3vw, 29px); line-height: 1.15; margin-bottom: 12px; }
+.calc-modal .modal-sub { color: var(--body-mid); margin-bottom: 22px; font-size: 15px; line-height: 1.55; }
+.calc-modal .form-field { margin-bottom: 14px; }
+.calc-modal .form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-deep); margin-bottom: 6px; }
+.calc-modal .form-field input { width: 100%; padding: 14px 16px; border: 1px solid var(--hairline); border-radius: var(--r-md); background: var(--canvas); font-family: var(--font); font-size: 15px; color: var(--ink-deep); }
+.calc-modal .form-field input:focus { outline: none; border-color: var(--primary); }
+.calc-modal .btn { width: 100%; justify-content: center; margin-top: 6px; padding: 18px 32px; }
+.calc-modal .form-microcopy { font-size: 12.5px; color: var(--muted); margin-top: 14px; display: flex; align-items: center; gap: 6px; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -354,9 +374,9 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   <section class="hero">
     <div class="hero-grid">
       <div>
-        <span class="trigger-band">An $8B community CU bought after a <b>$10K payroll loss</b>. A $10B CU after a <b>reconciliation audit</b>. A $2B community CU after <b>checks were stolen</b>.</span>
+        <span class="trigger-band">An $8B community CU bought after a <b>$10K payroll loss</b>. A $2B CU after <b>checks were stolen</b>.</span>
         <h1 class="two-tone"><span class="strong">A Modern Positive Pay number</span> <span class="soft">your CFO will believe.</span></h1>
-        <p class="lead">Walk into your next exec meeting with the math. Loss avoided, fee income, and retention modeled together. Built on community FI benchmarks. Ready to forward to your CFO in two clicks. 60 seconds, no signup to see your result.</p>
+        <p class="lead">The math for your next exec meeting, built on community FI benchmarks. 60 seconds, no signup.</p>
         <div class="hero-cta"><a href="#calculator" class="btn btn-primary">Try the calculator <span aria-hidden="true">↓</span></a></div>
       </div>
       <div class="hero-art-wrap">
@@ -424,8 +444,8 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 
   <section class="mode-picker" id="calculator">
     <div class="eyebrow">Step 1</div>
-    <h2 class="two-tone"><span class="strong">How would your FI</span> <span class="soft">use Modern Positive Pay?</span></h2>
-    <p class="lead">Most community FIs start with their own checks before they sell it to business clients. Select one to see your numbers — you can switch anytime.</p>
+    <h2 class="two-tone"><span class="strong">Fraud protection</span> <span class="soft">that pays for itself.</span></h2>
+    <p class="lead">Estimate your loss avoided, fee income, and client retention.</p>
     <div class="mode-pick-hint"><span class="hint-arrow" aria-hidden="true">→</span> Select a mode to begin</div>
     <div class="mode-cards" role="radiogroup" aria-label="Calculator mode">
       <button class="mode-card active" data-mode="b" role="radio" aria-checked="true">
@@ -800,6 +820,34 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
 
 <div class="foot-note">Modeled on AFS customer benchmarks, partner pricing exhibit A (May 2026), and FI fee schedule research (21 FIs, May 2026). Your FI's numbers will vary. © 2026 Advanced Fraud Solutions.</div>
 
+<!-- COMPLETION MODAL — peer benchmark capture (posts to the same Pardot handler 67jwv as the inline form) -->
+<div class="calc-modal" id="calc-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="calc-modal-title">
+  <div class="calc-modal-backdrop" data-close></div>
+  <div class="calc-modal-card">
+    <button type="button" class="calc-modal-close" data-close aria-label="Close">&times;</button>
+    <img class="calc-modal-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="">
+    <div class="eyebrow">Your numbers are ready</div>
+    <h2 id="calc-modal-title">Unlock the full revenue possibilities.</h2>
+    <p class="modal-sub">See how your loss avoided, fee income, and retention stack up against peer FIs your size — with peer benchmarks delivered to your inbox instantly.</p>
+    <form id="lock-form-modal" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
+      <div class="form-field"><label for="email-m">Work email</label><input type="email" id="email-m" name="email" required></div>
+      <div class="form-field"><label for="institution-m">Your FI</label><input type="text" id="institution-m" name="Company" required></div>
+      <div class="form-field" style="display:none;"><input type="text" id="first-name-m" name="first_name"></div>
+      <div class="form-field" style="display:none;"><input type="text" id="last-name-m" name="last_name"></div>
+      <button type="submit" class="btn btn-primary">Unlock peer benchmarks</button>
+      <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click.</p>
+      <!-- Hidden fields populated at submit time from calculator state -->
+      <input type="hidden" name="pp_source_form" value="calculator">
+      <input type="hidden" name="pp_asset_tier" value="">
+      <input type="hidden" name="pp_mode_selected" value="">
+      <input type="hidden" name="pp_loss_avoided_usd" value="0">
+      <input type="hidden" name="pp_fee_income_usd" value="0">
+      <input type="hidden" name="pp_retention_count" value="0">
+      <input type="hidden" name="pp_calculator_payload" value="{}">
+    </form>
+  </div>
+</div>
+
 <script>
 // Pricing constants from AFS partner exhibit A + internal sales sheet
 const SETUP_BY_ASSET = [1500, 3000, 5500, 7500, 10500];        // sub-1B, 1-5B, 5-10B, 10-20B, 20B+
@@ -882,8 +930,8 @@ function calc() {
     const margin = i.retailA - wholesale;
     const grossNII = enrolled * margin * 12;
     feeIncome = grossNII - setup;
-    // Loss avoided for business client mode = portion of FI fraud baseline that PP catches
-    lossAvoided = i.fraudA * CATCH_RATE;
+    // Loss avoided = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied catch-rate assumption.
+    lossAvoided = i.fraudA;
     retention = enrolled;
     tl1Num = feeIncome;
     tl2Num = feeIncome + grossNII; // setup recouped, full margin Year 2
@@ -891,7 +939,7 @@ function calc() {
     tl1What = `${enrolled} business clients enrolled at $${i.retailA}/mo. Margin of $${margin}/client.`;
     tl2What = `Setup recouped. Full ${enrolled} × $${margin} margin running.`;
     tl3What = `Mature program. Retention compounds. Service line owned.`;
-    ret1Sub = `Caught from your $${(i.fraudA/1000).toFixed(0)}K annual fraud baseline.`;
+    ret1Sub = `Your $${(i.fraudA/1000).toFixed(0)}K annual fraud baseline — the exposure Positive Pay is built to flag.`;
     ret2Sub = `${enrolled} clients × $${margin}/mo margin × 12, net of setup.`;
     ret3Sub = `Treasury services churn lower than depository-only. Each one is an account you don't have to replace.`;
   }
@@ -984,13 +1032,14 @@ document.querySelectorAll('input, select').forEach(el => {
   el.addEventListener('change', calc);
 });
 
-// Pardot form submission — populate hidden fields from current calculator state, then submit natively
-document.getElementById('lock-form').addEventListener('submit', (e) => {
-  // Don't preventDefault — let the browser POST to Pardot
+// Pardot form submission — populate a form's hidden fields from current calculator state, then submit natively.
+// Shared by the inline #lock-form and the completion #lock-form-modal (both post to handler 67jwv).
+function populatePardotFields(form) {
   const i = getInputs();
+  const set = (name, val) => { const el = form.querySelector('[name="' + name + '"]'); if (el) el.value = val; };
   const assetTiers = ['sub_1b', '1_5b', '5_10b', '10_20b', '20b_plus'];
-  document.getElementById('hf-asset-tier').value = assetTiers[i.asset] || '';
-  document.getElementById('hf-mode-selected').value = (currentMode === 'a') ? 'business_clients' : (currentMode === 'b') ? 'internal_only' : 'starter';
+  set('pp_asset_tier', assetTiers[i.asset] || '');
+  set('pp_mode_selected', (currentMode === 'a') ? 'business_clients' : (currentMode === 'b') ? 'internal_only' : 'starter');
   // Read current calculated values from the hero output
   const lossText = document.getElementById('ret1-value').textContent;
   const feeText = document.getElementById('ret2-value').textContent;
@@ -1003,9 +1052,9 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
     else if (t.includes('K')) n *= 1000;
     return Math.round(n);
   }
-  document.getElementById('hf-loss-avoided').value = parseDollar(lossText);
-  document.getElementById('hf-fee-income').value = parseDollar(feeText);
-  document.getElementById('hf-retention-count').value = parseInt(retText) || 0;
+  set('pp_loss_avoided_usd', parseDollar(lossText));
+  set('pp_fee_income_usd', parseDollar(feeText));
+  set('pp_retention_count', parseInt(retText) || 0);
   // Build a human-readable, mode-aware summary for the rep-facing payload field.
   // The discrete fields above (mode, tier, loss, fee, retention) carry the machine-usable values for automations.
   const params = new URLSearchParams(window.location.search);
@@ -1041,8 +1090,8 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
   const utmStr = ['utm_source','utm_medium','utm_campaign','utm_content'].map(k => params.get(k)).filter(Boolean).join(' / ') || '(none)';
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
   // Self-contained identity so the summary stands alone if copied elsewhere
-  const fiName = (document.getElementById('institution').value || '').trim();
-  const contactEmail = (document.getElementById('email').value || '').trim();
+  const fiName = ((form.querySelector('[name="Company"]') || {}).value || '').trim();
+  const contactEmail = ((form.querySelector('[name="email"]') || {}).value || '').trim();
   const idBits = [];
   if (fiName) idBits.push('FI: ' + fiName);
   if (contactEmail) idBits.push('Contact: ' + contactEmail);
@@ -1076,9 +1125,58 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
     '',
     'Source: Positive Pay ROI calculator   |   Campaign (UTM): ' + utmStr
   );
-  document.getElementById('hf-calc-payload').value = summaryLines.join('\n');
+  set('pp_calculator_payload', summaryLines.join('\n'));
   // Let the native submit run (POST to Pardot)
+}
+// Wire both forms: populate hidden fields on submit, then let the native POST to Pardot run
+['lock-form', 'lock-form-modal'].forEach(id => {
+  const f = document.getElementById(id);
+  if (f) f.addEventListener('submit', () => populatePardotFields(f));
 });
+
+// COMPLETION MODAL — open once the user has meaningfully engaged with the calculator
+(function () {
+  const modal = document.getElementById('calc-modal');
+  if (!modal) return;
+  const SHOWN_KEY = 'afa_calc_modal_shown';
+  let settleCount = 0, timer = null, opened = false;
+
+  function alreadyDone() {
+    if (opened) return true;
+    try { if (sessionStorage.getItem(SHOWN_KEY)) return true; } catch (e) {}
+    // Don't interrupt someone who's already filling the inline form
+    const inlineEmail = document.getElementById('email');
+    return !!(inlineEmail && inlineEmail.value.trim());
+  }
+  function openModal() {
+    if (alreadyDone()) return;
+    opened = true;
+    try { sessionStorage.setItem(SHOWN_KEY, '1'); } catch (e) {}
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const first = document.getElementById('email-m');
+    if (first) setTimeout(() => first.focus(), 60);
+    if (window.gtag) gtag('event', 'calc_modal_open', { event_category: 'calculator' });
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  // Count "settle" events (slider release, select change, mode switch); fire shortly after they pause.
+  function registerEngagement() {
+    if (alreadyDone()) return;
+    settleCount++;
+    clearTimeout(timer);
+    if (settleCount >= 3) timer = setTimeout(openModal, 1100);
+  }
+  document.querySelectorAll('.inputs input, .inputs select').forEach(el => el.addEventListener('change', registerEngagement));
+  document.querySelectorAll('.mode-card').forEach(c => c.addEventListener('click', registerEngagement));
+})();
 
 // MOBILE PRESET CHIPS: clicking a chip updates the linked slider + recalcs
 document.querySelectorAll('.chip-set').forEach(set => {
@@ -1133,10 +1231,10 @@ function applyUtmVariant() {
   const variant = params.get('utm_content');
   if (variant && UTM_VARIANTS[variant]) {
     const v = UTM_VARIANTS[variant];
-    document.querySelector('.trigger-band').innerHTML = v.trigger;
-    document.querySelector('.hero h1 .strong').textContent = v.h1Strong;
-    document.querySelector('.hero h1 .soft').textContent = v.h1Soft;
-    document.querySelector('.hero .lead').textContent = v.lead;
+    const tb = document.querySelector('.trigger-band'); if (tb) tb.innerHTML = v.trigger;
+    const hs = document.querySelector('.hero h1 .strong'); if (hs) hs.textContent = v.h1Strong;
+    const hf = document.querySelector('.hero h1 .soft'); if (hf) hf.textContent = v.h1Soft;
+    const hl = document.querySelector('.hero .lead'); if (hl) hl.textContent = v.lead;
   }
 }
 applyUtmVariant();
