@@ -13,6 +13,27 @@
   gtag('config', 'G-330SG25TTK');
 </script>
 
+<!-- LinkedIn Insight Tag (AFS partner 5763548) -->
+<script type="text/javascript">
+_linkedin_partner_id = "5763548";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script>
+<script type="text/javascript">
+(function(l) {
+  if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+  window.lintrk.q=[]}
+  var s = document.getElementsByTagName("script")[0];
+  var b = document.createElement("script");
+  b.type = "text/javascript";b.async = true;
+  b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+  s.parentNode.insertBefore(b, s);
+})(window.lintrk);
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=5763548&fmt=gif" />
+</noscript>
+
 <title>Modern Positive Pay ROI Calculator | Advanced Fraud Solutions</title>
 <meta name="description" content="See what Modern Positive Pay returns to your FI. 60 seconds. No signup to see your number.">
 <style>
@@ -91,7 +112,17 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .mode-card:not(.active):hover { opacity: 1; }
 .mode-card.active { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(199,2,0,0.22); transform: translateY(-2px); }
 .mode-card.active::after { content: "\2713 Selected"; position: absolute; top: 12px; right: 12px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 4px 9px; border-radius: 999px; }
-.mode-pick-hint { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px; }
+.mode-pick-hint { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 18px; }
+.mode-pick-hint .hint-arrow { display: inline-flex; animation: hint-nudge 1.4s ease-in-out infinite; font-size: 15px; }
+@keyframes hint-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+.mode-card .mode-toprow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.mode-card .mode-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); flex-shrink: 0; position: relative; transition: border-color 0.2s ease; }
+.mode-card.active .mode-radio { border-color: var(--primary); }
+.mode-card.active .mode-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--primary); }
+.mode-card:hover .mode-radio { border-color: var(--canvas); }
+.mode-card.active:hover .mode-radio { border-color: var(--primary); }
+.mode-card .mode-optnum { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); }
+.mode-card.active .mode-optnum { color: var(--canvas); }
 .mode-card .mode-label { display: block; font-weight: 700; font-size: 18px; margin-bottom: 8px; color: var(--canvas); }
 .mode-card .mode-helper { color: var(--muted); font-size: 14px; display: block; }
 .mode-card .mode-recommend { display: inline-block; background: var(--primary); color: var(--canvas); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
@@ -101,7 +132,7 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .calc-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
 @media (min-width: 900px) { .calc-grid { grid-template-columns: 380px 1fr; gap: 40px; align-items: start; } }
 
-.inputs { background: var(--surface-soft); border-radius: var(--r-lg); padding: 28px; }
+.inputs { background: var(--canvas); border: 1px solid var(--hairline); border-top: 4px solid var(--primary); border-radius: var(--r-lg); padding: 28px; box-shadow: 0 18px 44px rgba(0,0,0,0.09); }
 .inputs h3 { margin-bottom: 20px; font-size: 18px; }
 .mode-inputs { display: none; }
 .mode-inputs.active { display: block; }
@@ -109,11 +140,12 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .input-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--ink-deep); }
 .input-label .input-value { font-weight: 700; color: var(--primary); font-size: 16px; }
 .input-label .input-hint { display: block; font-size: 12px; font-weight: 400; color: var(--body-mid); margin-top: 2px; }
-input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; background: transparent; height: 24px; }
-input[type="range"]::-webkit-slider-runnable-track { height: 6px; background: var(--hairline); border-radius: 3px; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 22px; width: 22px; border-radius: 50%; background: var(--primary); margin-top: -8px; border: 3px solid var(--canvas); box-shadow: 0 1px 3px rgba(0,0,0,0.15); cursor: pointer; }
-input[type="range"]::-moz-range-track { height: 6px; background: var(--hairline); border-radius: 3px; }
-input[type="range"]::-moz-range-thumb { height: 22px; width: 22px; border-radius: 50%; background: var(--primary); border: 3px solid var(--canvas); cursor: pointer; }
+input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; background: transparent; height: 28px; }
+input[type="range"]::-webkit-slider-runnable-track { height: 8px; background: var(--hairline); border-radius: 4px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 28px; width: 28px; border-radius: 50%; background: var(--primary); margin-top: -10px; border: 4px solid var(--canvas); box-shadow: 0 2px 8px rgba(199,2,0,0.35); cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease; }
+input[type="range"]:hover::-webkit-slider-thumb, input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.12); box-shadow: 0 3px 12px rgba(199,2,0,0.5); }
+input[type="range"]::-moz-range-track { height: 8px; background: var(--hairline); border-radius: 4px; }
+input[type="range"]::-moz-range-thumb { height: 28px; width: 28px; border-radius: 50%; background: var(--primary); border: 4px solid var(--canvas); box-shadow: 0 2px 8px rgba(199,2,0,0.35); cursor: pointer; }
 select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); border-radius: var(--r-md); background: var(--canvas); font-family: var(--font); font-size: 15px; color: var(--ink-deep); cursor: pointer; }
 .toggle-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 13px; color: var(--body-mid); }
 .toggle-row input { width: auto; }
@@ -121,26 +153,26 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 /* OUTPUT */
 .output { padding: 4px 0; }
 .output-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 10px; }
-.three-numbers { display: grid; grid-template-columns: 1fr; gap: 0; margin-bottom: 28px; background: var(--ink-deep); border-radius: var(--r-lg); overflow: hidden; }
+.three-numbers { display: grid; grid-template-columns: 1fr; gap: 0; margin-bottom: 28px; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
 @media (min-width: 600px) { .three-numbers { grid-template-columns: repeat(3, 1fr); } }
-.return-card { padding: 28px 24px; position: relative; border-bottom: 1px solid #3a3a3a; }
-@media (min-width: 600px) { .return-card { border-bottom: none; border-right: 1px solid #3a3a3a; } .return-card:last-child { border-right: none; } }
+.return-card { padding: 28px 24px; position: relative; border-bottom: 1px solid var(--hairline); }
+@media (min-width: 600px) { .return-card { border-bottom: none; border-right: 1px solid var(--hairline); } .return-card:last-child { border-right: none; } }
 .return-card::before { content: ""; position: absolute; top: 0; left: 0; width: 3px; height: 32px; background: var(--primary); transition: height 0.3s ease; }
-.return-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 12px; }
-.return-value { font-size: clamp(36px, 4.5vw, 52px); font-weight: 700; line-height: 1; color: var(--canvas); letter-spacing: -0.02em; transition: opacity 0.3s ease; }
-.return-value.money { color: var(--value); }
-.return-value.money.muted-value { color: var(--canvas); opacity: 0.25; }
+.return-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--body-mid); margin-bottom: 12px; }
+.return-value { font-size: clamp(36px, 4.5vw, 52px); font-weight: 700; line-height: 1; color: var(--ink-deep); letter-spacing: -0.02em; transition: opacity 0.3s ease; }
+.return-value.money { color: var(--ink-deep); }
+.return-value.money.muted-value { color: var(--muted); opacity: 0.5; }
 .return-sub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.45; }
 
 /* TIMELINE */
-.timeline { background: var(--ink-deep); color: var(--canvas); border-radius: var(--r-lg); padding: 28px; margin-bottom: 24px; }
-.timeline h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 18px; }
+.timeline { background: var(--canvas); color: var(--ink-deep); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; margin-bottom: 24px; }
+.timeline h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--body-mid); margin-bottom: 18px; }
 .timeline-rows { display: grid; gap: 14px; }
-.timeline-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid #3a3a3a; }
+.timeline-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid var(--hairline); }
 .timeline-row:last-child { border-bottom: none; padding-bottom: 0; }
 .timeline-year { font-weight: 700; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em; }
-.timeline-what { color: var(--canvas); font-size: 15px; line-height: 1.4; }
-.timeline-num { font-weight: 700; color: var(--value); font-size: 18px; white-space: nowrap; }
+.timeline-what { color: var(--ink-deep); font-size: 15px; line-height: 1.4; }
+.timeline-num { font-weight: 700; color: var(--primary); font-size: 18px; white-space: nowrap; }
 
 /* PEER CALLOUT */
 .peer-callout { background: var(--surface-soft); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
@@ -148,10 +180,10 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .peer-callout .peer-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 8px; }
 
 /* PHASED CALLOUT */
-.phased-callout { background: var(--ink-deep); color: var(--canvas); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; line-height: 1.5; display: none; }
+.phased-callout { background: var(--surface-soft); color: var(--ink-deep); border-left: 3px solid var(--primary); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; line-height: 1.5; display: none; }
 .phased-callout.active { display: block; }
-.phased-callout .ph-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--value); margin-bottom: 10px; }
-.phased-callout p { color: var(--canvas); font-size: 14px; }
+.phased-callout .ph-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--primary); margin-bottom: 10px; }
+.phased-callout p { color: var(--body-mid); font-size: 14px; }
 
 /* METHODOLOGY */
 .methodology { background: var(--canvas); border: 1px solid var(--hairline-soft); border-radius: var(--r-lg); padding: 0; }
@@ -165,8 +197,13 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .methodology-content cite { display: block; font-size: 12px; color: var(--muted); font-style: normal; margin-top: 6px; }
 
 /* LOCK / FORM */
-.lock { padding-top: var(--section-y); }
-.lock .lock-wrap { background: var(--surface-soft); border-radius: var(--r-lg); padding: clamp(28px, 4vw, 48px); }
+.lock { padding-top: clamp(28px, 4vw, 44px); }
+.lock .lock-wrap { position: relative; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: clamp(28px, 4vw, 48px); overflow: hidden; }
+.lock-guide-icon { width: clamp(84px, 12vw, 116px); height: clamp(84px, 12vw, 116px); display: block; margin-bottom: 22px; filter: drop-shadow(0 12px 22px rgba(199,2,0,0.20)); animation: guide-float 3.6s ease-in-out infinite; transform-origin: center; }
+@keyframes guide-float { 0%, 100% { transform: translateY(0) rotate(-2.5deg); } 50% { transform: translateY(-11px) rotate(2.5deg); } }
+.lock-guide-glow { position: absolute; top: -40px; left: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(199,2,0,0.10) 0%, transparent 70%); pointer-events: none; animation: guide-pulse 3.6s ease-in-out infinite; }
+@keyframes guide-pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .lock-guide-icon, .lock-guide-glow, .mode-pick-hint .hint-arrow { animation: none; } }
 .lock h2 { margin-bottom: 16px; max-width: 22ch; }
 .lock .lead { max-width: 56ch; margin-bottom: 28px; }
 .form-grid { display: grid; gap: 14px; grid-template-columns: 1fr; margin-bottom: 20px; }
@@ -192,7 +229,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 }
 
 /* PROOF */
-.proof { background: var(--surface-soft); }
+.proof { background: var(--surface-soft); border-radius: var(--r-lg); padding: clamp(40px, 6vw, 72px) clamp(28px, 4vw, 48px); }
 .proof .eyebrow { display: block; }
 .proof h2 { margin-bottom: 12px; }
 .proof .lead { max-width: 56ch; margin-bottom: 40px; }
@@ -233,6 +270,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .soft-cta { background: var(--ink-deep); color: var(--canvas); position: relative; overflow: hidden; }
 .soft-cta .eyebrow { color: var(--canvas); position: relative; z-index: 1; }
 .soft-cta h2 { color: var(--canvas); margin-bottom: 16px; max-width: 22ch; position: relative; z-index: 1; }
+.soft-cta h2 .strong { color: var(--canvas); }
 .soft-cta h2 .soft { color: var(--muted); }
 .soft-cta .lead { color: var(--muted); max-width: 56ch; margin-bottom: 32px; position: relative; z-index: 1; }
 .soft-cta .btn-composite { position: relative; z-index: 1; }
@@ -364,18 +402,21 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
     <div class="eyebrow">Step 1</div>
     <h2 class="two-tone"><span class="strong">How would your FI</span> <span class="soft">use Modern Positive Pay?</span></h2>
     <p class="lead">Most community FIs start with their own checks before they sell it to business clients. Select one to see your numbers — you can switch anytime.</p>
-    <div class="mode-pick-hint">Select one to begin</div>
+    <div class="mode-pick-hint"><span class="hint-arrow" aria-hidden="true">→</span> Select a mode to begin</div>
     <div class="mode-cards" role="radiogroup" aria-label="Calculator mode">
       <button class="mode-card active" data-mode="b" role="radio" aria-checked="true">
+        <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 1</span></span>
         <span class="mode-recommend">Recommended</span>
         <span class="mode-label">For my FI's own checks</span>
         <span class="mode-helper">Protect cashier's checks, official checks, escrow, and vendor ACH. The most common starting point — matches what 48 AFS customer FIs are doing today.</span>
       </button>
       <button class="mode-card" data-mode="c" role="radio" aria-checked="false">
+        <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 2</span></span>
         <span class="mode-label">Start internal, grow into business clients</span>
         <span class="mode-helper">Year 1 protection on your own checks. Year 2-3, layer in business clients. Patient build, lower vendor risk.</span>
       </button>
       <button class="mode-card" data-mode="a" role="radio" aria-checked="false">
+        <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 3</span></span>
         <span class="mode-label">For my business clients</span>
         <span class="mode-helper">You already have business clients ready to enroll. Calculate the fee income + protection + retention.</span>
       </button>
@@ -534,16 +575,35 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     </div>
   </section>
 
-  <section class="guide-cta-section">
-    <a href="#lock" class="guide-cta">
-      <img class="guide-cta-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="">
-      <span class="guide-cta-body">
-        <span class="guide-cta-eyebrow">Free guide · keep exploring</span>
-        <span class="guide-cta-title">Get the Peer Benchmark Guide</span>
-        <span class="guide-cta-desc">See how your numbers stack up against AFS-protected FIs at your asset tier — plus a board-ready one-pager for your CFO. No sales call.</span>
-      </span>
-      <span class="guide-cta-arrow" aria-hidden="true">↓</span>
-    </a>
+  <section class="lock" id="lock">
+    <div class="lock-wrap">
+      <span class="lock-guide-glow" aria-hidden="true"></span>
+      <img class="lock-guide-icon" src="/positivepay/assets/peer-benchmark-icon.svg" alt="Peer Benchmark Guide">
+      <div class="eyebrow">See how you compare</div>
+      <h2 class="two-tone"><span class="strong">The Path to Positive Pay</span> <span class="soft">— Peer Insights.</span></h2>
+      <p class="lead">Community FIs almost never see how they stack up against peers. We'll send: your numbers above, a comparison against AFS-protected FIs at your asset tier (catch rate, NII, fraud-event frequency), and a board-ready one-pager you can forward to your CFO or CEO. No sales call. Read it on your time.</p>
+      <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
+        <div class="form-grid">
+          <div class="form-field"><label for="email">Work email</label><input type="email" id="email" name="email" required></div>
+          <div class="form-field"><label for="institution">Your FI</label><input type="text" id="institution" name="Company" required></div>
+          <div class="form-field" style="display:none;"><label for="first-name">First name</label><input type="text" id="first-name" name="first_name"></div>
+          <div class="form-field" style="display:none;"><label for="last-name">Last name</label><input type="text" id="last-name" name="last_name"></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Send to my inbox</button>
+          <button type="button" class="btn btn-secondary" id="send-to-cfo">Email this to my CFO →</button>
+        </div>
+        <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click. Two-field gate: we'll enrich first/last from your work email domain.</p>
+        <!-- Hidden fields populated at submit time from calculator state -->
+        <input type="hidden" id="hf-source-form" name="pp_source_form" value="calculator">
+        <input type="hidden" id="hf-asset-tier" name="pp_asset_tier" value="">
+        <input type="hidden" id="hf-mode-selected" name="pp_mode_selected" value="">
+        <input type="hidden" id="hf-loss-avoided" name="pp_loss_avoided_usd" value="0">
+        <input type="hidden" id="hf-fee-income" name="pp_fee_income_usd" value="0">
+        <input type="hidden" id="hf-retention-count" name="pp_retention_count" value="0">
+        <input type="hidden" id="hf-calc-payload" name="pp_calculator_payload" value="{}">
+      </form>
+    </div>
   </section>
 
   </main>
@@ -575,35 +635,6 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
 
   <main>
 
-  <section class="lock" id="lock">
-    <div class="lock-wrap">
-      <div class="eyebrow">See how you compare</div>
-      <h2 class="two-tone"><span class="strong">Get peer FI benchmarks at your asset size</span> <span class="soft">+ a one-pager your CFO can read in 5 minutes.</span></h2>
-      <p class="lead">Community FIs almost never see how they stack up against peers. We'll send: your numbers above, a comparison against AFS-protected FIs at your asset tier (catch rate, NII, fraud-event frequency), and a board-ready one-pager you can forward to your CFO or CEO. No sales call. Read it on your time.</p>
-      <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
-        <div class="form-grid">
-          <div class="form-field"><label for="email">Work email</label><input type="email" id="email" name="email" required></div>
-          <div class="form-field"><label for="institution">Your FI</label><input type="text" id="institution" name="Company" required></div>
-          <div class="form-field" style="display:none;"><label for="first-name">First name</label><input type="text" id="first-name" name="first_name"></div>
-          <div class="form-field" style="display:none;"><label for="last-name">Last name</label><input type="text" id="last-name" name="last_name"></div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Send to my inbox</button>
-          <button type="button" class="btn btn-secondary" id="send-to-cfo">Email this to my CFO →</button>
-        </div>
-        <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click. Two-field gate: we'll enrich first/last from your work email domain.</p>
-        <!-- Hidden fields populated at submit time from calculator state -->
-        <input type="hidden" id="hf-source-form" name="pp_source_form" value="calculator">
-        <input type="hidden" id="hf-asset-tier" name="pp_asset_tier" value="">
-        <input type="hidden" id="hf-mode-selected" name="pp_mode_selected" value="">
-        <input type="hidden" id="hf-loss-avoided" name="pp_loss_avoided_usd" value="0">
-        <input type="hidden" id="hf-fee-income" name="pp_fee_income_usd" value="0">
-        <input type="hidden" id="hf-retention-count" name="pp_retention_count" value="0">
-        <input type="hidden" id="hf-calc-payload" name="pp_calculator_payload" value="{}">
-      </form>
-    </div>
-  </section>
-
   <section class="proof">
     <div class="eyebrow">How AFS customers actually started</div>
     <h2 class="two-tone"><span class="strong">They didn't budget for Modern Positive Pay.</span> <span class="soft">They had a loss.</span></h2>
@@ -628,7 +659,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     <div class="proof-stats">
       <div class="proof-stat"><div class="stat-num">1,200+</div><div class="stat-desc">FIs trust AFS with fraud prevention</div></div>
       <div class="proof-stat"><div class="stat-num">19</div><div class="stat-desc">years stopping fraud at community FIs</div></div>
-      <div class="proof-stat"><div class="stat-num">7</div><div class="stat-desc">community FI cores supported direct</div></div>
+      <div class="proof-stat"><div class="stat-num">8x</div><div class="stat-desc">Inc. 5000 honoree</div></div>
     </div>
   </section>
 
@@ -721,7 +752,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
     <div class="eyebrow">Done with the math?</div>
     <h2 class="two-tone"><span class="strong">Talk to our team</span> <span class="soft">about your specific FI.</span></h2>
     <p class="lead">30 minutes. No slide deck. No demo theater. Just your numbers and our experience with peer FIs on your core.</p>
-    <a href="#" class="btn-composite">
+    <a href="/positivepay/discovery/" class="btn-composite">
       Book a discovery call
       <span class="arrow-orb">
         <svg viewBox="0 0 24 24"><path d="M5 12h12m-4-4l4 4-4 4" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
