@@ -944,49 +944,55 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
   const params = new URLSearchParams(window.location.search);
   const usd = n => '$' + Math.round(n).toLocaleString('en-US');
   const num = n => Number(n).toLocaleString('en-US');
-  const modeLabels = { a: 'For my business clients', b: "For my FI's own checks", c: 'Start internal, grow into business clients' };
+  const useLabels = { a: 'Sell it to their business clients', b: "Protect their FI's own checks", c: 'Start internal, then grow into business clients' };
   const tierLabels = ['Under $1B', '$1B-$5B', '$5B-$10B', '$10B-$20B', '$20B+'];
   let inputLines;
   if (currentMode === 'a') {
     inputLines = [
-      'Business accounts: ' + num(i.accounts),
-      'Enrollment rate: ' + Math.round(i.enroll * 100) + '%',
-      'Retail price: ' + usd(i.retailA) + '/mo per client',
-      'Annual fraud loss absorbed today: ' + usd(i.fraudA)
+      'Business accounts at their FI: ' + num(i.accounts),
+      'Enrollment rate they expect: ' + Math.round(i.enroll * 100) + '%',
+      "Monthly price they'd charge per client: " + usd(i.retailA),
+      'Annual fraud loss they absorb today: ' + usd(i.fraudA)
     ];
   } else if (currentMode === 'b') {
     inputLines = [
-      "Cashier's + official checks/yr: " + num(i.checks),
-      'Avg value per check: ' + usd(i.checkVal),
-      'Vendor ACH + payroll runs/yr: ' + num(i.ach),
-      'Avg ACH value: ' + usd(i.achVal)
+      "Cashier's + official checks per year: " + num(i.checks),
+      'Average value per check: ' + usd(i.checkVal),
+      'Vendor ACH + payroll runs per year: ' + num(i.ach),
+      'Average ACH payment value: ' + usd(i.achVal)
     ];
   } else {
     inputLines = [
-      "Cashier's + official checks/yr: " + num(i.checksC),
-      'Avg value per check: ' + usd(i.checkValC),
-      'Vendor ACH runs/yr: ' + num(i.achC),
-      'Business clients enrolled by end of Yr2: ' + num(i.y2Clients),
-      'Retail price: ' + usd(i.retailC) + '/mo per client'
+      "Cashier's + official checks per year: " + num(i.checksC),
+      'Average value per check: ' + usd(i.checkValC),
+      'Vendor ACH runs per year: ' + num(i.achC),
+      "Business clients they'll enroll by end of Year 2: " + num(i.y2Clients),
+      "Monthly price they'd charge per client: " + usd(i.retailC)
     ];
   }
+  const lossN = parseDollar(lossText), feeN = parseDollar(feeText), retN = parseInt(retText) || 0;
   const utmStr = ['utm_source','utm_medium','utm_campaign','utm_content'].map(k => params.get(k)).filter(Boolean).join(' / ') || '(none)';
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
   const summary = [
-    'SUBMITTED ' + stamp,
-    'Mode: ' + (modeLabels[currentMode] || currentMode),
-    'Asset tier: ' + (tierLabels[i.asset] || ('idx ' + i.asset)),
-    'Channel partner: ' + (i.jha ? 'Yes' : 'No'),
+    'POS PAY CALCULATOR SUBMISSION',
+    'This prospect modeled their Modern Positive Pay ROI on the Academy calculator. The numbers below are their own inputs and the calculator projections - not quotes or commitments.',
     '',
-    'WHAT THEY ENTERED',
+    'Snapshot: ' + usd(lossN) + ' loss avoided + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.',
+    '',
+    'Submitted: ' + stamp,
+    'How they plan to use Positive Pay: ' + (useLabels[currentMode] || currentMode),
+    'FI asset size: ' + (tierLabels[i.asset] || ('tier ' + i.asset)),
+    'Buys through a channel partner: ' + (i.jha ? 'Yes' : 'No'),
+    '',
+    'WHAT THEY ENTERED (their own numbers)',
     ...inputLines.map(l => '- ' + l),
     '',
-    'RESULT',
-    '- Year 1 loss avoided: ' + usd(parseDollar(lossText)),
-    '- Year 1 fee income: ' + usd(parseDollar(feeText)),
-    '- Clients retained: ' + num(parseInt(retText) || 0),
+    'WHAT THE CALCULATOR PROJECTED (Year 1)',
+    '- Loss avoided: ' + usd(lossN),
+    '- Fee income: ' + usd(feeN),
+    '- Business clients retained: ' + num(retN),
     '',
-    'Source: calculator   UTM: ' + utmStr
+    'Source: Positive Pay ROI calculator   |   Campaign (UTM): ' + utmStr
   ].join('\n');
   document.getElementById('hf-calc-payload').value = summary;
   // Let the native submit run (POST to Pardot)
