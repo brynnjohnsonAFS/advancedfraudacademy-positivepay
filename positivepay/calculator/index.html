@@ -605,8 +605,8 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <details class="methodology">
           <summary>Show the math</summary>
           <div class="methodology-content">
-            <p><b>Modern Positive Pay catches 85% of attempted fraud face value.</b> Every $1 of caught face value avoids $5.75 in true cost (LexisNexis True Cost of Fraud, 2025 — including investigation, recovery, reissue, and customer outreach).</p>
-            <div class="formula" id="formula-block">Loss avoided = face_at_risk × 0.85 catch rate × $5.75 soft cost
+            <p><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> Every $1 of fraud face value it prevents avoids $5.75 in true cost (LexisNexis True Cost of Fraud, 2025 — including investigation, recovery, reissue, and customer outreach).</p>
+            <div class="formula" id="formula-block">Loss avoided = face_at_risk × $5.75 soft cost
 Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
             + ACH/yr × avg value × 1.0% ACH fraud attempt rate
 
@@ -854,7 +854,6 @@ const SETUP_BY_ASSET = [1500, 3000, 5500, 7500, 10500];        // sub-1B, 1-5B, 
 const CORP_CHECKS_BY_ASSET = [2800, 5600, 9100, 12600, 17500]; // annual access fee
 const WHOLESALE_DIRECT = 40;   // direct list per business client per month
 const WHOLESALE_JHA = 25;      // Jack Henry / Symitar channel wholesale
-const CATCH_RATE = 0.85;
 const SOFT_COST = 5.75;
 const CHECK_ATTEMPT = 0.005;   // 0.5%
 const ACH_ATTEMPT = 0.01;      // 1.0%
@@ -895,8 +894,8 @@ function getInputs() {
 function calcInternalLoss(checks, checkVal, ach, achVal) {
   const checkFaceAtRisk = checks * checkVal * CHECK_ATTEMPT;
   const achFaceAtRisk = ach * achVal * ACH_ATTEMPT;
-  const faceCaught = (checkFaceAtRisk + achFaceAtRisk) * CATCH_RATE;
-  return faceCaught * SOFT_COST;
+  const facePrevented = checkFaceAtRisk + achFaceAtRisk;
+  return facePrevented * SOFT_COST;
 }
 
 function calc() {
@@ -955,7 +954,7 @@ function calc() {
     tl1What = `Cashier's checks, ACH, escrow protected. Year 1 covers setup and base subscription.`;
     tl2What = `Ongoing protection at maintenance only. Setup recouped.`;
     tl3What = `Program is paid back. Real losses prevented. Story to tell business clients.`;
-    ret1Sub = `${fmtK(trueCostAvoided)} face value caught at 85%, net of program cost.`;
+    ret1Sub = `${fmtK(trueCostAvoided)} in true cost prevented, net of program cost.`;
     ret2Sub = `No business client revenue in this mode.`;
     ret3Sub = `No business clients enrolled in Mode B.`;
   }
@@ -974,7 +973,7 @@ function calc() {
     tl1What = `Protect own checks. Setup paid.`;
     tl2What = `${i.y2Clients} business clients onboarded at $${margin}/mo margin.`;
     tl3What = `~${y3Clients} business clients. Internal protection continues.`;
-    ret1Sub = `${fmtK(actualTCA)} face value caught at 85%, net of program cost.`;
+    ret1Sub = `${fmtK(actualTCA)} in true cost prevented, net of program cost.`;
     ret2Sub = `Year 1 fee income is $0. By Year 2: ${fmtK(y2Income)}.`;
     ret3Sub = `${i.y2Clients} business clients onboarded by Year 2 end.`;
   }
