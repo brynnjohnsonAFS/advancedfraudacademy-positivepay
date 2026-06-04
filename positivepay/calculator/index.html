@@ -67,6 +67,11 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .eyebrow { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 16px; }
 .two-tone .strong { color: var(--ink-deep); }
 .two-tone .soft { color: var(--body-mid); }
+.rotator { display: inline-block; position: relative; }
+.rotator-track { display: inline-block; color: var(--primary); font-weight: 700; transition: opacity .35s ease, transform .35s ease; }
+.rotator-track.is-out { opacity: 0; transform: translateY(-0.3em); }
+.rotator-track.is-in { opacity: 0; transform: translateY(0.3em); }
+@media (prefers-reduced-motion: reduce) { .rotator-track { transition: none; } .rotator-track.is-out, .rotator-track.is-in { opacity: 1; transform: none; } }
 .btn { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font); font-weight: 700; font-size: 18px; line-height: 1; padding: 20px 36px; border-radius: var(--r-lg); border: none; cursor: pointer; text-decoration: none; transition: background 0.2s ease, color 0.2s ease; letter-spacing: 0.02em; }
 .btn-primary { background: var(--primary); color: var(--on-primary); }
 .btn-primary:hover { background: var(--primary-hover); }
@@ -704,8 +709,8 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
   <main>
 
   <section class="proof">
-    <div class="eyebrow">How AFS customers actually started</div>
-    <h2 class="two-tone"><span class="strong">They didn't budget for Modern Positive Pay.</span> <span class="soft">They had a loss.</span></h2>
+    <div class="eyebrow">Get ahead of the trigger</div>
+    <h2 class="two-tone"><span class="strong">Start before</span> <span class="soft">the <span class="rotator"><span class="rotator-track" data-rotate>loss</span></span>.</span></h2>
     <p class="lead">Three of the most consistent paths to AFS from the customer base. The trigger isn't a product roadmap — it's a specific event that exposed the gap.</p>
     <div class="proof-grid">
       <div class="proof-card">
@@ -1238,6 +1243,25 @@ function applyUtmVariant() {
   }
 }
 applyUtmVariant();
+
+// Proof-section headline: rotate "loss → audit → stolen check" (maps to the three trigger cards below)
+(function rotateProofWord(){
+  const el = document.querySelector('[data-rotate]');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const words = ['loss', 'audit', 'stolen check'];
+  let i = 0;
+  setInterval(function(){
+    el.classList.add('is-out');
+    setTimeout(function(){
+      i = (i + 1) % words.length;
+      el.textContent = words[i];
+      el.classList.remove('is-out');
+      el.classList.add('is-in');
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.remove('is-in'); }); });
+    }, 350);
+  }, 2400);
+})();
 
 calc();
 </script>
