@@ -1004,11 +1004,28 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
   const lossN = parseDollar(lossText), feeN = parseDollar(feeText), retN = parseInt(retText) || 0;
   const utmStr = ['utm_source','utm_medium','utm_campaign','utm_content'].map(k => params.get(k)).filter(Boolean).join(' / ') || '(none)';
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-  const summary = [
+  // Self-contained identity so the summary stands alone if copied elsewhere
+  const fiName = (document.getElementById('institution').value || '').trim();
+  const contactEmail = (document.getElementById('email').value || '').trim();
+  const idBits = [];
+  if (fiName) idBits.push('FI: ' + fiName);
+  if (contactEmail) idBits.push('Contact: ' + contactEmail);
+  // Mode-aware snapshot + results: "own checks" mode has no client fee income / retention
+  const ownChecks = (currentMode === 'b');
+  const snapshot = ownChecks
+    ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud loss avoided in Year 1.'
+    : 'Snapshot: ' + usd(lossN) + ' loss avoided + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.';
+  const resultLines = ownChecks
+    ? ['- Loss avoided: ' + usd(lossN)]
+    : ['- Loss avoided: ' + usd(lossN), '- Fee income: ' + usd(feeN), '- Business clients retained: ' + num(retN)];
+  const summaryLines = [
     'POS PAY CALCULATOR SUBMISSION',
     'This prospect modeled their Modern Positive Pay ROI on the Academy calculator. The numbers below are their own inputs and the calculator projections - not quotes or commitments.',
-    '',
-    'Snapshot: ' + usd(lossN) + ' loss avoided + ' + usd(feeN) + ' fee income in Year 1, ' + num(retN) + ' business clients retained.',
+    ''
+  ];
+  if (idBits.length) summaryLines.push(idBits.join('   |   '), '');
+  summaryLines.push(
+    snapshot,
     '',
     'Submitted: ' + stamp,
     'How they plan to use Positive Pay: ' + (useLabels[currentMode] || currentMode),
@@ -1019,13 +1036,11 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
     ...inputLines.map(l => '- ' + l),
     '',
     'WHAT THE CALCULATOR PROJECTED (Year 1)',
-    '- Loss avoided: ' + usd(lossN),
-    '- Fee income: ' + usd(feeN),
-    '- Business clients retained: ' + num(retN),
+    ...resultLines,
     '',
     'Source: Positive Pay ROI calculator   |   Campaign (UTM): ' + utmStr
-  ].join('\n');
-  document.getElementById('hf-calc-payload').value = summary;
+  );
+  document.getElementById('hf-calc-payload').value = summaryLines.join('\n');
   // Let the native submit run (POST to Pardot)
 });
 
