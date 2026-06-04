@@ -635,7 +635,6 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Send to my inbox</button>
-          <button type="button" class="btn btn-secondary" id="send-to-cfo">Email this to my CFO →</button>
         </div>
         <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click. Two-field gate: we'll enrich first/last from your work email domain.</p>
         <!-- Hidden fields populated at submit time from calculator state -->
@@ -1074,22 +1073,6 @@ document.getElementById('lock-form').addEventListener('submit', (e) => {
   );
   document.getElementById('hf-calc-payload').value = summaryLines.join('\n');
   // Let the native submit run (POST to Pardot)
-});
-
-// "Email to my CFO" button — opens mailto with the user's numbers
-document.getElementById('send-to-cfo').addEventListener('click', () => {
-  const r1 = document.getElementById('ret1-value').textContent;
-  const r2 = document.getElementById('ret2-value').textContent;
-  const r3 = document.getElementById('ret3-value').textContent;
-  const body = encodeURIComponent(
-    `I ran the Modern Positive Pay calculator from AFS. Our numbers:\n\n` +
-    `• Loss avoided (Year 1): ${r1}\n` +
-    `• Fee income: ${r2}\n` +
-    `• Business clients on a stickier service line: ${r3}\n\n` +
-    `Worth discussing? Full breakdown: ${window.location.href}\n`
-  );
-  const subject = encodeURIComponent('Modern Positive Pay: our numbers');
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
 });
 
 // MOBILE PRESET CHIPS: clicking a chip updates the linked slider + recalcs
