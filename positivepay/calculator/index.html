@@ -231,12 +231,13 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .phased-callout p { color: var(--body-mid); font-size: 14px; }
 
 /* METHODOLOGY */
-.methodology { background: var(--canvas); border: 1px solid var(--hairline-soft); border-radius: var(--r-lg); padding: 0; }
-.methodology summary { padding: 18px 24px; cursor: pointer; font-weight: 700; font-size: 15px; color: var(--ink-deep); list-style: none; display: flex; justify-content: space-between; align-items: center; }
-.methodology summary::after { content: "+"; font-size: 22px; color: var(--primary); font-weight: 400; }
-.methodology[open] summary::after { content: "−"; }
+.methodology { max-width: 1100px; margin: 0 auto; padding: 4px var(--gutter) 0; }
+.methodology summary { padding: 0; cursor: pointer; font-weight: 500; font-size: 13px; color: var(--muted); text-decoration: underline; list-style: none; display: inline-flex; align-items: center; gap: 4px; }
+.methodology summary:hover { color: var(--body-mid); }
+.methodology summary::after { content: "›"; font-size: 13px; color: var(--muted); font-weight: 400; transition: transform 0.2s ease; }
+.methodology[open] summary::after { transform: rotate(90deg); }
 .methodology summary::-webkit-details-marker { display: none; }
-.methodology-content { padding: 0 24px 24px; font-size: 14px; color: var(--body-mid); line-height: 1.6; }
+.methodology-content { padding: 12px 0 0; font-size: 14px; color: var(--body-mid); line-height: 1.6; }
 .methodology-content p { font-size: 14px; margin-bottom: 12px; }
 .methodology-content .formula { background: var(--surface-soft); border-radius: var(--r-md); padding: 12px 14px; font-family: ui-monospace, 'SF Mono', Monaco, Consolas, monospace; font-size: 13px; color: var(--ink-deep); margin-bottom: 14px; white-space: pre-wrap; }
 .methodology-content cite { display: block; font-size: 12px; color: var(--muted); font-style: normal; margin-top: 6px; }
@@ -298,14 +299,14 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .lock-benefits .lb-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-deep); white-space: nowrap; margin-right: 6px; }
 .lock-benefits .lb-text { font-size: 13.5px; color: var(--body-mid); line-height: 1.4; }
 .lock-right { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 12px; background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: clamp(20px, 3vw, 28px); box-shadow: 0 14px 34px rgba(0,0,0,0.06); }
-.lock-right .pb-anim { width: 150px; margin: 2px auto 0; }
-.lock-right .pb-card { padding: 12px 14px 8px; border-radius: 13px; box-shadow: 0 10px 26px rgba(0,0,0,0.07); }
-.lock-right .pb-corner { width: 24px; height: 24px; border-bottom-left-radius: 10px; }
-.lock-right .pb-stage { height: 68px; }
-.lock-right .pb-slide { gap: 8px; }
-.lock-right .pb-ico { width: 34px; height: 34px; }
-.lock-right .pb-label { font-size: 12px; max-width: 14ch; }
-.lock-guide-badge { align-self: center; display: inline-flex; align-items: center; gap: 8px; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--ink-deep); }
+.lock-left .pb-anim { width: 132px; margin: 20px 0 0 24px; }
+.lock-left .pb-card { padding: 11px 13px 7px; border-radius: 12px; box-shadow: 0 9px 24px rgba(0,0,0,0.07); }
+.lock-left .pb-corner { width: 22px; height: 22px; border-bottom-left-radius: 9px; }
+.lock-left .pb-stage { height: 60px; }
+.lock-left .pb-slide { gap: 7px; }
+.lock-left .pb-ico { width: 30px; height: 30px; }
+.lock-left .pb-label { font-size: 11.5px; max-width: 14ch; }
+.lock-guide-badge { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--ink-deep); }
 .lock-right .form-grid { grid-template-columns: 1fr; margin-bottom: 14px; }
 .lock-right .form-actions .btn-primary { width: 100%; }
 .form-grid { display: grid; gap: 14px; grid-template-columns: 1fr; margin-bottom: 20px; }
@@ -686,24 +687,6 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
           <span class="ph-eyebrow">Beyond the dollars</span>
           <p>Starting with your own FI lets you learn the tool, build internal buy-in, and prove value on your own checks before pitching business clients. By Year 2, you're not selling a vendor. You're selling a program you've already run.</p>
         </div>
-
-        <details class="methodology">
-          <summary>Show the math</summary>
-          <div class="methodology-content">
-            <p id="formula-intro"><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
-            <div class="formula" id="formula-block">FI Protection (Year 1) = face_at_risk (fraud face value)
-Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
-            + ACH/yr × avg value × 1.0% ACH fraud attempt rate
-FI Protection (Year N) = Year 1 × (1 + 4%)^(N−1)
-            — protection compounds as the FI grows its check & ACH volume
-
-Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup
-Clients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)
-            — modest net-of-churn book growth
-Cost basis and setup scale with FI asset size. We'll share specifics when you talk to our team.</div>
-            <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026). FI growth benchmark: FDIC Quarterly Banking Profile 2024 (community-bank loan growth +5.1%), NCUA 2024 (credit-union assets +2.3%).</cite>
-          </div>
-        </details>
       </div>
     </div>
   </section>
@@ -733,8 +716,6 @@ Cost basis and setup scale with FI asset size. We'll share specifics when you ta
               <span class="lb-text">AFS benchmarks from 19 years protecting community FIs.</span>
             </li>
           </ul>
-        </div>
-        <div class="lock-right">
           <div class="pb-anim" role="img" aria-label="The guide cycles through peer insights: non-interest income, what other FIs do, and internal benchmarks">
             <div class="pb-card" aria-hidden="true">
               <span class="pb-corner"></span>
@@ -773,6 +754,8 @@ Cost basis and setup scale with FI asset size. We'll share specifics when you ta
               <div class="pb-dots"><span></span><span></span><span></span></div>
             </div>
           </div>
+        </div>
+        <div class="lock-right">
           <span class="lock-guide-badge">🔓 Unlock Peer Insights in the free guide</span>
           <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
             <div class="form-grid">
@@ -942,6 +925,24 @@ Cost basis and setup scale with FI asset size. We'll share specifics when you ta
   </section>
 
 </main>
+
+<details class="methodology">
+  <summary>Show the math</summary>
+  <div class="methodology-content">
+    <p id="formula-intro"><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
+    <div class="formula" id="formula-block">FI Protection (Year 1) = face_at_risk (fraud face value)
+Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
+            + ACH/yr × avg value × 1.0% ACH fraud attempt rate
+FI Protection (Year N) = Year 1 × (1 + 4%)^(N−1)
+            — protection compounds as the FI grows its check & ACH volume
+
+Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup
+Clients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)
+            — modest net-of-churn book growth
+Cost basis and setup scale with FI asset size. We'll share specifics when you talk to our team.</div>
+    <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026). FI growth benchmark: FDIC Quarterly Banking Profile 2024 (community-bank loan growth +5.1%), NCUA 2024 (credit-union assets +2.3%).</cite>
+  </div>
+</details>
 
 <div class="foot-note">Modeled on AFS customer benchmarks, partner pricing exhibit A (May 2026), and FI fee schedule research (21 FIs, May 2026). Your FI's numbers will vary. © 2026 Advanced Fraud Solutions.</div>
 
