@@ -224,6 +224,10 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
               <div class="form-field"><label for="notes">Anything else? (optional)</label><textarea id="notes" name="notes" placeholder="Specific questions, context, deadlines"></textarea></div>
               <input type="hidden" name="pp_source_form" value="discovery_landing">
               <input type="hidden" name="institution_name" id="hidden-institution" value="">
+              <!-- Human-readable label for the topic dropdown (machine value posts in `topic`) -->
+              <input type="hidden" name="topic_label" id="topic-label" value="">
+              <!-- Human-readable summary of the whole submission — built on submit (see script) -->
+              <input type="hidden" name="pp_discovery_summary" id="pp-discovery-summary" value="">
               <button type="submit" class="btn btn-primary form-submit">Send the request</button>
               <p class="form-microcopy"><span>🔒</span> No phone number required. We will reach out to schedule within one business day.</p>
             </form>
@@ -386,9 +390,46 @@ if (instInput) {
   });
 }
 
-form.addEventListener('submit', (e) => {
-  // Stuff UTM params into a hidden source-form field; let native POST run to Pardot
-  // (UTM source/medium/campaign/content already added as hidden fields above)
+// Build a human-readable summary of the whole submission just before the native POST.
+// This guarantees everything the visitor typed reaches Pardot in ONE mapped field
+// (pp_discovery_summary) and gives anyone reading the prospect a clean at-a-glance record.
+// Mirrors the calculator's pp_calculator_payload pattern: label: value lines, only
+// non-empty lines included. Discrete fields still post too (email, Company, role, topic, notes).
+form.addEventListener('submit', () => {
+  const val = (id) => (document.getElementById(id)?.value || '').trim();
+
+  // Readable label for the topic dropdown (so the record shows the sentence, not "score_program")
+  const topicSel = document.getElementById('topic');
+  const topicLabel = topicSel && topicSel.selectedIndex > 0
+    ? topicSel.options[topicSel.selectedIndex].text.trim()
+    : '';
+  const topicLabelInput = document.getElementById('topic-label');
+  if (topicLabelInput) topicLabelInput.value = topicLabel;
+
+  // Assemble the summary — only include rows that have a value.
+  const rows = [
+    ['FI',                  val('institution')],
+    ['Role / department',   val('role')],
+    ['Wants to cover',      topicLabel],
+    ['Notes',               val('notes')],
+  ];
+  const meta = [
+    ['Source form', 'discovery_landing'],
+    ['Source',      utm.utm_source],
+    ['Medium',      utm.utm_medium],
+    ['Campaign',    utm.utm_campaign],
+    ['Content',     utm.utm_content],
+    ['Origin',      utm.source_form],
+  ];
+
+  const lines = ['=== Discovery session request ==='];
+  rows.forEach(([k, v]) => { if (v) lines.push(k + ': ' + v); });
+  const metaLines = meta.filter(([, v]) => v).map(([k, v]) => k + ': ' + v);
+  if (metaLines.length) { lines.push('---'); lines.push(...metaLines); }
+
+  const summaryInput = document.getElementById('pp-discovery-summary');
+  if (summaryInput) summaryInput.value = lines.join('\n');
+  // No preventDefault — let the native form POST run to the Pardot form handler.
 });
 </script>
 </body>
