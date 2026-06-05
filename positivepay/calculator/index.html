@@ -217,15 +217,16 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   .vm-unlock { flex-direction: row; align-items: flex-start; gap: 10px; text-align: left; }
 }
 
-/* PEER CALLOUT */
-.peer-callout { background: var(--surface-soft); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
-.peer-callout b { color: var(--ink-deep); }
-.peer-callout .peer-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 8px; }
-.peer-cta-wrap { text-align: center; margin: 18px 0 8px; }
-.peer-cta-lead { font-size: 15px; color: var(--body-mid); margin: 0 auto 14px; max-width: 520px; line-height: 1.5; }
+/* PROOF -> ASK CARD (the one focal element below the matrix) */
+.peer-cta-card { background: var(--canvas); border: 1px solid var(--hairline); border-left: 4px solid var(--primary); border-radius: var(--r-lg); box-shadow: 0 8px 24px rgba(0,0,0,0.06); padding: 24px 26px; margin: 8px 0 24px; }
+.peer-cta-card .peer-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 8px; }
+.peer-cta-card #peer-text { display: block; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
+.peer-cta-card #peer-text b { color: var(--ink-deep); }
+.peer-cta-card .btn { margin-top: 18px; }
+@media (max-width: 599px) { .peer-cta-card .btn { display: flex; width: 100%; justify-content: center; } }
 
-/* PHASED CALLOUT */
-.phased-callout { background: var(--surface-soft); color: var(--ink-deep); border-left: 3px solid var(--primary); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; line-height: 1.5; display: none; }
+/* PHASED CALLOUT (Mode C only — kept secondary, a light note rather than a competing box) */
+.phased-callout { background: transparent; color: var(--ink-deep); border-left: 3px solid var(--primary); border-radius: 0; padding: 4px 0 4px 18px; margin-bottom: 24px; font-size: 14px; line-height: 1.5; display: none; }
 .phased-callout.active { display: block; }
 .phased-callout .ph-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--primary); margin-bottom: 10px; }
 .phased-callout p { color: var(--body-mid); font-size: 14px; }
@@ -234,7 +235,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .methodology { max-width: 1100px; margin: 0 auto; padding: 4px var(--gutter) 0; }
 .methodology summary { padding: 0; cursor: pointer; font-weight: 500; font-size: 13px; color: var(--muted); text-decoration: underline; list-style: none; display: inline-flex; align-items: center; gap: 4px; }
 .methodology summary:hover { color: var(--body-mid); }
-.methodology summary::after { content: "›"; font-size: 13px; color: var(--muted); font-weight: 400; transition: transform 0.2s ease; }
+.methodology summary::after { content: "›"; font-size: 13px; color: var(--muted); font-weight: 400; display: inline-block; transform: rotate(0deg); transition: transform 0.2s ease; }
 .methodology[open] summary::after { transform: rotate(90deg); }
 .methodology summary::-webkit-details-marker { display: none; }
 .methodology-content { padding: 12px 0 0; font-size: 14px; color: var(--body-mid); line-height: 1.6; }
@@ -677,13 +678,9 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         </div>
         <p class="matrix-note" id="matrix-note">FI Protection grows ~4%/yr — as your FI grows, so does the check &amp; ACH volume Positive Pay shields. Benchmark: community-bank loan growth +5.1% (FDIC Quarterly Banking Profile, 2024); credit-union assets +2.3% (NCUA, 2024). Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn.</p>
 
-        <div class="peer-callout">
+        <div class="peer-cta-card">
           <span class="peer-eyebrow">Peer FIs at your asset tier</span>
           <span id="peer-text"><b>11 in-portfolio AFS customer CUs and community banks</b> in this range run Modern Positive Pay on their own checks today. Cores represented: Symitar, DNA, KeyStone, Corelation.</span>
-        </div>
-
-        <div class="peer-cta-wrap">
-          <p class="peer-cta-lead">Get more peer insights like this in our peer benchmarks guide — right to your inbox.</p>
           <a href="#lock" id="peer-cta" class="btn btn-primary">Email me the peer benchmarks guide <span aria-hidden="true">↓</span></a>
         </div>
 
