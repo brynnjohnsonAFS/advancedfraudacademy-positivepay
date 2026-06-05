@@ -181,6 +181,10 @@
     transition: transform 0.15s ease;
   }
   .hotspot:hover { transform: scale(1.12); }
+  /* an open hotspot must outrank sibling dots so its tooltip isn't overlapped.
+     each .hotspot is its own stacking context (z-index:40), so the tooltip's
+     own z-index can't lift it above a neighboring dot — raise the whole dot. */
+  .hotspot.open { z-index: 50; }
   .hotspot::before {
     content: ''; position: absolute; inset: -6px; border-radius: 50%;
     background: var(--red); opacity: 0.35;
@@ -491,8 +495,29 @@
     margin-top: 40px;
   }
   .footer-cta h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 8px; font-weight: 700; letter-spacing: -0.01em; }
-  .footer-cta p { color: #c5c5c5; margin-bottom: 22px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .footer-cta p { color: #c5c5c5; margin-bottom: 8px; max-width: 540px; margin-left: auto; margin-right: auto; }
   .footer-mark { margin-top: 28px; font-size: 11px; color: #6a6a6a; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* ---- end-of-demo "what's next" choice cards ---- */
+  .next-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px; max-width: 1000px; margin: 28px auto 0; text-align: left;
+  }
+  .next-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px 22px; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .next-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .next-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--red-soft); display: grid; place-items: center;
+    font-size: 24px; margin-bottom: 14px;
+  }
+  .next-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .next-card p { color: var(--grey); font-size: 13.5px; line-height: 1.5; margin: 0 0 18px; flex: 1; }
+  .next-card .btn { width: 100%; justify-content: center; margin-top: auto; }
 
   /* hide some nav buttons on narrow screens */
   @media (max-width: 720px) {
@@ -568,9 +593,28 @@
 
 <!-- FOOTER -->
 <section class="footer-cta">
-  <h2>Want to see this with your FI's data?</h2>
-  <p>Book a 20-minute walkthrough. We'll configure the platform around your environment and answer the questions that matter to your team.</p>
-  <a href="/positivepay/product#demo" class="btn btn-primary" onclick="trackDemoEvent('demo_book_demo_click')">Book a demo →</a>
+  <h2>You've seen it work. What's next?</h2>
+  <p>Pick the path that fits where you are.</p>
+  <div class="next-grid">
+    <div class="next-card">
+      <div class="next-icon">📅</div>
+      <h3>Book a working session</h3>
+      <p>30 minutes on your numbers with our team — peer benchmarks, a realistic timeline, and whether it fits. Not a sales pitch.</p>
+      <a href="/positivepay/discovery/" class="btn btn-primary" onclick="trackDemoEvent('demo_cta_discovery')">Book a session →</a>
+    </div>
+    <div class="next-card">
+      <div class="next-icon">📊</div>
+      <h3>See your ROI</h3>
+      <p>Estimate your annual fraud protection, fee income, and client retention for your FI — in a few clicks, no signup.</p>
+      <a href="/positivepay/calculator/" class="btn btn-primary" onclick="trackDemoEvent('demo_cta_calculator')">Open the calculator →</a>
+    </div>
+    <div class="next-card">
+      <div class="next-icon">🎓</div>
+      <h3>Take the free course</h3>
+      <p>The full Modern Positive Pay playbook — 5 tracks, real peer benchmarks, free, and no schedule to keep.</p>
+      <a href="/positivepay/" class="btn btn-primary" onclick="trackDemoEvent('demo_cta_academy')">Start the Academy →</a>
+    </div>
+  </div>
   <div class="footer-mark">Advanced Fraud Solutions · advancedfraudacademy.com</div>
 </section>
 

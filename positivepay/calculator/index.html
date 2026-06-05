@@ -102,17 +102,27 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
   0%, 100% { opacity: 0.15; }
   50% { opacity: 1; }
 }
-/* Cycling benefits overlaid on the grid */
-.hero-art-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px; pointer-events: none; }
-.hero-art-overlay::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(34,34,34,0.86) 0%, rgba(34,34,34,0.62) 55%, rgba(34,34,34,0.25) 100%); }
-.hero-art-eyebrow { position: relative; display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #fff; margin-bottom: 18px; }
-.hero-art-eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--primary); }
-.hero-art-stage { position: relative; width: 100%; height: 3.4em; }
-.hero-art-benefit { position: absolute; left: 0; right: 0; top: 50%; font-size: clamp(20px, 2.7vw, 30px); font-weight: 700; line-height: 1.2; color: #fff; opacity: 0; transform: translate(0, calc(-50% + 0.45em)); transition: opacity .5s ease, transform .5s ease; }
-.hero-art-benefit.is-active { opacity: 1; transform: translate(0, -50%); }
-.hero-art-sub { position: relative; margin-top: 20px; max-width: 32ch; font-size: 14px; line-height: 1.5; font-weight: 400; color: rgba(255,255,255,0.82); }
-.hero-art-sub b { color: #ADE25D; font-weight: 700; }
-@media (prefers-reduced-motion: reduce) { .hero-art-benefit { transition: none; } }
+/* Kinetic value-pillars overlaid on the grid */
+.hero-art-overlay { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 22px; padding: clamp(26px, 4vw, 40px); pointer-events: none; }
+/* soft left-anchored scrim — keeps the grid pulsing on the right */
+.hero-art-overlay::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, rgba(34,34,34,0.94) 0%, rgba(34,34,34,0.88) 34%, rgba(34,34,34,0.5) 66%, rgba(34,34,34,0.12) 100%); }
+/* drifting red glow for depth (matches product page .hero-panel::after) */
+.hero-art-glow { position: absolute; right: -150px; top: -150px; z-index: -1; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(199,2,0,0.32), transparent 70%); filter: blur(20px); pointer-events: none; animation: pp-drift-glow 14s ease-in-out infinite; }
+.hero-art-eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.92); }
+.hero-art-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 0 rgba(199,2,0,0.6); animation: pp-blink 2.4s ease-in-out infinite; }
+.hero-pillar-track { transition: opacity .35s ease, transform .35s ease; }
+.hero-pillar-track.is-out { opacity: 0; transform: translateY(-0.3em); }
+.hero-pillar-track.is-in { opacity: 0; transform: translateY(0.3em); }
+.hero-pillar { display: block; font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; line-height: 1.08; letter-spacing: -0.01em; color: #fff; max-width: 14ch; }
+.hero-pillar-tick { display: block; width: 36px; height: 3px; border-radius: 2px; background: var(--primary); margin: 14px 0 12px; }
+.hero-pillar-sub { display: block; font-size: 14px; font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.74); max-width: 26ch; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-pillar-track { transition: none; }
+  .hero-pillar-track.is-out, .hero-pillar-track.is-in { opacity: 1; transform: none; }
+  .hero-art-glow, .hero-art-eyebrow .dot { animation: none; }
+}
+@keyframes pp-drift-glow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-30px, 18px); } }
+@keyframes pp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
 /* MODE PICKER */
 .mode-picker { padding-top: 24px; padding-bottom: 24px; }
@@ -169,30 +179,33 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 /* OUTPUT */
 .output { padding: 4px 0; }
 .output-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 10px; }
-.three-numbers { display: grid; grid-template-columns: 1fr; gap: 0; margin-bottom: 28px; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
-@media (min-width: 600px) { .three-numbers { grid-template-columns: repeat(3, 1fr); } }
-.return-card { padding: 28px 24px; position: relative; border-bottom: 1px solid var(--hairline); }
-@media (min-width: 600px) { .return-card { border-bottom: none; border-right: 1px solid var(--hairline); } .return-card:last-child { border-right: none; } }
-.return-card::before { content: ""; position: absolute; top: 0; left: 0; width: 3px; height: 32px; background: var(--primary); transition: height 0.3s ease; }
-.return-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--body-mid); margin-bottom: 12px; }
-.return-value { font-size: clamp(36px, 4.5vw, 52px); font-weight: 700; line-height: 1; color: var(--ink-deep); letter-spacing: -0.02em; transition: opacity 0.3s ease; }
-.return-value.money { color: var(--ink-deep); }
-.return-value.money.muted-value { color: var(--muted); opacity: 0.5; }
-.return-sub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.45; }
-
-/* TIMELINE */
-.timeline { background: var(--canvas); color: var(--ink-deep); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; margin-bottom: 24px; }
-.timeline h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--body-mid); margin-bottom: 18px; }
-.timeline-rows { display: grid; gap: 14px; }
-.timeline-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid var(--hairline); }
-.timeline-row:last-child { border-bottom: none; padding-bottom: 0; }
-.timeline-year { font-weight: 700; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em; }
-.timeline-what { color: var(--ink-deep); font-size: 15px; line-height: 1.4; }
-.timeline-num { font-weight: 700; color: var(--value); font-size: 18px; white-space: nowrap; }
-/* 3-year picture: greens deepen Year 1 -> Year 3 to show profit compounding */
-#tl1-num { color: #b6e26a; }
-#tl2-num { color: #74c042; }
-#tl3-num { color: #3f9d2f; }
+/* VALUE MATRIX — the 3-year picture: Year 1/2/3 rows x Protection / NII / Clients columns */
+.value-matrix { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 14px; }
+.vm-head, .vm-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+.vm-head { background: var(--surface-soft); border-bottom: 1px solid var(--hairline); }
+.vm-corner { padding: 14px 18px; }
+.vm-colhead { padding: 14px 18px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--body-mid); text-align: right; align-self: end; line-height: 1.3; }
+.vm-row { border-bottom: 1px solid var(--hairline); }
+.vm-row:last-child { border-bottom: none; }
+.vm-yearcell { padding: 20px 18px; display: flex; flex-direction: column; gap: 5px; }
+.vm-year { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.vm-what { font-size: 12.5px; color: var(--body-mid); line-height: 1.4; }
+.vm-cell { padding: 20px 18px; font-weight: 700; font-size: clamp(20px, 2.6vw, 28px); letter-spacing: -0.02em; line-height: 1.1; text-align: right; white-space: nowrap; align-self: center; }
+.vm-nii { color: var(--ink-deep); }
+.vm-clients { color: var(--body-mid); }
+.vm-cell.vm-na { color: var(--muted); opacity: 0.5; font-weight: 400; }
+/* FI Protection greens deepen Year 1 -> Year 3 to show protection compounding as the FI grows */
+.vm-row[data-year="1"] .vm-protect { color: #b6e26a; }
+.vm-row[data-year="2"] .vm-protect { color: #74c042; }
+.vm-row[data-year="3"] .vm-protect { color: #3f9d2f; }
+.matrix-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 24px; }
+@media (max-width: 599px) {
+  .vm-head { display: none; }
+  .vm-row { grid-template-columns: 1fr; }
+  .vm-yearcell { padding-bottom: 10px; }
+  .vm-cell { display: flex; justify-content: space-between; align-items: center; text-align: right; padding: 11px 18px; font-size: 21px; border-top: 1px solid var(--hairline-soft); }
+  .vm-cell::before { content: attr(data-label); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--body-mid); }
+}
 
 /* PEER CALLOUT */
 .peer-callout { background: var(--surface-soft); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
@@ -491,16 +504,14 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
             <rect x="280" y="200" width="36" height="36" rx="6" class="pulse-3"/>
           </g>
         </svg>
-        <div class="hero-art-overlay" aria-live="polite">
-          <span class="hero-art-eyebrow">Explore your potential</span>
-          <div class="hero-art-stage">
-            <span class="hero-art-benefit">Protect your FI</span>
-            <span class="hero-art-benefit">Official checks, cashier&rsquo;s checks &amp; ACH vendor payments</span>
-            <span class="hero-art-benefit">Grow non-interest revenue streams</span>
-            <span class="hero-art-benefit">Build business banking</span>
-            <span class="hero-art-benefit">Improve retention</span>
+        <div class="hero-art-overlay" aria-label="Explore your potential: protection, retention, and non-interest income">
+          <span class="hero-art-glow" aria-hidden="true"></span>
+          <span class="hero-art-eyebrow"><span class="dot" aria-hidden="true"></span>Explore your potential</span>
+          <div class="hero-pillar-track" data-pillar aria-hidden="true">
+            <span class="hero-pillar" data-pillar-title>Protection</span>
+            <span class="hero-pillar-tick"></span>
+            <span class="hero-pillar-sub" data-pillar-sub>Checks, cashier&rsquo;s checks &amp; ACH</span>
           </div>
-          <span class="hero-art-sub"><b>Protection, retention, and non-interest income.</b></span>
         </div>
       </div>
     </div>
@@ -615,46 +626,35 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
       </div>
 
       <div class="output">
-        <div class="output-eyebrow">Step 3: Your Year 1 returns</div>
+        <div class="output-eyebrow">Step 3: The possibilities</div>
 
-        <div class="three-numbers">
-          <div class="return-card">
-            <div class="return-label">Annual protection</div>
-            <div class="return-value money" id="ret1-value">$0</div>
-            <div class="return-sub" id="ret1-sub">Check + ACH fraud your FI is protected against in Year 1.</div>
+        <div class="value-matrix">
+          <div class="vm-head">
+            <div class="vm-corner"></div>
+            <div class="vm-colhead">FI Protection</div>
+            <div class="vm-colhead">Non-Interest Income</div>
+            <div class="vm-colhead">Clients on program</div>
           </div>
-          <div class="return-card">
-            <div class="return-label">Run-rate fee income</div>
-            <div class="return-value money muted-value" id="ret2-value">$0</div>
-            <div class="return-sub" id="ret2-sub">Annual, Year 2 onward — once business clients are enrolled. Year 1 ramps from setup.</div>
+          <div class="vm-row" data-year="1">
+            <div class="vm-yearcell"><span class="vm-year">Year 1</span><span class="vm-what" id="m-y1-what">Protect your own checks. Pay setup. Start small.</span></div>
+            <div class="vm-cell vm-protect" id="m-y1-protect" data-label="FI Protection">$0</div>
+            <div class="vm-cell vm-nii" id="m-y1-nii" data-label="Non-Interest Income">$0</div>
+            <div class="vm-cell vm-clients" id="m-y1-clients" data-label="Clients on program">0</div>
           </div>
-          <div class="return-card">
-            <div class="return-label">Retention</div>
-            <div class="return-value" id="ret3-value">0</div>
-            <div class="return-sub" id="ret3-sub">Business clients on a stickier service line.</div>
+          <div class="vm-row" data-year="2">
+            <div class="vm-yearcell"><span class="vm-year">Year 2</span><span class="vm-what" id="m-y2-what">Add first business clients. Internal protection continues.</span></div>
+            <div class="vm-cell vm-protect" id="m-y2-protect" data-label="FI Protection">$0</div>
+            <div class="vm-cell vm-nii" id="m-y2-nii" data-label="Non-Interest Income">$0</div>
+            <div class="vm-cell vm-clients" id="m-y2-clients" data-label="Clients on program">0</div>
+          </div>
+          <div class="vm-row" data-year="3">
+            <div class="vm-yearcell"><span class="vm-year">Year 3</span><span class="vm-what" id="m-y3-what">Compound. Each new client adds margin.</span></div>
+            <div class="vm-cell vm-protect" id="m-y3-protect" data-label="FI Protection">$0</div>
+            <div class="vm-cell vm-nii" id="m-y3-nii" data-label="Non-Interest Income">$0</div>
+            <div class="vm-cell vm-clients" id="m-y3-clients" data-label="Clients on program">0</div>
           </div>
         </div>
-
-        <div class="timeline">
-          <h4>The 3-year picture</h4>
-          <div class="timeline-rows">
-            <div class="timeline-row">
-              <div class="timeline-year">Year 1</div>
-              <div class="timeline-what" id="tl1-what">Protect your own checks. Pay setup. Start small.</div>
-              <div class="timeline-num" id="tl1-num">$0</div>
-            </div>
-            <div class="timeline-row">
-              <div class="timeline-year">Year 2</div>
-              <div class="timeline-what" id="tl2-what">Add first business clients. Internal protection continues.</div>
-              <div class="timeline-num" id="tl2-num">$0</div>
-            </div>
-            <div class="timeline-row">
-              <div class="timeline-year">Year 3</div>
-              <div class="timeline-what" id="tl3-what">Compound. Each new client adds margin.</div>
-              <div class="timeline-num" id="tl3-num">$0</div>
-            </div>
-          </div>
-        </div>
+        <p class="matrix-note" id="matrix-note">FI Protection grows ~4%/yr — as your FI grows, so does the check &amp; ACH volume Positive Pay shields. Benchmark: community-bank loan growth +5.1% (FDIC Quarterly Banking Profile, 2024); credit-union assets +2.3% (NCUA, 2024).</p>
 
         <div class="peer-callout">
           <span class="peer-eyebrow">Peer FIs at your asset tier</span>
@@ -670,13 +670,15 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
           <summary>Show the math</summary>
           <div class="methodology-content">
             <p><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
-            <div class="formula" id="formula-block">Annual protection = face_at_risk (fraud face value)
+            <div class="formula" id="formula-block">FI Protection (Year 1) = face_at_risk (fraud face value)
 Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
             + ACH/yr × avg value × 1.0% ACH fraud attempt rate
+FI Protection (Year N) = Year 1 × (1 + 4%)^(N−1)
+            — protection compounds as the FI grows its check & ACH volume
 
-Fee income = enrolled clients × (your retail price − cost basis) × 12 − setup
+Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup
 Cost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.</div>
-            <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026).</cite>
+            <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026). FI growth benchmark: FDIC Quarterly Banking Profile 2024 (community-bank loan growth +5.1%), NCUA 2024 (credit-union assets +2.3%).</cite>
           </div>
         </details>
       </div>
@@ -994,6 +996,11 @@ const WHOLESALE_DIRECT = 40;   // direct list per business client per month
 const WHOLESALE_JHA = 25;      // Jack Henry / Symitar channel wholesale
 const CHECK_ATTEMPT = 0.005;   // 0.5%
 const ACH_ATTEMPT = 0.01;      // 1.0%
+// FI Protection compounds with the FI's organic growth: as the FI grows, its check/ACH
+// volume — and the fraud exposure Positive Pay shields — grows too. Conservative blended
+// midpoint of FDIC community-bank loan growth (+5.1%, QBP 2024) and NCUA credit-union
+// asset growth (+2.3%, 2024). Tune this single constant to reprice the Protection column.
+const FI_GROWTH_RATE = 0.04;   // 4%/yr
 
 let currentMode = 'b';
 
@@ -1004,6 +1011,18 @@ const fmtK = (n) => {
   return '$' + Math.round(n);
 };
 const fmtNum = (n) => Math.round(n).toLocaleString('en-US');
+
+// Write a matrix cell; null/undefined/NaN renders as a muted "—" (metric N/A for this mode).
+function setMatrixCell(id, val, fmtFn) {
+  const el = document.getElementById(id);
+  if (val === null || val === undefined || Number.isNaN(val)) {
+    el.textContent = '—';
+    el.classList.add('vm-na');
+  } else {
+    el.textContent = fmtFn(val);
+    el.classList.remove('vm-na');
+  }
+}
 
 function getInputs() {
   return {
@@ -1056,85 +1075,63 @@ function calc() {
   document.getElementById('val-y2').textContent = i.y2Clients;
   document.getElementById('val-retail-c').textContent = '$' + i.retailC;
 
-  let lossAvoided = 0, feeIncome = 0, feeRunRate = 0, retention = 0;
-  let tl1Num = 0, tl2Num = 0, tl3Num = 0;
-  let tl1What = '', tl2What = '', tl3What = '';
-  let ret1Sub = '', ret2Sub = '', ret3Sub = '';
+  // Each mode produces: a gross FI Protection base (fraud face protected, before cost),
+  // a per-year Non-Interest Income array, a per-year cumulative-clients array, and a
+  // per-year caption. A null entry => that metric doesn't apply to the mode (renders "—").
+  let protectBase = 0;
+  let niiArr = [null, null, null];
+  let clientsArr = [null, null, null];
+  let whatArr = ['', '', ''];
 
   if (currentMode === 'a') {
     const enrolled = Math.round(i.accounts * i.enroll);
     const margin = i.retailA - wholesale;
     const grossNII = enrolled * margin * 12;
-    feeIncome = grossNII - setup;   // Year 1, net of setup (shown in the timeline)
-    feeRunRate = grossNII;          // Year 2+ run-rate — the headline fee number
-    // Annual protection = the FI's own stated annual fraud loss — the exposure Positive Pay is positioned to flag. No applied detection or soft-cost multiplier.
-    lossAvoided = i.fraudA;
-    retention = enrolled;
-    tl1Num = feeIncome;
-    tl2Num = feeIncome + grossNII; // setup recouped, full margin Year 2
-    tl3Num = feeIncome + grossNII * 2;
-    tl1What = `${enrolled} business clients enrolled at $${i.retailA}/mo. Margin of $${margin}/client.`;
-    tl2What = `Setup recouped. Full ${enrolled} × $${margin} margin running.`;
-    tl3What = `Mature program. Retention compounds. Service line owned.`;
-    ret1Sub = `Your $${(i.fraudA/1000).toFixed(0)}K annual fraud baseline — the exposure Positive Pay is built to flag.`;
-    ret2Sub = `Year 2 onward: ${enrolled} clients × $${margin}/mo × 12 at full run rate. Year 1 absorbs setup.`;
-    ret3Sub = `Treasury services churn lower than depository-only. Each one is an account you don't have to replace.`;
+    const feeIncome = grossNII - setup;             // Year 1, net of setup
+    protectBase = i.fraudA;                          // FI's stated annual fraud exposure
+    niiArr = [feeIncome, feeIncome + grossNII, feeIncome + grossNII * 2]; // cumulative net margin
+    clientsArr = [enrolled, enrolled, enrolled];     // enrolled book, retained
+    whatArr = [
+      `${enrolled} business clients enrolled at $${i.retailA}/mo. Margin of $${margin}/client.`,
+      `Setup recouped. Full ${enrolled} × $${margin} margin running.`,
+      `Mature program. Retention compounds. Service line owned.`
+    ];
   }
   else if (currentMode === 'b') {
-    const fraudProtected = calcInternalLoss(i.checks, i.checkVal, i.ach, i.achVal);
-    const totalCost = corpFee + setup;
-    lossAvoided = fraudProtected - totalCost;
-    feeIncome = 0;
-    retention = 0;
-    tl1Num = lossAvoided;
-    tl2Num = fraudProtected - corpFee; // no setup Year 2
-    tl3Num = fraudProtected - corpFee;
-    tl1What = `Cashier's checks, ACH, escrow protected. Year 1 covers setup and base subscription.`;
-    tl2What = `Ongoing protection at maintenance only. Setup recouped.`;
-    tl3What = `Program is paid back. Real losses prevented. Story to tell business clients.`;
-    ret1Sub = `${fmtK(fraudProtected)} in check + ACH fraud protected, net of program cost.`;
-    ret2Sub = `No business client revenue in this mode.`;
-    ret3Sub = `No business clients enrolled in Mode B.`;
+    protectBase = calcInternalLoss(i.checks, i.checkVal, i.ach, i.achVal);
+    niiArr = [null, null, null];                     // no business clients in this mode
+    clientsArr = [null, null, null];
+    whatArr = [
+      `Cashier's checks, ACH, escrow protected. Year 1 covers setup and base subscription.`,
+      `Ongoing protection at maintenance only. Setup recouped.`,
+      `Program is paid back. Real losses prevented. Story to tell business clients.`
+    ];
   }
   else if (currentMode === 'c') {
-    const fraudProtected = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
+    protectBase = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
     const margin = i.retailC - wholesale;
     const y2Income = i.y2Clients * margin * 12;
-    feeRunRate = y2Income;   // Year 2 run-rate — the headline fee number (Year 1 = $0, ramp)
     const y3Clients = Math.round(i.y2Clients * 2.5);
     const y3Income = y3Clients * margin * 12;
-    lossAvoided = fraudProtected - (corpFee + setup);
-    feeIncome = 0; // Year 1 = no clients yet
-    retention = i.y2Clients;
-    tl1Num = lossAvoided;
-    tl2Num = (fraudProtected - corpFee) + y2Income;
-    tl3Num = (fraudProtected - corpFee) + y3Income;
-    tl1What = `Protect own checks. Setup paid.`;
-    tl2What = `${i.y2Clients} business clients onboarded at $${margin}/mo margin.`;
-    tl3What = `~${y3Clients} business clients. Internal protection continues.`;
-    ret1Sub = `${fmtK(fraudProtected)} in check + ACH fraud protected, net of program cost.`;
-    ret2Sub = `Year 2 onward, once your ${i.y2Clients} clients are live. Year 1 ramps from setup.`;
-    ret3Sub = `${i.y2Clients} business clients onboarded by Year 2 end.`;
+    niiArr = [0, y2Income, y3Income];                // ramps from $0 in Year 1
+    clientsArr = [0, i.y2Clients, y3Clients];        // cumulative clients onboarded
+    whatArr = [
+      `Protect own checks. Setup paid.`,
+      `${i.y2Clients} business clients onboarded at $${margin}/mo margin.`,
+      `~${y3Clients} business clients. Internal protection continues.`
+    ];
   }
 
-  document.getElementById('ret1-value').textContent = fmtK(lossAvoided);
-  document.getElementById('ret2-value').textContent = currentMode === 'b' ? '$0' : fmtK(feeRunRate);
-  document.getElementById('ret3-value').textContent = retention > 0 ? retention.toString() : '0';
-  document.getElementById('ret1-sub').textContent = ret1Sub;
-  document.getElementById('ret2-sub').textContent = ret2Sub;
-  document.getElementById('ret3-sub').textContent = ret3Sub;
+  // FI Protection compounds with the FI's organic growth rate, Year 1 -> Year 3.
+  const protectArr = [0, 1, 2].map(n => protectBase * Math.pow(1 + FI_GROWTH_RATE, n));
 
-  // Visually mute the fee income card in Mode B (it's $0)
-  const ret2El = document.getElementById('ret2-value');
-  if (currentMode === 'b') ret2El.classList.add('muted-value');
-  else ret2El.classList.remove('muted-value');
-
-  document.getElementById('tl1-num').textContent = fmtK(tl1Num);
-  document.getElementById('tl2-num').textContent = fmtK(tl2Num);
-  document.getElementById('tl3-num').textContent = fmtK(tl3Num);
-  document.getElementById('tl1-what').textContent = tl1What;
-  document.getElementById('tl2-what').textContent = tl2What;
-  document.getElementById('tl3-what').textContent = tl3What;
+  for (let y = 1; y <= 3; y++) {
+    const idx = y - 1;
+    document.getElementById('m-y' + y + '-protect').textContent = fmtK(protectArr[idx]);
+    setMatrixCell('m-y' + y + '-nii', niiArr[idx], fmtK);
+    setMatrixCell('m-y' + y + '-clients', clientsArr[idx], fmtNum);
+    document.getElementById('m-y' + y + '-what').textContent = whatArr[idx];
+  }
 
   // Peer callout adjusts by asset tier
   const peerByTier = [
@@ -1178,14 +1175,16 @@ function populatePardotFields(form) {
   const assetTiers = ['sub_1b', '1_5b', '5_10b', '10_20b', '20b_plus'];
   set('pp_asset_tier', assetTiers[i.asset] || '');
   set('pp_mode_selected', (currentMode === 'a') ? 'business_clients' : (currentMode === 'b') ? 'internal_only' : 'starter');
-  // Read current calculated values from the hero output
-  const lossText = document.getElementById('ret1-value').textContent;
-  const feeText = document.getElementById('ret2-value').textContent;
-  const retText = document.getElementById('ret3-value').textContent;
-  // Strip $, K, M and convert
+  // Read current calculated values from the value matrix: Year 1 protection (immediate
+  // shield) plus the 3-year non-interest income and client book the FI builds.
+  const lossText = document.getElementById('m-y1-protect').textContent;
+  const feeText = document.getElementById('m-y3-nii').textContent;
+  const retText = document.getElementById('m-y3-clients').textContent;
+  // Strip $, K, M and convert ("—" => 0)
   function parseDollar(t) {
-    if (!t || t === '$0') return 0;
+    if (!t || t === '$0' || t === '—') return 0;
     let n = parseFloat(t.replace(/[$,]/g, ''));
+    if (Number.isNaN(n)) return 0;
     if (t.includes('M')) n *= 1000000;
     else if (t.includes('K')) n *= 1000;
     return Math.round(n);
@@ -1237,10 +1236,10 @@ function populatePardotFields(form) {
   const ownChecks = (currentMode === 'b');
   const snapshot = ownChecks
     ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud protected in Year 1.'
-    : 'Snapshot: ' + usd(lossN) + ' Year 1 protection + ' + usd(feeN) + ' run-rate fee income (Year 2), ' + num(retN) + ' business clients retained.';
+    : 'Snapshot: ' + usd(lossN) + ' Year 1 protection + ' + usd(feeN) + ' in 3-year non-interest income, ' + num(retN) + ' business clients on the program by Year 3.';
   const resultLines = ownChecks
-    ? ['- Annual protection: ' + usd(lossN)]
-    : ['- Annual protection: ' + usd(lossN), '- Run-rate fee income (Year 2): ' + usd(feeN), '- Business clients retained: ' + num(retN)];
+    ? ['- Year 1 FI protection: ' + usd(lossN)]
+    : ['- Year 1 FI protection: ' + usd(lossN), '- 3-year non-interest income: ' + usd(feeN), '- Business clients by Year 3: ' + num(retN)];
   const summaryLines = [
     'POS PAY CALCULATOR SUBMISSION',
     'This prospect modeled their Modern Positive Pay ROI on the Academy calculator. The numbers below are their own inputs and the calculator projections - not quotes or commitments.',
@@ -1426,17 +1425,29 @@ applyUtmVariant();
   }, 2400);
 })();
 
-// Hero art: cycle through the benefits of Positive Pay over the grid
-(function rotateHeroBenefits(){
-  const items = document.querySelectorAll('.hero-art-benefit');
-  if (!items.length) return;
-  items[0].classList.add('is-active');
+// Hero art: cycle the three Positive Pay value pillars over the grid
+(function rotateHeroPillars(){
+  const track = document.querySelector('[data-pillar]');
+  if (!track) return;
+  const titleEl = track.querySelector('[data-pillar-title]');
+  const subEl = track.querySelector('[data-pillar-sub]');
+  const pillars = [
+    { title: 'Protection', sub: 'Checks, cashier’s checks & ACH' },
+    { title: 'Retention', sub: 'Win & keep business accounts' },
+    { title: 'Non-interest income', sub: 'New fee-revenue streams' }
+  ];
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let i = 0;
   setInterval(function(){
-    items[i].classList.remove('is-active');
-    i = (i + 1) % items.length;
-    items[i].classList.add('is-active');
+    track.classList.add('is-out');
+    setTimeout(function(){
+      i = (i + 1) % pillars.length;
+      titleEl.textContent = pillars[i].title;
+      subEl.textContent = pillars[i].sub;
+      track.classList.remove('is-out');
+      track.classList.add('is-in');
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ track.classList.remove('is-in'); }); });
+    }, 350);
   }, 2800);
 })();
 
