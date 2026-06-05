@@ -214,6 +214,22 @@
     text-transform: uppercase; letter-spacing: 0.06em;
     color: #ffb3bd; margin-bottom: 4px;
   }
+  /* tooltip flips below the dot when the dot sits near the top edge */
+  .hotspot.below .hotspot-tooltip { bottom: auto; top: calc(100% + 14px); }
+  .hotspot.below .hotspot-tooltip::after {
+    top: auto; bottom: 100%;
+    border-top-color: transparent; border-bottom-color: var(--ink);
+  }
+  .hotspot.below.open .hotspot-tooltip { transform: translateX(-50%) translateY(4px); }
+  /* tooltip pins to the dot's left/right edge when near a viewport side */
+  .hotspot.tip-left .hotspot-tooltip { left: 0; right: auto; transform: none; }
+  .hotspot.tip-left .hotspot-tooltip::after { left: 19px; }
+  .hotspot.tip-left.open .hotspot-tooltip { transform: translateY(-4px); }
+  .hotspot.tip-left.below.open .hotspot-tooltip { transform: translateY(4px); }
+  .hotspot.tip-right .hotspot-tooltip { left: auto; right: 0; transform: none; }
+  .hotspot.tip-right .hotspot-tooltip::after { left: auto; right: 19px; }
+  .hotspot.tip-right.open .hotspot-tooltip { transform: translateY(-4px); }
+  .hotspot.tip-right.below.open .hotspot-tooltip { transform: translateY(4px); }
 
   /* ============ COMMON UI ============ */
   .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
@@ -566,7 +582,7 @@
       crumb: 'Home',
       content: `
         <div style="text-align:center;">
-          <div class="view-toggle">
+          <div class="view-toggle" data-tip="home-toggle">
             <button class="active">Combined View</button>
             <button>Check Only</button>
             <button>ACH Only</button>
@@ -579,7 +595,7 @@
               <div><div class="kpi-num">37</div><div class="kpi-lbl">Total exceptions</div></div>
               <div><div class="kpi-num">$74,535</div><div class="kpi-lbl">Total exception amount</div></div>
             </div>
-            <div class="bar-chart">
+            <div class="bar-chart" data-tip="home-trend">
               <div class="bar" style="height: 12%;"></div>
               <div class="bar" style="height: 36%;"></div>
               <div class="bar" style="height: 22%;"></div>
@@ -594,7 +610,7 @@
           <div class="dash-card">
             <div class="title">🥧 Exceptions by Decision [Combined]</div>
             <div class="donut-wrap">
-              <div class="donut"></div>
+              <div class="donut" data-tip="home-donut"></div>
               <div class="donut-legend">
                 <div><span class="dot" style="background:var(--red)"></span><strong>Return</strong> · 170</div>
                 <div><span class="dot" style="background:var(--green)"></span><strong>Pay</strong> · 95</div>
@@ -625,9 +641,9 @@
         </div>
       `,
       hotspots: [
-        { x: '50%', y: 24, n: 1, title: 'View toggle', body: 'Combined, Check Only, ACH Only. The dashboard adapts to what you need to look at.' },
-        { x: 28, y: 38, n: 2, title: '6-month trend', body: '37 exceptions over six months, $74,535 in flagged volume. The summary your board wants in one chart.' },
-        { x: 78, y: 38, n: 3, title: 'Decision mix', body: '170 returned, 95 paid. The ratio that tells you whether your team is catching fraud or paying through it.' },
+        { tip: 'home-toggle', anchor: 'cr', n: 1, title: 'View toggle', body: 'Combined, Check Only, ACH Only. The dashboard adapts to what you need to look at.' },
+        { tip: 'home-trend', anchor: 'tr', n: 2, title: '6-month trend', body: '37 exceptions over six months, $74,535 in flagged volume. The summary your board wants in one chart.' },
+        { tip: 'home-donut', anchor: 'tr', n: 3, title: 'Decision mix', body: '170 returned, 95 paid. The ratio that tells you whether your team is catching fraud or paying through it.' },
       ]
     }),
 
@@ -645,7 +661,7 @@
           </div>
         </div>
         <table class="table table-compact">
-          <thead><tr><th>Client</th><th>Account</th><th>Routing #</th><th>Check #</th><th>Amount</th><th>Issue Date</th><th>Payee</th><th>Stop?</th><th>Voided?</th></tr></thead>
+          <thead><tr><th data-tip="issued-source">Client</th><th>Account</th><th>Routing #</th><th>Check #</th><th>Amount</th><th>Issue Date</th><th>Payee</th><th data-tip="issued-stopvoid">Stop?</th><th>Voided?</th></tr></thead>
           <tbody>
             <tr><td>Cedar Valley Distribution</td><td>Payroll</td><td>122199983</td><td>11128</td><td>$500.00</td><td>02/26/2026</td><td>John Smith</td><td>No</td><td>No</td></tr>
             <tr><td>Cedar Valley Distribution</td><td>Payroll</td><td>122199983</td><td>11126</td><td>$1,000.00</td><td>02/05/2026</td><td>Jane Doe</td><td>No</td><td>No</td></tr>
@@ -659,8 +675,8 @@
         </table>
       `,
       hotspots: [
-        { x: 20, y: 30, n: 1, title: 'Source of truth', body: 'Every authorized check the business client uploaded. Every presented item gets compared to this list.' },
-        { x: 78, y: 30, n: 2, title: 'Stop & Void status', body: 'A check stopped or voided after issue still gets matched and flagged correctly.' },
+        { tip: 'issued-source', anchor: 'tc', n: 1, title: 'Source of truth', body: 'Every authorized check the business client uploaded. Every presented item gets compared to this list.' },
+        { tip: 'issued-stopvoid', anchor: 'tc', n: 2, title: 'Stop & Void status', body: 'A check stopped or voided after issue still gets matched and flagged correctly.' },
       ]
     }),
 
@@ -678,7 +694,7 @@
           </div>
         </div>
         <table class="table table-compact">
-          <thead><tr><th>ID</th><th>Status</th><th>Decision</th><th>Client</th><th>Account</th><th>Check #</th><th>Amount</th><th>Presented</th><th>Payee</th><th>Issued Check</th></tr></thead>
+          <thead><tr><th>ID</th><th>Status</th><th data-tip="pres-decision">Decision</th><th>Client</th><th>Account</th><th>Check #</th><th>Amount</th><th>Presented</th><th>Payee</th><th data-tip="pres-issued">Issued Check</th></tr></thead>
           <tbody>
             <tr><td>21912</td><td><span class="badge completed">Completed</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>11141</td><td>$1,000.00</td><td>04/02/2026</td><td>John Doe</td><td><span class="link">👁 View</span></td></tr>
             <tr><td>21509</td><td><span class="badge completed">Completed</span></td><td><span class="badge ret">↩ Return</span></td><td>Metro Auto Service</td><td>Checking</td><td>149</td><td>$200.00</td><td>03/31/2026</td><td>Paul Payee</td><td><span class="link">👁 View</span></td></tr>
@@ -690,8 +706,8 @@
         </table>
       `,
       hotspots: [
-        { x: 30, y: 38, n: 1, title: 'Decision badges', body: 'Color-coded Pay / Return. Green is paid, red is returned. Instant visual triage.' },
-        { x: 88, y: 38, n: 2, title: 'Issued check link', body: 'Click View to pull up the original issued record alongside this presented item.' },
+        { tip: 'pres-decision', anchor: 'tc', n: 1, title: 'Decision badges', body: 'Color-coded Pay / Return. Green is paid, red is returned. Instant visual triage.' },
+        { tip: 'pres-issued', anchor: 'tc', n: 2, title: 'Issued check link', body: 'Click View to pull up the original issued record alongside this presented item.' },
       ]
     }),
 
@@ -708,11 +724,11 @@
             <div class="form-field"><label>Presented Date <span class="req">*</span></label><input type="text" value="05/19/2026" /></div>
             <div class="form-field"><label>Payee Name</label><input type="text" placeholder="Payee Name" /></div>
           </div>
-          <button class="validate-btn">✓ Validate Check</button>
+          <button class="validate-btn" data-tip="teller-validate">✓ Validate Check</button>
         </div>
       `,
       hotspots: [
-        { x: 50, y: 65, n: 1, title: 'Point of presentment', body: 'A teller types routing, account, check #, amount, and payee. The system validates against issued data before the deposit is taken.' },
+        { tip: 'teller-validate', anchor: 'cr', n: 1, title: 'Point of presentment', body: 'A teller types routing, account, check #, amount, and payee. The system validates against issued data before the deposit is taken.' },
       ]
     }),
 
@@ -730,7 +746,7 @@
           </div>
         </div>
         <table class="table table-compact">
-          <thead><tr><th>ID</th><th>Status</th><th>Decision</th><th>Client</th><th>Account</th><th>Originator</th><th>Routing #</th><th>Amount</th><th>SEC</th></tr></thead>
+          <thead><tr><th>ID</th><th data-tip="ach-status">Status</th><th>Decision</th><th>Client</th><th>Account</th><th data-tip="ach-orig">Originator</th><th>Routing #</th><th>Amount</th><th>SEC</th></tr></thead>
           <tbody>
             <tr><td>5152</td><td><span class="badge completed">Completed [Default]</span></td><td><span class="badge ret">↩ Return</span></td><td>Metro Auto Service</td><td>Checking</td><td>First Demo Bank</td><td>111000026</td><td>$100.00</td><td>WEB</td></tr>
             <tr><td>4690</td><td><span class="badge completed">Completed [Default]</span></td><td><span class="badge ret">↩ Return</span></td><td>Northbridge Manufacturing</td><td>Primary Treasury</td><td>Sample Originator</td><td>122199983</td><td>$500.00</td><td>WEB</td></tr>
@@ -743,8 +759,8 @@
         </table>
       `,
       hotspots: [
-        { x: 26, y: 35, n: 1, title: 'Default vs Manual vs Auto', body: 'Tags show whether the business client decisioned this, the system applied the default at cutoff, or an Automatic Decision Rule fired.' },
-        { x: 70, y: 50, n: 2, title: 'Originator + SEC', body: 'Originator, company ID, SEC code. Everything Nacha-aligned reporting needs.' },
+        { tip: 'ach-status', anchor: 'tc', n: 1, title: 'Default vs Manual vs Auto', body: 'Tags show whether the business client decisioned this, the system applied the default at cutoff, or an Automatic Decision Rule fired.' },
+        { tip: 'ach-orig', anchor: 'tc', n: 2, title: 'Originator + SEC', body: 'Originator, company ID, SEC code. Everything Nacha-aligned reporting needs.' },
       ]
     }),
 
