@@ -176,7 +176,7 @@
     background: var(--red);
     color: #fff; font-weight: 700; font-size: 11px;
     display: grid; place-items: center;
-    cursor: pointer; z-index: 20;
+    cursor: pointer; z-index: 40;
     box-shadow: 0 4px 14px rgba(199,2,0,0.45);
     transition: transform 0.15s ease;
   }
@@ -199,7 +199,7 @@
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
     box-shadow: var(--shadow-lg);
-    z-index: 25;
+    z-index: 45;
   }
   .hotspot-tooltip::after {
     content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -772,11 +772,11 @@
             <div class="pill-btn">📊 Excel</div>
             <div class="pill-btn">🔍 Search</div>
           </div>
-          <div class="reviewed-action">📦 Mark as Reviewed [0]</div>
+          <div class="reviewed-action" data-tip="exc-review">📦 Mark as Reviewed [0]</div>
           <div class="pill-btn">💾 Saved Filters · Active ▾</div>
         </div>
         <table class="table table-compact">
-          <thead><tr><th class="check-col"><input type="checkbox" /></th><th>Reviewed</th><th>ID</th><th>Client</th><th>Business Client</th><th>Type</th><th>Decision</th><th>Routing</th><th>Account</th><th>Amount</th><th>Payee</th></tr></thead>
+          <thead><tr><th class="check-col"><input type="checkbox" /></th><th data-tip="exc-reviewed-col">Reviewed</th><th>ID</th><th>Client</th><th>Business Client</th><th>Type</th><th data-tip="exc-decision">Decision</th><th>Routing</th><th>Account</th><th>Amount</th><th>Payee</th></tr></thead>
           <tbody>
             <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>277</td><td>AFS</td><td>Cedar Valley Distribution</td><td>ACH</td><td><span class="badge ret">↩ Return</span></td><td>111000027</td><td>Supplies</td><td>$500.00</td><td>Jones P.</td></tr>
             <tr class="muted-ret"><td><input type="checkbox" /></td><td>— No</td><td>5312</td><td>AFS</td><td>Riverside Veterinary</td><td>Check</td><td><span class="badge ret">↩ Return</span></td><td>011000138</td><td>004624388120</td><td>$1,800.00</td><td>—</td></tr>
@@ -790,9 +790,9 @@
         <div style="font-size:11px;color:var(--grey-2);margin-top:10px;text-align:right;">1 – 7 of 7 items</div>
       `,
       hotspots: [
-        { x: 52, y: 12, n: 1, title: 'Mark as Reviewed', body: 'Bulk-review action. Turns the queue into an audited workflow.' },
-        { x: 18, y: 38, n: 2, title: 'Reviewed status', body: 'Every exception tracks whether your team has audited the decision after the fact.' },
-        { x: 60, y: 38, n: 3, title: 'Decision badge', body: 'Pay or Return at a glance. Color-coded for triage.' },
+        { tip: 'exc-review', anchor: 'tc', n: 1, title: 'Mark as Reviewed', body: 'Bulk-review action. Turns the queue into an audited workflow.' },
+        { tip: 'exc-reviewed-col', anchor: 'tc', n: 2, title: 'Reviewed status', body: 'Every exception tracks whether your team has audited the decision after the fact.' },
+        { tip: 'exc-decision', anchor: 'tc', n: 3, title: 'Decision badge', body: 'Pay or Return at a glance. Color-coded for triage.' },
       ]
     }),
 
@@ -814,17 +814,17 @@
               <div class="modal-row"><span class="lbl">Routing #</span> <span class="val">011305202</span></div>
               <div class="modal-row"><span class="lbl">Account #</span> <span class="val">Payroll</span></div>
               <div class="modal-row"><span class="lbl">Check Number</span> <span class="val">4112025</span></div>
-              <div class="modal-row flag"><span class="lbl">Amount</span> <span class="val">$2,000.00</span><span class="flag-msg">⚠ Amount does not match the Issued Check</span></div>
+              <div class="modal-row flag" data-tip="exc-flag"><span class="lbl">Amount</span> <span class="val">$2,000.00</span><span class="flag-msg">⚠ Amount does not match the Issued Check</span></div>
               <div class="modal-row"><span class="lbl">Presented Date</span> <span class="val">4/11/2026</span></div>
               <div class="modal-row flag"><span class="lbl">Payee Name</span> <span class="val">James Brown</span><span class="flag-msg">⚠ Payee name does not match the Issued Check</span></div>
-              <div class="modal-alert">🔔 Duplicate Presented Check exists [View]</div>
+              <div class="modal-alert" data-tip="exc-dupe">🔔 Duplicate Presented Check exists [View]</div>
             </div>
           </div>
         </div>
       `,
       hotspots: [
-        { x: 50, y: 45, n: 1, title: 'Two flags, one check', body: 'Amount mismatched AND payee mismatched. Both highlighted red. A decisioner has everything they need to return this in one screen.' },
-        { x: 50, y: 78, n: 2, title: 'The pattern catch', body: 'The system also flagged that a duplicate presented check exists. The kind of pattern a teller would not spot in time.' },
+        { tip: 'exc-flag', anchor: 'cr', n: 1, title: 'Two flags, one check', body: 'Amount mismatched AND payee mismatched. Both highlighted red. A decisioner has everything they need to return this in one screen.' },
+        { tip: 'exc-dupe', anchor: 'cr', n: 2, title: 'The pattern catch', body: 'The system also flagged that a duplicate presented check exists. The kind of pattern a teller would not spot in time.' },
       ]
     }),
 
@@ -841,7 +841,7 @@
               <div class="tile red"><div class="tile-icon">🔒</div><div class="tile-label">Roles &<br>Permissions</div></div>
               <div class="tile blue"><div class="tile-icon">🎨</div><div class="tile-label">Branding</div></div>
               <div class="tile blue"><div class="tile-icon">📄</div><div class="tile-label">Billing<br>Reports</div></div>
-              <div class="tile green"><div class="tile-icon">📁</div><div class="tile-label">Decision<br>Files</div></div>
+              <div class="tile green" data-tip="set-decisionfiles"><div class="tile-icon">📁</div><div class="tile-label">Decision<br>Files</div></div>
               <div class="tile amber"><div class="tile-icon">📅</div><div class="tile-label">Holiday<br>Schedules</div></div>
             </div>
           </div>
@@ -851,7 +851,7 @@
             <div class="settings-grid" style="grid-template-columns: repeat(2, 1fr);">
               <div class="tile blue"><div class="tile-icon">📄</div><div class="tile-label">File<br>Formats</div></div>
               <div class="tile blue"><div class="tile-icon">✉️</div><div class="tile-label">Notification<br>Templates</div></div>
-              <div class="tile green"><div class="tile-icon">🌿</div><div class="tile-label">Automatic Check<br>Decision Rules</div></div>
+              <div class="tile green" data-tip="set-autorules"><div class="tile-icon">🌿</div><div class="tile-label">Automatic Check<br>Decision Rules</div></div>
               <div class="tile amber"><div class="tile-icon">👍</div><div class="tile-label">Check Approval<br>Rules</div></div>
               <div class="tile green"><div class="tile-icon">🌿</div><div class="tile-label">Automatic ACH<br>Decision Rules</div></div>
               <div class="tile amber"><div class="tile-icon">👍</div><div class="tile-label">ACH Approval<br>Rules</div></div>
@@ -862,20 +862,20 @@
             <h3>📊 Logs & API</h3>
             <div class="settings-grid" style="grid-template-columns: repeat(2, 1fr);">
               <div class="tile blue"><div class="tile-icon">🔔</div><div class="tile-label">Notification<br>Log</div></div>
-              <div class="tile amber"><div class="tile-icon">💡</div><div class="tile-label">Default Decision<br>Log</div></div>
+              <div class="tile amber" data-tip="set-defaultlog"><div class="tile-icon">💡</div><div class="tile-label">Default Decision<br>Log</div></div>
               <div class="tile red"><div class="tile-icon">🖥</div><div class="tile-label">System<br>Log</div></div>
               <div class="tile green"><div class="tile-icon">📄</div><div class="tile-label">File<br>Processing</div></div>
-              <div class="tile purple"><div class="tile-icon">{ }</div><div class="tile-label">API</div></div>
+              <div class="tile purple" data-tip="set-api"><div class="tile-icon">{ }</div><div class="tile-label">API</div></div>
               <div class="tile teal"><div class="tile-icon">🪝</div><div class="tile-label">Web Hooks</div></div>
             </div>
           </div>
         </div>
       `,
       hotspots: [
-        { x: 22, y: 78, n: 1, title: 'Decision Files', body: 'Where decision file delivery is configured. SFTP, pickup queue, API, webhook — wherever your core consumes.' },
-        { x: 52, y: 50, n: 2, title: 'Automatic Decision Rules', body: 'Configure pay-or-return defaults by client, exception type, and dollar threshold.' },
-        { x: 84, y: 75, n: 3, title: 'API + Web Hooks', body: 'Push exceptions into your core in real time. The automation unlock.' },
-        { x: 84, y: 55, n: 4, title: 'Default Decision Log', body: 'Every exception the system defaulted at cutoff, fully logged. Board-defensible audit trail.' },
+        { tip: 'set-decisionfiles', anchor: 'tr', n: 1, title: 'Decision Files', body: 'Where decision file delivery is configured. SFTP, pickup queue, API, webhook — wherever your core consumes.' },
+        { tip: 'set-autorules', anchor: 'tr', n: 2, title: 'Automatic Decision Rules', body: 'Configure pay-or-return defaults by client, exception type, and dollar threshold.' },
+        { tip: 'set-api', anchor: 'tr', n: 3, title: 'API + Web Hooks', body: 'Push exceptions into your core in real time. The automation unlock.' },
+        { tip: 'set-defaultlog', anchor: 'tr', n: 4, title: 'Default Decision Log', body: 'Every exception the system defaulted at cutoff, fully logged. Board-defensible audit trail.' },
       ]
     }),
   };

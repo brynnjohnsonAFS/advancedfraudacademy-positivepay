@@ -92,7 +92,7 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .hero .lead { max-width: 60ch; margin-bottom: 32px; }
 .trigger-band { display: inline-block; padding: 10px 16px; background: var(--surface-soft); border-radius: var(--r-md); font-size: 14px; color: var(--body-mid); margin-bottom: 28px; line-height: 1.5; }
 .trigger-band b { color: var(--ink-deep); font-weight: 700; }
-.hero-art-wrap { background: var(--ink-deep); border-radius: var(--r-lg); padding: 32px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; box-shadow: 10px 10px 30px rgba(0,0,0,0.10); }
+.hero-art-wrap { position: relative; overflow: hidden; background: var(--ink-deep); border-radius: var(--r-lg); padding: 32px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; box-shadow: 10px 10px 30px rgba(0,0,0,0.10); }
 .hero-art { width: 100%; height: 100%; }
 .hero-art rect { transition: opacity 1.2s ease; }
 .hero-art .pulse { animation: pulse-square 4s ease-in-out infinite; }
@@ -102,6 +102,17 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
   0%, 100% { opacity: 0.15; }
   50% { opacity: 1; }
 }
+/* Cycling benefits overlaid on the grid */
+.hero-art-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px; pointer-events: none; }
+.hero-art-overlay::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(34,34,34,0.86) 0%, rgba(34,34,34,0.62) 55%, rgba(34,34,34,0.25) 100%); }
+.hero-art-eyebrow { position: relative; display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #fff; margin-bottom: 18px; }
+.hero-art-eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--primary); }
+.hero-art-stage { position: relative; width: 100%; height: 3.4em; }
+.hero-art-benefit { position: absolute; left: 0; right: 0; top: 50%; font-size: clamp(20px, 2.7vw, 30px); font-weight: 700; line-height: 1.2; color: #fff; opacity: 0; transform: translate(0, calc(-50% + 0.45em)); transition: opacity .5s ease, transform .5s ease; }
+.hero-art-benefit.is-active { opacity: 1; transform: translate(0, -50%); }
+.hero-art-sub { position: relative; margin-top: 20px; max-width: 32ch; font-size: 14px; line-height: 1.5; font-weight: 400; color: rgba(255,255,255,0.82); }
+.hero-art-sub b { color: #ADE25D; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .hero-art-benefit { transition: none; } }
 
 /* MODE PICKER */
 .mode-picker { padding-top: 24px; padding-bottom: 24px; }
@@ -480,6 +491,17 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
             <rect x="280" y="200" width="36" height="36" rx="6" class="pulse-3"/>
           </g>
         </svg>
+        <div class="hero-art-overlay" aria-live="polite">
+          <span class="hero-art-eyebrow">Explore your potential</span>
+          <div class="hero-art-stage">
+            <span class="hero-art-benefit">Protect your FI</span>
+            <span class="hero-art-benefit">Official checks, cashier&rsquo;s checks &amp; ACH vendor payments</span>
+            <span class="hero-art-benefit">Grow non-interest revenue streams</span>
+            <span class="hero-art-benefit">Build business banking</span>
+            <span class="hero-art-benefit">Improve retention</span>
+          </div>
+          <span class="hero-art-sub"><b>Protection, retention, and non-interest income.</b></span>
+        </div>
       </div>
     </div>
   </section>
@@ -1372,6 +1394,20 @@ applyUtmVariant();
       requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.remove('is-in'); }); });
     }, 350);
   }, 2400);
+})();
+
+// Hero art: cycle through the benefits of Positive Pay over the grid
+(function rotateHeroBenefits(){
+  const items = document.querySelectorAll('.hero-art-benefit');
+  if (!items.length) return;
+  items[0].classList.add('is-active');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let i = 0;
+  setInterval(function(){
+    items[i].classList.remove('is-active');
+    i = (i + 1) % items.length;
+    items[i].classList.add('is-active');
+  }, 2800);
 })();
 
 calc();
