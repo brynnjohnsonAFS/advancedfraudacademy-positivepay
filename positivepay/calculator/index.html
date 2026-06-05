@@ -1256,8 +1256,10 @@ function populatePardotFields(form) {
     else if (t.includes('K')) n *= 1000;
     return Math.round(n);
   }
-  set('pp_loss_avoided_usd', parseDollar(lossText));
-  set('pp_fee_income_usd', parseDollar(feeText));
+  // Store thousands-separated display strings (no "$" — the email template adds it) so Pardot
+  // merge fields render "$24,000" not "$24000". Raw numerics still live in the payload summary.
+  set('pp_loss_avoided_usd', parseDollar(lossText).toLocaleString('en-US'));
+  set('pp_fee_income_usd', parseDollar(feeText).toLocaleString('en-US'));
   set('pp_retention_count', parseInt(retText) || 0);
   // Build a human-readable, mode-aware summary for the rep-facing payload field.
   // The discrete fields above (mode, tier, loss, fee, retention) carry the machine-usable values for automations.
