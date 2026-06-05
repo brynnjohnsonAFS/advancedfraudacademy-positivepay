@@ -1272,15 +1272,20 @@ function populatePardotFields(form) {
   if (f) f.addEventListener('submit', () => populatePardotFields(f));
 });
 
-// COMPLETION MODAL — open once the user has meaningfully engaged with the calculator
+// COMPLETION MODAL — open only once the user is clearly DONE dialing in,
+// never mid-input. Fires on the first "done" signal (idle-after-engagement or
+// exit-intent), and backs off entirely if the user reaches the inline form.
 (function () {
   const modal = document.getElementById('calc-modal');
   if (!modal) return;
   const SHOWN_KEY = 'afa_calc_modal_shown';
-  let settleCount = 0, timer = null, opened = false;
+  const MIN_ENGAGE = 4;     // input changes before the modal is eligible to open
+  const IDLE_MS = 7000;     // pause (no input) that signals "done dialing in"
+  let engageCount = 0, idleTimer = null, opened = false, inlineReached = false;
 
   function alreadyDone() {
     if (opened) return true;
+    if (inlineReached) return true; // they've scrolled to the inline form — don't pop a redundant modal
     try { if (sessionStorage.getItem(SHOWN_KEY)) return true; } catch (e) {}
     // Don't interrupt someone who's already filling the inline form
     const inlineEmail = document.getElementById('email');
@@ -1305,15 +1310,40 @@ function populatePardotFields(form) {
   modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-  // Count "settle" events (slider release, select change, mode switch); fire shortly after they pause.
+  // SIGNAL 1 — idle after engagement: count input changes; once they've engaged,
+  // open only after a long-enough pause (they've stopped dialing in and are
+  // reading their results). Every interaction resets the idle timer.
   function registerEngagement() {
     if (alreadyDone()) return;
-    settleCount++;
-    clearTimeout(timer);
-    if (settleCount >= 3) timer = setTimeout(openModal, 1100);
+    engageCount++;
+    clearTimeout(idleTimer);
+    if (engageCount >= MIN_ENGAGE) idleTimer = setTimeout(openModal, IDLE_MS);
   }
   document.querySelectorAll('.inputs input, .inputs select').forEach(el => el.addEventListener('change', registerEngagement));
   document.querySelectorAll('.mode-card').forEach(c => c.addEventListener('click', registerEngagement));
+
+  // SIGNAL 2 — exit-intent (desktop): cursor leaves toward the browser chrome
+  // after the user has engaged. No-op on touch, which is covered by SIGNAL 1.
+  document.addEventListener('mouseout', e => {
+    if (!e.relatedTarget && e.clientY <= 0 && engageCount >= MIN_ENGAGE) openModal();
+  });
+
+  // SUPPRESSION — if the user scrolls down to the inline capture form, never
+  // auto-open the modal (they already have the form in front of them).
+  const lock = document.getElementById('lock');
+  if (lock) {
+    const onScroll = () => {
+      if (inlineReached) return;
+      const rect = lock.getBoundingClientRect();
+      // inline form has scrolled into the viewport
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        inlineReached = true;
+        clearTimeout(idleTimer);
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
 })();
 
 // MOBILE PRESET CHIPS: clicking a chip updates the linked slider + recalcs
