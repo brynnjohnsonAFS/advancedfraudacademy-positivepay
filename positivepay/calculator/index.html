@@ -86,6 +86,7 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 .hero-cta .btn span { transition: transform 0.2s ease; }
 .hero-cta .btn:hover span { transform: translateY(3px); }
 #calculator { scroll-margin-top: 92px; }
+#lock { scroll-margin-top: 92px; }
 .hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.4fr 1fr; gap: 56px; } }
 .hero h1 { margin-bottom: 24px; max-width: 24ch; font-size: clamp(40px, 6vw, 65px); line-height: 1.05; }
@@ -196,6 +197,11 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .vm-row[data-year="1"] .vm-protect { color: #b6e26a; }
 .vm-row[data-year="2"] .vm-protect { color: #74c042; }
 .vm-row[data-year="3"] .vm-protect { color: #3f9d2f; }
+/* Mode A (business clients): FI Protection isn't modeled, so the column carries a subtle "unlock" nudge instead of bare dashes */
+.vm-cell.vm-locked { padding: 0; }
+.vm-unlock { display: flex; gap: 9px; align-items: flex-start; text-align: left; white-space: normal; font-weight: 400; font-size: 12.5px; line-height: 1.45; letter-spacing: 0; color: var(--body-mid); background: rgba(173,226,93,0.12); border: 1px dashed rgba(132,192,66,0.6); border-radius: 10px; padding: 12px 14px; margin: 14px; }
+.vm-unlock svg { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; color: #74c042; }
+.vm-unlock b { color: var(--ink-deep); font-weight: 700; }
 .matrix-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 24px; }
 @media (max-width: 599px) {
   .vm-head { display: none; }
@@ -203,12 +209,18 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   .vm-yearcell { padding-bottom: 10px; }
   .vm-cell { display: flex; justify-content: space-between; align-items: center; text-align: right; padding: 11px 18px; font-size: 21px; border-top: 1px solid var(--hairline-soft); }
   .vm-cell::before { content: attr(data-label); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--body-mid); }
+  .vm-cell.vm-locked { display: block; padding: 0; }
+  .vm-cell.vm-locked::before { display: none; }
+  .vm-cell.vm-locked:empty { display: none; }
+  .vm-unlock { margin: 12px 0; }
 }
 
 /* PEER CALLOUT */
 .peer-callout { background: var(--surface-soft); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; color: var(--body-mid); line-height: 1.5; }
 .peer-callout b { color: var(--ink-deep); }
 .peer-callout .peer-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 8px; }
+.peer-cta-wrap { text-align: center; margin: 18px 0 8px; }
+.peer-cta-lead { font-size: 15px; color: var(--body-mid); margin: 0 auto 14px; max-width: 520px; line-height: 1.5; }
 
 /* PHASED CALLOUT */
 .phased-callout { background: var(--surface-soft); color: var(--ink-deep); border-left: 3px solid var(--primary); border-radius: var(--r-lg); padding: 22px 26px; margin-bottom: 24px; font-size: 14px; line-height: 1.5; display: none; }
@@ -523,12 +535,12 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
     <div class="mode-cards" role="radiogroup" aria-label="Calculator mode">
       <button class="mode-card active" data-mode="b" role="radio" aria-checked="true">
         <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 1</span></span>
-        <span class="mode-recommend">Recommended</span>
         <span class="mode-label">For my FI's own checks</span>
         <span class="mode-helper">Protect cashier's checks, official checks, escrow, and vendor ACH. The most common starting point — matches what 48 AFS customer FIs are doing today.</span>
       </button>
       <button class="mode-card" data-mode="c" role="radio" aria-checked="false">
         <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 2</span></span>
+        <span class="mode-recommend">Recommended</span>
         <span class="mode-label">Start internal, grow into business clients</span>
         <span class="mode-helper">Year 1 protection on your own checks. Year 2-3, layer in business clients. Patient build, lower vendor risk.</span>
       </button>
@@ -656,6 +668,11 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <div class="peer-callout">
           <span class="peer-eyebrow">Peer FIs at your asset tier</span>
           <span id="peer-text"><b>11 in-portfolio AFS customer CUs and community banks</b> in this range run Modern Positive Pay on their own checks today. Cores represented: Symitar, DNA, KeyStone, Corelation.</span>
+        </div>
+
+        <div class="peer-cta-wrap">
+          <p class="peer-cta-lead">Get more peer insights like this in our peer benchmarks guide — right to your inbox.</p>
+          <a href="#lock" id="peer-cta" class="btn btn-primary">Email me the peer benchmarks guide <span aria-hidden="true">↓</span></a>
         </div>
 
         <div class="phased-callout" id="phased-callout">
@@ -1015,6 +1032,32 @@ const fmtK = (n) => {
 const fmtNum = (n) => Math.round(n).toLocaleString('en-US');
 
 // Write a matrix cell; null/undefined/NaN renders as a muted "—" (metric N/A for this mode).
+// Mode A doesn't model FI Protection — instead of three bare "—", the column shows a subtle
+// nudge: run Positive Pay on the FI's own payments (Modes B/C) and the protection numbers fill in.
+const UNLOCK_INSIGHT = '<span class="vm-unlock">' +
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>' +
+  '<span><b>Unlock FI Protection.</b> Run Positive Pay on your own FI’s checks &amp; ACH and this column fills in — try <b>“For my FI’s own checks”</b> or <b>“Start internal, grow into business clients.”</b></span>' +
+  '</span>';
+
+// FI Protection column: real per-year numbers for Modes B/C; the unlock nudge (centered on the
+// Year-2 cell) for Mode A, where protection depends on client volume we can't credibly project.
+function renderProtectColumn(mode, protectArr) {
+  const cells = [1, 2, 3].map(y => document.getElementById('m-y' + y + '-protect'));
+  if (mode === 'a') {
+    cells.forEach((el, idx) => {
+      el.classList.remove('vm-na');
+      el.classList.add('vm-locked');
+      el.innerHTML = (idx === 1) ? UNLOCK_INSIGHT : '';
+    });
+  } else {
+    cells.forEach((el, idx) => {
+      el.classList.remove('vm-locked');
+      el.innerHTML = '';
+      setMatrixCell('m-y' + (idx + 1) + '-protect', protectArr[idx], fmtK);
+    });
+  }
+}
+
 function setMatrixCell(id, val, fmtFn) {
   const el = document.getElementById(id);
   if (val === null || val === undefined || Number.isNaN(val)) {
@@ -1133,9 +1176,10 @@ function calc() {
   // FI Protection compounds with the FI's organic growth rate, Year 1 -> Year 3.
   const protectArr = [0, 1, 2].map(n => protectBase == null ? null : protectBase * Math.pow(1 + FI_GROWTH_RATE, n));
 
+  renderProtectColumn(currentMode, protectArr);
+
   for (let y = 1; y <= 3; y++) {
     const idx = y - 1;
-    setMatrixCell('m-y' + y + '-protect', protectArr[idx], fmtK);
     setMatrixCell('m-y' + y + '-nii', niiArr[idx], fmtK);
     setMatrixCell('m-y' + y + '-clients', clientsArr[idx], fmtNum);
     document.getElementById('m-y' + y + '-what').textContent = whatArr[idx];
@@ -1297,6 +1341,21 @@ function populatePardotFields(form) {
   const f = document.getElementById(id);
   if (f) f.addEventListener('submit', () => populatePardotFields(f));
 });
+
+// Peer-callout CTA: track the click, scroll to the guide form, and focus the email field
+const peerCta = document.getElementById('peer-cta');
+if (peerCta) {
+  peerCta.addEventListener('click', (e) => {
+    if (window.gtag) gtag('event', 'peer_cta_click', { event_category: 'calculator' });
+    const lock = document.getElementById('lock');
+    const email = document.getElementById('email');
+    if (lock) {
+      e.preventDefault();
+      lock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (email) setTimeout(() => email.focus(), 500); // focus after scroll settles
+    }
+  });
+}
 
 // COMPLETION MODAL — open only once the user is clearly DONE dialing in,
 // never mid-input. Fires on the first "done" signal (idle-after-engagement or
