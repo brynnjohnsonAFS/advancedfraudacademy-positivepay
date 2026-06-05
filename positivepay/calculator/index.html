@@ -179,7 +179,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .output { padding: 4px 0; }
 .output-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--eyebrow); margin-bottom: 10px; }
 /* VALUE MATRIX — the 3-year picture: Year 1/2/3 rows x Protection / NII / Clients columns */
-.value-matrix { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 14px; }
+.value-matrix { position: relative; background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 14px; }
 .vm-head, .vm-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; }
 .vm-head { background: var(--surface-soft); border-bottom: 1px solid var(--hairline); }
 .vm-corner { padding: 14px 18px; }
@@ -197,10 +197,12 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
 .vm-row[data-year="1"] .vm-protect { color: #b6e26a; }
 .vm-row[data-year="2"] .vm-protect { color: #74c042; }
 .vm-row[data-year="3"] .vm-protect { color: #3f9d2f; }
-/* Mode A (business clients): FI Protection isn't modeled, so the column carries a subtle "unlock" nudge instead of bare dashes */
-.vm-cell.vm-locked { padding: 0; }
-.vm-unlock { display: flex; gap: 9px; align-items: flex-start; text-align: left; white-space: normal; font-weight: 400; font-size: 12.5px; line-height: 1.45; letter-spacing: 0; color: var(--body-mid); background: rgba(173,226,93,0.12); border: 1px dashed rgba(132,192,66,0.6); border-radius: 10px; padding: 12px 14px; margin: 14px; }
-.vm-unlock svg { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; color: #74c042; }
+/* Mode A (business clients): FI Protection isn't modeled. Rather than three bare "—", a single
+   subtle badge sits vertically centered across the whole column (positioned over it as an overlay
+   so it never balloons one row). Mode guidance lives in the matrix-note footnote, not the badge. */
+.vm-lock-overlay { position: absolute; display: flex; align-items: center; justify-content: center; padding: 10px 8px; pointer-events: none; }
+.vm-unlock { pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; white-space: normal; max-width: 100%; font-weight: 400; font-size: 12px; line-height: 1.45; letter-spacing: 0; color: var(--body-mid); background: rgba(173,226,93,0.14); border: 1px dashed rgba(132,192,66,0.65); border-radius: 12px; padding: 14px 12px; }
+.vm-unlock svg { flex-shrink: 0; width: 22px; height: 22px; color: #74c042; }
 .vm-unlock b { color: var(--ink-deep); font-weight: 700; }
 .matrix-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 24px; }
 @media (max-width: 599px) {
@@ -209,10 +211,10 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   .vm-yearcell { padding-bottom: 10px; }
   .vm-cell { display: flex; justify-content: space-between; align-items: center; text-align: right; padding: 11px 18px; font-size: 21px; border-top: 1px solid var(--hairline-soft); }
   .vm-cell::before { content: attr(data-label); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--body-mid); }
-  .vm-cell.vm-locked { display: block; padding: 0; }
-  .vm-cell.vm-locked::before { display: none; }
-  .vm-cell.vm-locked:empty { display: none; }
-  .vm-unlock { margin: 12px 0; }
+  .vm-cell.vm-locked { display: none; }
+  /* On mobile the matrix stacks to one column, so the overlay drops to a normal full-width banner */
+  .vm-lock-overlay { position: static; padding: 0 16px 16px; }
+  .vm-unlock { flex-direction: row; align-items: flex-start; gap: 10px; text-align: left; }
 }
 
 /* PEER CALLOUT */
@@ -629,10 +631,6 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
           <div class="input-group"><div class="input-label"><span>Realistic enrollment rate</span><span class="input-value" id="val-enroll">10%</span></div><input type="range" id="in-enroll" min="2" max="50" step="1" value="10"><div class="input-label" style="margin-top:4px;"><span class="input-hint">AFS customer median is 5-10% in Year 1. 33% is a 3-year target.</span></div></div>
           <div class="input-group"><div class="input-label"><span>Your retail price per business client / month</span><span class="input-value" id="val-retail-a">$65</span></div><input type="range" id="in-retail-a" min="40" max="100" step="5" value="65"></div>
         </div>
-
-        <div class="toggle-row">
-          <input type="checkbox" id="in-jha"><label for="in-jha">My FI buys through a channel partner (Access Softek, Lumin, Narmi, Tru Treasury, Tyfone, Candescent, CSPI, Jaguar). Adjusts the model for partner pricing.</label>
-        </div>
       </div>
 
       <div class="output">
@@ -663,6 +661,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
             <div class="vm-cell vm-nii" id="m-y3-nii" data-label="Non-Interest Income">$0</div>
             <div class="vm-cell vm-clients" id="m-y3-clients" data-label="Clients on program">0</div>
           </div>
+          <div class="vm-lock-overlay" id="vm-lock-overlay" hidden></div>
         </div>
         <p class="matrix-note" id="matrix-note">FI Protection grows ~4%/yr — as your FI grows, so does the check &amp; ACH volume Positive Pay shields. Benchmark: community-bank loan growth +5.1% (FDIC Quarterly Banking Profile, 2024); credit-union assets +2.3% (NCUA, 2024). Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn.</p>
 
@@ -694,7 +693,7 @@ FI Protection (Year N) = Year 1 × (1 + 4%)^(N−1)
 Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup
 Clients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)
             — modest net-of-churn book growth
-Cost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.</div>
+Cost basis and setup scale with FI asset size. We'll share specifics when you talk to our team.</div>
             <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026). FI growth benchmark: FDIC Quarterly Banking Profile 2024 (community-bank loan growth +5.1%), NCUA 2024 (credit-union assets +2.3%).</cite>
           </div>
         </details>
@@ -970,8 +969,7 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
 // Pricing constants from AFS partner exhibit A + internal sales sheet
 const SETUP_BY_ASSET = [1500, 3000, 5500, 7500, 10500];        // sub-1B, 1-5B, 5-10B, 10-20B, 20B+
 const CORP_CHECKS_BY_ASSET = [2800, 5600, 9100, 12600, 17500]; // annual access fee
-const WHOLESALE_DIRECT = 40;   // direct list per business client per month
-const WHOLESALE_JHA = 25;      // Jack Henry / Symitar channel wholesale
+const WHOLESALE_DIRECT = 40;   // wholesale cost basis per business client per month
 const CHECK_ATTEMPT = 0.005;   // 0.5%
 const ACH_ATTEMPT = 0.01;      // 1.0%
 // FI Protection compounds with the FI's organic growth: as the FI grows, its check/ACH
@@ -994,24 +992,28 @@ const fmtK = (n) => {
 const fmtNum = (n) => Math.round(n).toLocaleString('en-US');
 
 // Write a matrix cell; null/undefined/NaN renders as a muted "—" (metric N/A for this mode).
-// Mode A doesn't model FI Protection — instead of three bare "—", the column shows a subtle
-// nudge: run Positive Pay on the FI's own payments (Modes B/C) and the protection numbers fill in.
+// Mode A doesn't model FI Protection. Instead of three bare "—", a single concise badge sits
+// vertically centered across the whole column (an absolute overlay so it never balloons one row).
+// The "switch modes" guidance lives in the matrix-note footnote, keeping this badge short.
 const UNLOCK_INSIGHT = '<span class="vm-unlock">' +
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>' +
-  '<span><b>Unlock FI Protection.</b> Run Positive Pay on your own FI’s checks &amp; ACH and this column fills in — try <b>“For my FI’s own checks”</b> or <b>“Start internal, grow into business clients.”</b></span>' +
+  '<span><b>Unlock FI Protection</b> by running Positive Pay on your own FI’s checks &amp; ACH first.</span>' +
   '</span>';
 
-// FI Protection column: real per-year numbers for Modes B/C; the unlock nudge (centered on the
-// Year-2 cell) for Mode A, where protection depends on client volume we can't credibly project.
+// FI Protection column: real per-year numbers for Modes B/C; the unlock badge for Mode A, where
+// protection depends on client volume we can't credibly project. The badge is an overlay centered
+// over the (emptied) column; positionLockOverlay() pins it to the column's measured box.
 function renderProtectColumn(mode, protectArr) {
   const cells = [1, 2, 3].map(y => document.getElementById('m-y' + y + '-protect'));
+  const overlay = document.getElementById('vm-lock-overlay');
   if (mode === 'a') {
-    cells.forEach((el, idx) => {
-      el.classList.remove('vm-na');
-      el.classList.add('vm-locked');
-      el.innerHTML = (idx === 1) ? UNLOCK_INSIGHT : '';
-    });
+    cells.forEach(el => { el.classList.remove('vm-na'); el.classList.add('vm-locked'); el.innerHTML = ''; });
+    overlay.innerHTML = UNLOCK_INSIGHT;
+    overlay.hidden = false;
+    positionLockOverlay();
   } else {
+    overlay.hidden = true;
+    overlay.innerHTML = '';
     cells.forEach((el, idx) => {
       el.classList.remove('vm-locked');
       el.innerHTML = '';
@@ -1019,6 +1021,24 @@ function renderProtectColumn(mode, protectArr) {
     });
   }
 }
+
+// Pin the unlock overlay to the FI Protection column box (Year-1 top -> Year-3 bottom), measured
+// live so it survives reflow. On mobile (<=599px) the matrix stacks to one column and CSS drops
+// the overlay to a static full-width banner, so we clear the inline geometry instead.
+function positionLockOverlay() {
+  const overlay = document.getElementById('vm-lock-overlay');
+  if (overlay.hidden) return;
+  if (window.innerWidth <= 599) { overlay.removeAttribute('style'); overlay.hidden = false; return; }
+  const matrix = document.querySelector('.value-matrix');
+  const top = document.getElementById('m-y1-protect').getBoundingClientRect();
+  const bottom = document.getElementById('m-y3-protect').getBoundingClientRect();
+  const mr = matrix.getBoundingClientRect();
+  overlay.style.left = (top.left - mr.left) + 'px';
+  overlay.style.top = (top.top - mr.top) + 'px';
+  overlay.style.width = top.width + 'px';
+  overlay.style.height = (bottom.bottom - top.top) + 'px';
+}
+window.addEventListener('resize', positionLockOverlay);
 
 function setMatrixCell(id, val, fmtFn) {
   const el = document.getElementById(id);
@@ -1034,7 +1054,6 @@ function setMatrixCell(id, val, fmtFn) {
 function getInputs() {
   return {
     asset: parseInt(document.getElementById('in-asset').value),
-    jha: document.getElementById('in-jha').checked,
     // Mode A
     accounts: parseInt(document.getElementById('in-accounts').value),
     enroll: parseInt(document.getElementById('in-enroll').value) / 100,
@@ -1068,7 +1087,7 @@ const MATRIX_NOTE_DEFAULT = document.getElementById('matrix-note').textContent;
 
 function calc() {
   const i = getInputs();
-  const wholesale = i.jha ? WHOLESALE_JHA : WHOLESALE_DIRECT;
+  const wholesale = WHOLESALE_DIRECT;
   const setup = SETUP_BY_ASSET[i.asset];
   const corpFee = CORP_CHECKS_BY_ASSET[i.asset];
 
@@ -1154,8 +1173,8 @@ function calc() {
   const matrixNote = document.getElementById('matrix-note');
   if (currentMode === 'a') {
     formulaIntro.innerHTML = `<b>This mode models the non-interest income and client retention you earn by enrolling business clients in Modern Positive Pay.</b> We don't project FI Protection here — it depends on the check &amp; ACH volume your clients load into Positive Pay, which varies too much to model credibly.`;
-    formulaBlock.textContent = `Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup\nEnrolled clients = business accounts × enrollment rate\nClients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)\n            — modest net-of-churn book growth\nCost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.`;
-    matrixNote.textContent = `Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn. FI Protection isn't modeled in this mode: it depends on the check & ACH volume your business clients load into Positive Pay, which varies too much to project credibly.`;
+    formulaBlock.textContent = `Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup\nEnrolled clients = business accounts × enrollment rate\nClients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)\n            — modest net-of-churn book growth\nCost basis and setup scale with FI asset size. We'll share specifics when you talk to our team.`;
+    matrixNote.textContent = `Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn. FI Protection isn't modeled in this mode: it depends on the check & ACH volume your business clients load into Positive Pay, which varies too much to project credibly. To size your own FI's protection, switch to “For my FI's own checks” or “Start internal, grow into business clients.”`;
   } else {
     formulaIntro.innerHTML = FORMULA_DEFAULT_INTRO;
     formulaBlock.textContent = FORMULA_DEFAULT_BLOCK;
@@ -1287,7 +1306,6 @@ function populatePardotFields(form) {
     'Submitted: ' + stamp,
     'How they plan to use Positive Pay: ' + (useLabels[currentMode] || currentMode),
     'FI asset size: ' + (tierLabels[i.asset] || ('tier ' + i.asset)),
-    'Buys through a channel partner: ' + (i.jha ? 'Yes' : 'No'),
     '',
     'WHAT THEY ENTERED (their own numbers)',
     ...inputLines.map(l => '- ' + l),
