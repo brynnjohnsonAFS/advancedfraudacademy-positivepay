@@ -283,21 +283,22 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   .pb-slide.pb-s1 { opacity: 1; }
   .pb-dots span:nth-child(1) { background: var(--primary); }
 }
-.lock h2 { margin-bottom: 16px; max-width: 22ch; }
-.lock .lead { max-width: 56ch; margin-bottom: 28px; }
-/* LOCK — two-column card: copy + bullets on the left, animated guide icon on the right */
-.lock-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; margin-bottom: 32px; }
-@media (min-width: 860px) { .lock-grid { grid-template-columns: 1.5fr 1fr; gap: 48px; } }
-.lock-left h2 { margin-bottom: 14px; }
+.lock h2 { margin-bottom: 12px; max-width: 22ch; }
+.lock .lead { max-width: 56ch; margin-bottom: 24px; }
+/* LOCK — two-column card: copy + bullets on the left, lead-capture form on the right */
+.lock-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
+@media (min-width: 860px) { .lock-grid { grid-template-columns: 1fr minmax(320px, 0.85fr); gap: 44px; } }
+.lock-left h2 { margin-bottom: 10px; }
 .lock-left .lead { margin-bottom: 0; }
-.lock-benefits { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 13px; }
-.lock-benefits li { position: relative; display: grid; gap: 2px; padding-left: 24px; }
-.lock-benefits li::before { content: ""; position: absolute; left: 0; top: 3px; width: 13px; height: 13px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' width='3' height='3' fill='%23C70200'/%3E%3Crect y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='7' width='3' height='3' fill='%23222'/%3E%3C/svg%3E") center/contain no-repeat; }
-.lock-benefits .lb-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-deep); }
-.lock-benefits .lb-text { font-size: 13.5px; color: var(--body-mid); line-height: 1.45; }
-.lock-right { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; min-height: 220px; }
-.lock-right .lock-guide-icon { width: clamp(120px, 16vw, 168px); height: clamp(120px, 16vw, 168px); margin-bottom: 0; position: relative; z-index: 1; }
-.lock-guide-badge { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; background: var(--canvas); border: 1px solid var(--hairline); border-radius: 999px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--ink-deep); box-shadow: 0 8px 22px rgba(0,0,0,0.07); }
+.lock-benefits { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.lock-benefits li { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; padding-left: 24px; }
+.lock-benefits li::before { content: ""; position: absolute; left: 0; top: 4px; width: 13px; height: 13px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' width='3' height='3' fill='%23C70200'/%3E%3Crect y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='3.5' width='3' height='3' fill='%23222'/%3E%3Crect y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='3.5' y='7' width='3' height='3' fill='%23222'/%3E%3Crect x='7' y='7' width='3' height='3' fill='%23222'/%3E%3C/svg%3E") center/contain no-repeat; }
+.lock-benefits .lb-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-deep); white-space: nowrap; }
+.lock-benefits .lb-text { font-size: 13.5px; color: var(--body-mid); line-height: 1.4; }
+.lock-right { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 14px; background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: clamp(20px, 3vw, 28px); box-shadow: 0 14px 34px rgba(0,0,0,0.06); }
+.lock-guide-badge { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--ink-deep); }
+.lock-right .form-grid { grid-template-columns: 1fr; margin-bottom: 14px; }
+.lock-right .form-actions .btn-primary { width: 100%; }
 .form-grid { display: grid; gap: 14px; grid-template-columns: 1fr; margin-bottom: 20px; }
 @media (min-width: 600px) { .form-grid { grid-template-columns: 1fr 1fr; } }
 .form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-deep); margin-bottom: 6px; }
@@ -710,86 +711,47 @@ Cost basis and setup scale with FI asset size and channel partner status. We'll 
           <p class="lead">Community FIs almost never see how they stack up against peers. The free guide changes that.</p>
           <ul class="lock-benefits">
             <li>
-              <span class="lb-label">What's inside</span>
-              <span class="lb-text">Your numbers from above, plus where they land against AFS-protected FIs at your asset tier.</span>
+              <span class="lb-label">Inside —</span>
+              <span class="lb-text">Your numbers vs. AFS-protected FIs at your asset tier.</span>
             </li>
             <li>
-              <span class="lb-label">What you'll access</span>
-              <span class="lb-text">Non-interest income and fraud-event frequency benchmarks — with a board-ready one-pager for your CFO or CEO.</span>
+              <span class="lb-label">Access —</span>
+              <span class="lb-text">Non-interest income + fraud-frequency benchmarks, plus a board-ready one-pager.</span>
             </li>
             <li>
-              <span class="lb-label">Why this helps</span>
-              <span class="lb-text">Walk into your next exec meeting with peer math, not vendor claims. No sales call — read it on your time.</span>
+              <span class="lb-label">Why —</span>
+              <span class="lb-text">Peer math for your next exec meeting; no sales call.</span>
             </li>
             <li>
-              <span class="lb-label">Where the data comes from</span>
-              <span class="lb-text">AFS internal benchmarks and learned data from 19 years protecting community FIs.</span>
+              <span class="lb-label">Source —</span>
+              <span class="lb-text">AFS benchmarks from 19 years protecting community FIs.</span>
             </li>
           </ul>
         </div>
         <div class="lock-right">
-          <span class="lock-guide-glow" aria-hidden="true"></span>
-          <div class="pb-anim" role="img" aria-label="The guide cycles through peer insights: non-interest income, what other FIs do, and internal benchmarks">
-            <div class="pb-card" aria-hidden="true">
-              <span class="pb-corner"></span>
-              <div class="pb-stage">
-                <div class="pb-slide pb-s1">
-                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
-                    <rect x="8" y="30" width="9" height="14" rx="2" fill="#222222"/>
-                    <rect x="21.5" y="22" width="9" height="22" rx="2" fill="#222222"/>
-                    <rect x="35" y="12" width="9" height="32" rx="2" fill="#C70200"/>
-                    <path d="M7 28 L24 19 L38 10" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M38 10 L31.5 9 M38 10 L37 16.5" stroke="#C70200" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <span class="pb-label">Non-Interest Income</span>
-                </div>
-                <div class="pb-slide pb-s2">
-                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
-                    <circle cx="14" cy="16" r="6" fill="#222222"/>
-                    <path d="M4 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
-                    <circle cx="38" cy="16" r="6" fill="#222222"/>
-                    <path d="M28 38 a10 10 0 0 1 20 0 z" fill="#222222"/>
-                    <circle cx="26" cy="13" r="7" fill="#C70200"/>
-                    <path d="M14 38 a12 12 0 0 1 24 0 z" fill="#C70200"/>
-                  </svg>
-                  <span class="pb-label">See What Other FIs Do</span>
-                </div>
-                <div class="pb-slide pb-s3">
-                  <svg class="pb-ico" viewBox="0 0 52 52" fill="none">
-                    <path d="M8 36 a18 18 0 0 1 36 0" stroke="#222222" stroke-width="4" stroke-linecap="round"/>
-                    <path d="M8 36 a18 18 0 0 1 9.6 -15.9" stroke="#C70200" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="26" y1="36" x2="36" y2="22" stroke="#C70200" stroke-width="3" stroke-linecap="round"/>
-                    <circle cx="26" cy="36" r="3.6" fill="#222222"/>
-                  </svg>
-                  <span class="pb-label">Internal Benchmarks</span>
-                </div>
-              </div>
-              <div class="pb-dots"><span></span><span></span><span></span></div>
-            </div>
-          </div>
           <span class="lock-guide-badge">🔓 Unlock Peer Insights in the free guide</span>
+          <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
+            <div class="form-grid">
+              <div class="form-field"><label for="email">Work email</label><input type="email" id="email" name="email" required></div>
+              <div class="form-field"><label for="institution">Your FI</label><input type="text" id="institution" name="Company" required></div>
+              <div class="form-field" style="display:none;"><label for="first-name">First name</label><input type="text" id="first-name" name="first_name"></div>
+              <div class="form-field" style="display:none;"><label for="last-name">Last name</label><input type="text" id="last-name" name="last_name"></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Send to my inbox</button>
+            </div>
+            <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click. Two-field gate: we'll enrich first/last from your work email domain.</p>
+            <!-- Hidden fields populated at submit time from calculator state -->
+            <input type="hidden" id="hf-source-form" name="pp_source_form" value="calculator">
+            <input type="hidden" id="hf-asset-tier" name="pp_asset_tier" value="">
+            <input type="hidden" id="hf-mode-selected" name="pp_mode_selected" value="">
+            <input type="hidden" id="hf-loss-avoided" name="pp_loss_avoided_usd" value="0">
+            <input type="hidden" id="hf-fee-income" name="pp_fee_income_usd" value="0">
+            <input type="hidden" id="hf-retention-count" name="pp_retention_count" value="0">
+            <input type="hidden" id="hf-calc-payload" name="pp_calculator_payload" value="{}">
+          </form>
         </div>
       </div>
-      <form id="lock-form" action="https://go.advancedfraudsolutions.com/l/783193/2026-06-02/67jwv" method="post">
-        <div class="form-grid">
-          <div class="form-field"><label for="email">Work email</label><input type="email" id="email" name="email" required></div>
-          <div class="form-field"><label for="institution">Your FI</label><input type="text" id="institution" name="Company" required></div>
-          <div class="form-field" style="display:none;"><label for="first-name">First name</label><input type="text" id="first-name" name="first_name"></div>
-          <div class="form-field" style="display:none;"><label for="last-name">Last name</label><input type="text" id="last-name" name="last_name"></div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Send to my inbox</button>
-        </div>
-        <p class="form-microcopy"><span class="lock-icon">🔒</span> We email the breakdown. We don't call. Unsubscribe in one click. Two-field gate: we'll enrich first/last from your work email domain.</p>
-        <!-- Hidden fields populated at submit time from calculator state -->
-        <input type="hidden" id="hf-source-form" name="pp_source_form" value="calculator">
-        <input type="hidden" id="hf-asset-tier" name="pp_asset_tier" value="">
-        <input type="hidden" id="hf-mode-selected" name="pp_mode_selected" value="">
-        <input type="hidden" id="hf-loss-avoided" name="pp_loss_avoided_usd" value="0">
-        <input type="hidden" id="hf-fee-income" name="pp_fee_income_usd" value="0">
-        <input type="hidden" id="hf-retention-count" name="pp_retention_count" value="0">
-        <input type="hidden" id="hf-calc-payload" name="pp_calculator_payload" value="{}">
-      </form>
     </div>
   </section>
 
