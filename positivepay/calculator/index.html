@@ -90,8 +90,6 @@ p { font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--body-mid);
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.4fr 1fr; gap: 56px; } }
 .hero h1 { margin-bottom: 24px; max-width: 24ch; font-size: clamp(40px, 6vw, 65px); line-height: 1.05; }
 .hero .lead { max-width: 60ch; margin-bottom: 32px; }
-.trigger-band { display: inline-block; padding: 10px 16px; background: var(--surface-soft); border-radius: var(--r-md); font-size: 14px; color: var(--body-mid); margin-bottom: 28px; line-height: 1.5; }
-.trigger-band b { color: var(--ink-deep); font-weight: 700; }
 .hero-art-wrap { position: relative; overflow: hidden; background: var(--ink-deep); border-radius: var(--r-lg); padding: 32px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; box-shadow: 10px 10px 30px rgba(0,0,0,0.10); }
 .hero-art { width: 100%; height: 100%; }
 .hero-art rect { transition: opacity 1.2s ease; }
@@ -440,7 +438,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   <section class="hero">
     <div class="hero-grid">
       <div>
-        <span class="trigger-band">An $8B community CU bought after a <b>$10K payroll loss</b>. A $2B CU after <b>checks were stolen</b>.</span>
+        <span class="eyebrow">Modern Positive Pay · For community FIs</span>
         <h1 class="two-tone"><span class="strong">Protect your own checks first.</span> <span class="soft">Grow into business banking later.</span></h1>
         <p class="lead">See your Modern Positive Pay return in 60 seconds, then talk to us when the math makes sense.</p>
         <div class="hero-cta"><a href="#calculator" class="btn btn-primary">Try the calculator <span aria-hidden="true">↓</span></a></div>
@@ -537,7 +535,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
       <button class="mode-card" data-mode="a" role="radio" aria-checked="false">
         <span class="mode-toprow"><span class="mode-radio" aria-hidden="true"></span><span class="mode-optnum">Mode 3</span></span>
         <span class="mode-label">For my business clients</span>
-        <span class="mode-helper">You already have business clients ready to enroll. Calculate the fee income + protection + retention.</span>
+        <span class="mode-helper">You already have business clients ready to enroll. Calculate the fee income + retention.</span>
       </button>
     </div>
   </section>
@@ -617,7 +615,6 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
           <div class="input-group"><div class="input-label"><span>Business accounts at your FI</span><span class="input-value" id="val-accounts">300</span></div><input type="range" id="in-accounts" min="25" max="3000" step="25" value="300"></div>
           <div class="input-group"><div class="input-label"><span>Realistic enrollment rate</span><span class="input-value" id="val-enroll">10%</span></div><input type="range" id="in-enroll" min="2" max="50" step="1" value="10"><div class="input-label" style="margin-top:4px;"><span class="input-hint">AFS customer median is 5-10% in Year 1. 33% is a 3-year target.</span></div></div>
           <div class="input-group"><div class="input-label"><span>Your retail price per business client / month</span><span class="input-value" id="val-retail-a">$65</span></div><input type="range" id="in-retail-a" min="40" max="100" step="5" value="65"></div>
-          <div class="input-group"><div class="input-label"><span>Annual fraud loss your FI absorbs today</span><span class="input-value" id="val-fraud-a">$50,000</span></div><input type="range" id="in-fraud-a" min="10000" max="500000" step="5000" value="50000"></div>
         </div>
 
         <div class="toggle-row">
@@ -669,7 +666,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
         <details class="methodology">
           <summary>Show the math</summary>
           <div class="methodology-content">
-            <p><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
+            <p id="formula-intro"><b>Modern Positive Pay flags items that don't match your issue file before they clear.</b> The figures above count fraud face value only. Each $1 of prevented fraud also avoids roughly $5.75 in downstream true cost — investigation, recovery, reissue, customer outreach (LexisNexis True Cost of Fraud, 2025) — which we leave out to keep your numbers conservative.</p>
             <div class="formula" id="formula-block">FI Protection (Year 1) = face_at_risk (fraud face value)
 Face at risk = checks/yr × avg value × 0.5% check fraud attempt rate
             + ACH/yr × avg value × 1.0% ACH fraud attempt rate
@@ -1037,7 +1034,6 @@ function getInputs() {
     accounts: parseInt(document.getElementById('in-accounts').value),
     enroll: parseInt(document.getElementById('in-enroll').value) / 100,
     retailA: parseInt(document.getElementById('in-retail-a').value),
-    fraudA: parseInt(document.getElementById('in-fraud-a').value),
     // Mode B
     checks: parseInt(document.getElementById('in-checks').value),
     checkVal: parseInt(document.getElementById('in-check-val').value),
@@ -1059,6 +1055,12 @@ function calcInternalLoss(checks, checkVal, ach, achVal) {
   return facePrevented;
 }
 
+// Default "Show the math" + matrix-note copy (Modes B/C). Captured once at load so Mode A
+// can swap to an income-only version and the other modes can restore it cleanly.
+const FORMULA_DEFAULT_INTRO = document.getElementById('formula-intro').innerHTML;
+const FORMULA_DEFAULT_BLOCK = document.getElementById('formula-block').textContent;
+const MATRIX_NOTE_DEFAULT = document.getElementById('matrix-note').textContent;
+
 function calc() {
   const i = getInputs();
   const wholesale = i.jha ? WHOLESALE_JHA : WHOLESALE_DIRECT;
@@ -1069,7 +1071,6 @@ function calc() {
   document.getElementById('val-accounts').textContent = i.accounts.toLocaleString();
   document.getElementById('val-enroll').textContent = (i.enroll * 100).toFixed(0) + '%';
   document.getElementById('val-retail-a').textContent = '$' + i.retailA;
-  document.getElementById('val-fraud-a').textContent = fmt(i.fraudA);
   document.getElementById('val-checks').textContent = i.checks.toLocaleString();
   document.getElementById('val-check-val').textContent = fmt(i.checkVal);
   document.getElementById('val-ach').textContent = i.ach.toLocaleString();
@@ -1093,7 +1094,9 @@ function calc() {
     const margin = i.retailA - wholesale;
     const grossNII = enrolled * margin * 12;
     const feeIncome = grossNII - setup;             // Year 1, net of setup
-    protectBase = i.fraudA;                          // FI's stated annual fraud exposure
+    // No FI Protection figure in business-client mode: it depends on the check & ACH volume
+    // clients load into Positive Pay, which varies too much to project. Lead with NII + clients.
+    protectBase = null;
     niiArr = [feeIncome, feeIncome + grossNII, feeIncome + grossNII * 2]; // cumulative net margin
     clientsArr = [enrolled, Math.round(enrolled * (1 + CLIENT_GROWTH_RATE)), Math.round(enrolled * Math.pow(1 + CLIENT_GROWTH_RATE, 2))]; // book grows modestly, net of churn
     whatArr = [
@@ -1128,14 +1131,29 @@ function calc() {
   }
 
   // FI Protection compounds with the FI's organic growth rate, Year 1 -> Year 3.
-  const protectArr = [0, 1, 2].map(n => protectBase * Math.pow(1 + FI_GROWTH_RATE, n));
+  const protectArr = [0, 1, 2].map(n => protectBase == null ? null : protectBase * Math.pow(1 + FI_GROWTH_RATE, n));
 
   for (let y = 1; y <= 3; y++) {
     const idx = y - 1;
-    document.getElementById('m-y' + y + '-protect').textContent = fmtK(protectArr[idx]);
+    setMatrixCell('m-y' + y + '-protect', protectArr[idx], fmtK);
     setMatrixCell('m-y' + y + '-nii', niiArr[idx], fmtK);
     setMatrixCell('m-y' + y + '-clients', clientsArr[idx], fmtNum);
     document.getElementById('m-y' + y + '-what').textContent = whatArr[idx];
+  }
+
+  // "Show the math" + matrix note are mode-aware. Business-client mode (a) doesn't model
+  // FI Protection, so we show only the income/retention math and drop the protection note.
+  const formulaIntro = document.getElementById('formula-intro');
+  const formulaBlock = document.getElementById('formula-block');
+  const matrixNote = document.getElementById('matrix-note');
+  if (currentMode === 'a') {
+    formulaIntro.innerHTML = `<b>This mode models the non-interest income and client retention you earn by enrolling business clients in Modern Positive Pay.</b> We don't project FI Protection here — it depends on the check &amp; ACH volume your clients load into Positive Pay, which varies too much to model credibly.`;
+    formulaBlock.textContent = `Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup\nEnrolled clients = business accounts × enrollment rate\nClients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)\n            — modest net-of-churn book growth\nCost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.`;
+    matrixNote.textContent = `Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn. FI Protection isn't modeled in this mode: it depends on the check & ACH volume your business clients load into Positive Pay, which varies too much to project credibly.`;
+  } else {
+    formulaIntro.innerHTML = FORMULA_DEFAULT_INTRO;
+    formulaBlock.textContent = FORMULA_DEFAULT_BLOCK;
+    matrixNote.textContent = MATRIX_NOTE_DEFAULT;
   }
 
   // Peer callout adjusts by asset tier
@@ -1209,8 +1227,7 @@ function populatePardotFields(form) {
     inputLines = [
       'Business accounts at their FI: ' + num(i.accounts),
       'Enrollment rate they expect: ' + Math.round(i.enroll * 100) + '%',
-      "Monthly price they'd charge per client: " + usd(i.retailA),
-      'Annual fraud loss they absorb today: ' + usd(i.fraudA)
+      "Monthly price they'd charge per client: " + usd(i.retailA)
     ];
   } else if (currentMode === 'b') {
     inputLines = [
@@ -1239,11 +1256,16 @@ function populatePardotFields(form) {
   if (contactEmail) idBits.push('Contact: ' + contactEmail);
   // Mode-aware snapshot + results: "own checks" mode has no client fee income / retention
   const ownChecks = (currentMode === 'b');
+  const businessOnly = (currentMode === 'a'); // no FI-protection figure in this mode
   const snapshot = ownChecks
     ? 'Snapshot: ' + usd(lossN) + ' in check + ACH fraud protected in Year 1.'
+    : businessOnly
+    ? 'Snapshot: ' + usd(feeN) + ' in 3-year non-interest income, ' + num(retN) + ' business clients on the program by Year 3.'
     : 'Snapshot: ' + usd(lossN) + ' Year 1 protection + ' + usd(feeN) + ' in 3-year non-interest income, ' + num(retN) + ' business clients on the program by Year 3.';
   const resultLines = ownChecks
     ? ['- Year 1 FI protection: ' + usd(lossN)]
+    : businessOnly
+    ? ['- 3-year non-interest income: ' + usd(feeN), '- Business clients by Year 3: ' + num(retN)]
     : ['- Year 1 FI protection: ' + usd(lossN), '- 3-year non-interest income: ' + usd(feeN), '- Business clients by Year 3: ' + num(retN)];
   const summaryLines = [
     'POS PAY CALCULATOR SUBMISSION',
@@ -1368,31 +1390,26 @@ document.querySelectorAll('.chip-set').forEach(set => {
 // Variants align with LinkedIn ad creative themes
 const UTM_VARIANTS = {
   'loss-event': {
-    trigger: 'An $8B community CU bought after a <b>$10K payroll loss</b>. A $10B CU after a <b>reconciliation audit</b>. A $2B community CU after <b>checks were stolen</b>.',
     h1Strong: 'Walk in with the number',
     h1Soft: 'before the next loss event walks in for you.',
     lead: 'See how exposed your FI is right now. Then take the math to your CFO. Peer FIs already protecting their own checks all bought after a specific event. Get ahead of yours.'
   },
   'fee-income': {
-    trigger: 'Community FIs charge <b>$50-90/month per business client</b> for Modern Positive Pay. Most are leaving the revenue line on the table.',
     h1Strong: 'There is non-interest income hiding in your treasury services.',
     h1Soft: 'Modern Positive Pay is the path to it.',
     lead: 'Calculate the fee income your FI could earn on a service business clients already want. Pays for itself by the fifth client. Compounds from there.'
   },
   'partner': {
-    trigger: 'Already on <b>Symitar</b>, <b>DNA</b>, <b>Corelation</b>, or <b>KeyStone</b>? AFS plugs in directly. Or through your <b>Tru Treasury</b>, <b>Lumin</b>, or <b>Access Softek</b> reseller.',
     h1Strong: 'Modern Positive Pay is in the platforms you already run.',
     h1Soft: 'See what it returns to your FI.',
     lead: 'No two-year integration build. AFS supports 7 community FI cores direct and 8 wholesale partners. Calculate what enabling it returns to your FI.'
   },
   'retention': {
-    trigger: 'Treasury services churn <b>3x less</b> than depository-only relationships. Every Positive Pay client is one you do not have to replace.',
     h1Strong: 'A stickier business client is worth more than a fee.',
     h1Soft: 'Modern Positive Pay gives you both.',
     lead: 'Calculate the retention math, the fee income, and the loss avoidance on one page. The three returns most FIs measure separately, modeled together.'
   },
   'six-figure': {
-    trigger: 'At 150 business clients and a $25/mo margin, that\'s <b>$45K NII</b>. At 333 clients, <b>$100K+ NII</b>. Where is your FI on the curve?',
     h1Strong: 'The math on Modern Positive Pay holds up to a CFO.',
     h1Soft: 'See what your FI returns in Year 1.',
     lead: 'Most community FIs are leaving non-interest income on the table. Calculate yours in 60 seconds. Peer benchmarks included.'
@@ -1403,7 +1420,6 @@ function applyUtmVariant() {
   const variant = params.get('utm_content');
   if (variant && UTM_VARIANTS[variant]) {
     const v = UTM_VARIANTS[variant];
-    const tb = document.querySelector('.trigger-band'); if (tb) tb.innerHTML = v.trigger;
     const hs = document.querySelector('.hero h1 .strong'); if (hs) hs.textContent = v.h1Strong;
     const hf = document.querySelector('.hero h1 .soft'); if (hf) hf.textContent = v.h1Soft;
     const hl = document.querySelector('.hero .lead'); if (hl) hl.textContent = v.lead;
