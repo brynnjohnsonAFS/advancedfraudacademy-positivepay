@@ -366,10 +366,14 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
   100% { transform: translateX(-50%); }
 }
 .ticker-item { display: flex; align-items: center; padding: 0 20px; height: 56px; flex-shrink: 0; }
-.ticker-name { font-weight: 700; font-size: 18px; color: var(--body-mid); letter-spacing: -0.01em; white-space: nowrap; transition: color 0.2s ease; }
-.ticker-item:hover .ticker-name { color: var(--ink-deep); }
-.ticker-name .core-tag { display: inline-block; margin-left: 8px; padding: 2px 7px; background: var(--surface-soft); border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--eyebrow); vertical-align: middle; }
-.ticker-name .partner-tag { display: inline-block; margin-left: 8px; padding: 2px 7px; background: var(--ink-deep); border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--canvas); vertical-align: middle; }
+.logo-img { height: 30px; width: auto; max-width: 180px; object-fit: contain; filter: grayscale(1) opacity(0.55); transition: filter 0.25s ease, opacity 0.25s ease; }
+.ticker-item:hover .logo-img { filter: none; opacity: 1; }
+/* Optical balancing — equal pixel height reads unevenly across wordmark vs icon+wordmark logos */
+.logo-img[alt="Fiserv"] { height: 24px; }
+.logo-img[alt="Linker Finance"] { height: 22px; }
+.logo-img[alt="Tyfone"] { height: 34px; }
+.logo-img[alt="Candescent"] { height: 26px; }
+.logo-img[alt="Access Softek"] { height: 28px; }
 .integ-foot { max-width: 1100px; margin: 32px auto 0; padding: 0 var(--gutter); display: grid; grid-template-columns: 1fr; gap: 24px; }
 @media (min-width: 768px) { .integ-foot { grid-template-columns: 1fr 1fr; gap: 40px; } }
 .integ-foot .integ-foot-card h3 { font-size: 16px; font-weight: 700; color: var(--ink-deep); margin-bottom: 8px; }
