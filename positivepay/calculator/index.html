@@ -654,7 +654,7 @@ select { width: 100%; padding: 12px 14px; border: 1px solid var(--hairline); bor
             <div class="vm-cell vm-clients" id="m-y3-clients" data-label="Clients on program">0</div>
           </div>
         </div>
-        <p class="matrix-note" id="matrix-note">FI Protection grows ~4%/yr — as your FI grows, so does the check &amp; ACH volume Positive Pay shields. Benchmark: community-bank loan growth +5.1% (FDIC Quarterly Banking Profile, 2024); credit-union assets +2.3% (NCUA, 2024).</p>
+        <p class="matrix-note" id="matrix-note">FI Protection grows ~4%/yr — as your FI grows, so does the check &amp; ACH volume Positive Pay shields. Benchmark: community-bank loan growth +5.1% (FDIC Quarterly Banking Profile, 2024); credit-union assets +2.3% (NCUA, 2024). Clients on program assume ~7%/yr net book growth — modest retention plus net-new, net of churn.</p>
 
         <div class="peer-callout">
           <span class="peer-eyebrow">Peer FIs at your asset tier</span>
@@ -677,6 +677,8 @@ FI Protection (Year N) = Year 1 × (1 + 4%)^(N−1)
             — protection compounds as the FI grows its check & ACH volume
 
 Non-interest income = enrolled clients × (your retail price − cost basis) × 12 − setup
+Clients on program (Year N) = Year 1 book × (1 + 7%)^(N−1)
+            — modest net-of-churn book growth
 Cost basis and setup scale with FI asset size and channel partner status. We'll share specifics when you talk to our team.</div>
             <cite>Sources: Federal Reserve Q2 2024 commercial payment data, LexisNexis True Cost of Fraud (2025), FI fee schedule survey (21 FIs, May 2026). FI growth benchmark: FDIC Quarterly Banking Profile 2024 (community-bank loan growth +5.1%), NCUA 2024 (credit-union assets +2.3%).</cite>
           </div>
@@ -1001,6 +1003,9 @@ const ACH_ATTEMPT = 0.01;      // 1.0%
 // midpoint of FDIC community-bank loan growth (+5.1%, QBP 2024) and NCUA credit-union
 // asset growth (+2.3%, 2024). Tune this single constant to reprice the Protection column.
 const FI_GROWTH_RATE = 0.04;   // 4%/yr
+// Client book grows modestly year-over-year — retention plus net-new, net of some churn.
+// Conservative midpoint of a 5-10% range; drives the "Clients on program" column (Modes A & C).
+const CLIENT_GROWTH_RATE = 0.07; // 7%/yr
 
 let currentMode = 'b';
 
@@ -1090,10 +1095,10 @@ function calc() {
     const feeIncome = grossNII - setup;             // Year 1, net of setup
     protectBase = i.fraudA;                          // FI's stated annual fraud exposure
     niiArr = [feeIncome, feeIncome + grossNII, feeIncome + grossNII * 2]; // cumulative net margin
-    clientsArr = [enrolled, enrolled, enrolled];     // enrolled book, retained
+    clientsArr = [enrolled, Math.round(enrolled * (1 + CLIENT_GROWTH_RATE)), Math.round(enrolled * Math.pow(1 + CLIENT_GROWTH_RATE, 2))]; // book grows modestly, net of churn
     whatArr = [
       `${enrolled} business clients enrolled at $${i.retailA}/mo. Margin of $${margin}/client.`,
-      `Setup recouped. Full ${enrolled} × $${margin} margin running.`,
+      `Setup recouped. Full $${margin}/client margin running; book grows as you retain and add.`,
       `Mature program. Retention compounds. Service line owned.`
     ];
   }
@@ -1111,7 +1116,7 @@ function calc() {
     protectBase = calcInternalLoss(i.checksC, i.checkValC, i.achC, 3000); // $3K avg ACH default
     const margin = i.retailC - wholesale;
     const y2Income = i.y2Clients * margin * 12;
-    const y3Clients = Math.round(i.y2Clients * 2.5);
+    const y3Clients = Math.round(i.y2Clients * (1 + CLIENT_GROWTH_RATE)); // modest growth on the Year-2 book
     const y3Income = y3Clients * margin * 12;
     niiArr = [0, y2Income, y3Income];                // ramps from $0 in Year 1
     clientsArr = [0, i.y2Clients, y3Clients];        // cumulative clients onboarded
