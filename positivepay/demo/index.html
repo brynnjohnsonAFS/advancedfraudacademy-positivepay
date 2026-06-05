@@ -642,7 +642,7 @@
       `,
       hotspots: [
         { tip: 'home-toggle', anchor: 'cr', n: 1, title: 'View toggle', body: 'Combined, Check Only, ACH Only. The dashboard adapts to what you need to look at.' },
-        { tip: 'home-trend', anchor: 'tr', n: 2, title: '6-month trend', body: '37 exceptions over six months, $74,535 in flagged volume. The summary your board wants in one chart.' },
+        { tip: 'home-trend', anchor: 'tc', n: 2, title: '6-month trend', body: '37 exceptions over six months, $74,535 in flagged volume. The summary your board wants in one chart.' },
         { tip: 'home-donut', anchor: 'tr', n: 3, title: 'Decision mix', body: '170 returned, 95 paid. The ratio that tells you whether your team is catching fraud or paying through it.' },
       ]
     }),
@@ -895,6 +895,7 @@
   let mode = null;
   let currentScreen = 'home';
   let tourIndex = 0;
+  let currentHotspots = [];
 
   // =========== RENDER ===========
   function renderScreen(screenKey) {
@@ -902,6 +903,7 @@
     if (!def) return;
     const { crumb, content, hotspots = [] } = def();
     currentScreen = screenKey;
+    currentHotspots = hotspots;
     document.getElementById('crumb-screen').textContent = crumb;
 
     // active nav state (normalize exceptions_detail back to exceptions)
@@ -912,7 +914,7 @@
 
     const vp = document.getElementById('viewport');
     vp.innerHTML = content + hotspots.map((h, i) => `
-      <div class="hotspot" style="left:${typeof h.x === 'number' ? h.x + '%' : h.x}; top:${typeof h.y === 'number' ? h.y + '%' : h.y};" onclick="toggleHotspot(this)">
+      <div class="hotspot" onclick="toggleHotspot(this)">
         ${h.n || (i+1)}
         <div class="hotspot-tooltip">
           <div class="hotspot-title">${h.title}</div>
@@ -920,7 +922,63 @@
         </div>
       </div>
     `).join('');
+
+    positionHotspots(hotspots);
   }
+
+  // =========== HOTSPOT POSITIONING ===========
+  // Each callout is anchored to the element it explains (data-tip="<key>"),
+  // measured after render, so the dot always lines up with its item — even as
+  // tables, cards, and the modal reflow. Falls back to legacy x/y percentages.
+  const DOT = 26; // hotspot diameter (must match .hotspot width/height)
+
+  function anchorPoint(box, anchor) {
+    const x0 = box.left, y0 = box.top, w = box.width, h = box.height;
+    const points = {
+      tl: [x0,        y0       ], tc: [x0 + w / 2, y0       ], tr: [x0 + w, y0       ],
+      cl: [x0,        y0 + h / 2], c:  [x0 + w / 2, y0 + h / 2], cr: [x0 + w, y0 + h / 2],
+      bl: [x0,        y0 + h    ], bc: [x0 + w / 2, y0 + h    ], br: [x0 + w, y0 + h    ],
+    };
+    return points[anchor] || points.tr;
+  }
+
+  function pctToPx(v, dim) {
+    if (typeof v === 'number') return dim * v / 100;
+    if (typeof v === 'string' && v.trim().endsWith('px')) return parseFloat(v);
+    return dim * (parseFloat(v) || 0) / 100;
+  }
+
+  function positionHotspots(hotspots) {
+    const vp = document.getElementById('viewport');
+    if (!vp) return;
+    const vpRect = vp.getBoundingClientRect();
+    const dots = vp.querySelectorAll('.hotspot');
+    hotspots.forEach((h, i) => {
+      const el = dots[i];
+      if (!el) return;
+      let px, py;
+      const target = h.tip ? vp.querySelector(`[data-tip="${h.tip}"]`) : null;
+      if (target) {
+        const r = target.getBoundingClientRect();
+        const box = { left: r.left - vpRect.left, top: r.top - vpRect.top, width: r.width, height: r.height };
+        [px, py] = anchorPoint(box, h.anchor || 'tr');
+      } else {
+        px = pctToPx(h.x, vpRect.width);
+        py = pctToPx(h.y, vpRect.height);
+      }
+      // place the dot centered on the anchor point (no transform — keeps :hover scale)
+      el.style.left = (px - DOT / 2) + 'px';
+      el.style.top  = (py - DOT / 2) + 'px';
+      // edge-aware tooltip: flip below near the top, pin to a side near the edges
+      el.classList.toggle('below', py < 150);
+      el.classList.remove('tip-left', 'tip-right');
+      if (px < 130) el.classList.add('tip-left');
+      else if (px > vpRect.width - 130) el.classList.add('tip-right');
+    });
+  }
+
+  window.addEventListener('resize', () => positionHotspots(currentHotspots));
+  window.addEventListener('load', () => positionHotspots(currentHotspots));
 
   function toggleHotspot(el) {
     document.querySelectorAll('.hotspot.open').forEach(h => { if (h !== el) h.classList.remove('open'); });
