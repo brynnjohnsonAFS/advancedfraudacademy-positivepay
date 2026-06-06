@@ -609,6 +609,7 @@
     var p = window.location.pathname;
     if (/\/positivepay\/track-[1-5]\/(lesson-[1-6]\/?|exceptions\/?)?$/i.test(p)) return true; // any track/lesson page
     if (/\/positivepay\/start\/?$/.test(p))        return true;
+    if (/\/positivepay\/product\/?$/.test(p))      return true; // sales page — has its own discovery-call CTA
     if (/\/positivepay\/thank-you\/?$/.test(p))    return true;
     if (/\/positivepay\/certificate\/?$/.test(p))  return true;
     if (/\/positivepay\/terms\/?$/.test(p))        return true;
@@ -830,6 +831,7 @@
   function stripPathSkipped() {
     var p = window.location.pathname;
     // Skip on pages where promo is redundant or insensitive (already-converted flows)
+    if (/\/positivepay\/product\/?$/.test(p)) return true; // sales page — has its own discovery-call CTA
     if (/\/positivepay\/thank-you\/?$/.test(p)) return true;
     if (/\/positivepay\/certificate\/?$/.test(p)) return true;
     return false;
